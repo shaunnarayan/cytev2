@@ -129,9 +129,6 @@ class BundleCache: ObservableObject {
                 self.bundleImageCache[bundleID] = image
                 self.bundleColorCache[bundleID] = self.bundleImageCache[bundleID]!.averageColor
             }
-        } else {
-            self.bundleImageCache[bundleID] = image
-            self.bundleColorCache[bundleID] = self.bundleImageCache[bundleID]!.averageColor
         }
     }
     
@@ -152,7 +149,9 @@ class BundleCache: ObservableObject {
         else { return NSImage() }
         
         let icon = NSWorkspace.shared.icon(forFile: path)
-        setCache(bundleID: bundleID, image: icon)
+        Task {
+            setCache(bundleID: bundleID, image: icon)
+        }
         return icon
     }
 }

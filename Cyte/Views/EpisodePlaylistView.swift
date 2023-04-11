@@ -350,16 +350,16 @@ struct EpisodePlaylistView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .toolbar {
-                ToolbarItemGroup(placement: .primaryAction) {
-                    if documents.count > 0 {
+                if documents.count > 0 {
+                    ToolbarItem {
                         Button("Resume") {
                             // Handle button tap here
                             NSWorkspace.shared.open(documents.first!.path!)
                         }
-                        .frame(width:100, height: 50)
                     }
+                }
+                ToolbarItem {
                     Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
-                        .frame(width:100, height: 50)
                 }
             }
         }

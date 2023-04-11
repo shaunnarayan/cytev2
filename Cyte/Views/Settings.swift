@@ -259,9 +259,8 @@ struct Settings: View {
             }
         }
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
+            ToolbarItem {
                 Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
-                    .frame(width:100, height: 50)
             }
         }
     }

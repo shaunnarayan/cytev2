@@ -73,7 +73,7 @@ class EpisodeModel: ObservableObject {
         intervals.removeAll()
         var _episodes: [Episode] = []
         
-        if self.filter.count < 3 || self.filter.split(separator: " ").count > 5 {
+        if self.filter.count < 3 {
             let episodeFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
             episodeFetch.sortDescriptors = [NSSortDescriptor(key:"start", ascending: false)]
             var pred = String("start >= %@ AND end <= %@")
