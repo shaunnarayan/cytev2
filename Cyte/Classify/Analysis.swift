@@ -13,6 +13,7 @@ class Analysis {
     static let shared = Analysis()
     private var pendingRequest: Bool = false
     private var dropouts: Int64 = 0
+    private var observedTime: Date = Date()
     
     //
     // Runs a chain of vision analysis (OCR then NLP) on the provided frame
@@ -24,6 +25,7 @@ class Analysis {
             return
         }
         pendingRequest = true
+        observedTime = Date()
         // do analysis
         let requestHandler = VNImageRequestHandler(cvPixelBuffer: frame.data!, orientation: .up)
         let request = VNRecognizeTextRequest(completionHandler: recognizeTextHandler)
@@ -49,7 +51,7 @@ class Analysis {
             return "\(result) \(adding.0)"
         }
         Task {
-            await Memory.shared.observe(what: text)
+            await Memory.shared.observe(what: text, at: observedTime)
             pendingRequest = false
         }
     }

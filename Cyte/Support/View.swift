@@ -70,7 +70,7 @@ func secondsToReadable(seconds: Double) -> String {
     return res
 }
 
-func procVisionResult(request: VNRequest, error: Error?) -> [(String, CGRect)] {
+func procVisionResult(request: VNRequest, error: Error?, minConfidence: Float = 0.45) -> [(String, CGRect)] {
     guard let observations =
             request.results as? [VNRecognizedTextObservation] else {
         return []
@@ -78,7 +78,7 @@ func procVisionResult(request: VNRequest, error: Error?) -> [(String, CGRect)] {
     let recognizedStringsAndRects: [(String, CGRect)] = observations.compactMap { observation in
         // Find the top observation.
         guard let candidate = observation.topCandidates(1).first else { return ("", .zero) }
-        if observation.confidence < 0.45 { return ("", .zero) }
+        if observation.confidence < minConfidence { return ("", .zero) }
         
         // Find the bounding-box observation for the string range.
         let stringRange = candidate.string.startIndex..<candidate.string.endIndex

@@ -202,7 +202,7 @@ struct Settings: View {
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
                 
-                Text("Privacy note: This feature will request icons for visited domains from https://www.google.com/s2/favicons on startup")
+                Text("Privacy note: This feature will request icons for display from https://www.google.com/s2/favicons on startup")
                     .font(.caption)
                     .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 
@@ -261,6 +261,7 @@ struct Settings: View {
         .toolbar {
             ToolbarItem {
                 Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
+                    .frame(width: 50)
             }
         }
     }

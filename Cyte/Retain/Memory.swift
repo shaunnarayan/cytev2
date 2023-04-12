@@ -408,13 +408,21 @@ class Memory {
     ///  duplication resolution
     ///
     @MainActor
-    func observe(what: String) async {
-        if episode == nil {
-            // @todo was likely closed from another source, this does mean the last frame loses observations, should really
-            // be able to get the original episode via query for latest
-            return
+    func observe(what: String, at: Date) async {
+        var _episode = episode
+        if _episode == nil {
+            log.info("Found nil episode, recall from DB for straggling observation")
+            let episodeFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
+            episodeFetch.sortDescriptors = [NSSortDescriptor(key:"start", ascending: false)]
+            episodeFetch.fetchLimit = 1
+            let episodes = try! PersistenceController.shared.container.viewContext.fetch(episodeFetch)
+            _episode = episodes.first
+            if( _episode == nil ) {
+                // most likely the episode was cleaned up for being too short
+                log.warning("Failed to observe \(what) : \(at)")
+                return
+            }
         }
-        let start = Date()
         let result: NSMutableArray = differ.diff_main(ofOldString: lastObservation, andNewString: what)!
         differ.diff_cleanupSemantic(result)
         // embed every 12sish
@@ -434,7 +442,10 @@ class Memory {
             }
         }
         
-        let newItem = CyteInterval(from: start, to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: start)!, episode: episode!, document: added)
+        let newItem = CyteInterval(
+            from: at,
+            to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,
+            episode: _episode!, document: added)
         insert(interval: newItem)
         lastObservation = what
     }

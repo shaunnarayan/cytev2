@@ -356,10 +356,12 @@ struct EpisodePlaylistView: View {
                             // Handle button tap here
                             NSWorkspace.shared.open(documents.first!.path!)
                         }
+                        .frame(width: 70)
                     }
                 }
                 ToolbarItem {
                     Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
+                        .frame(width: 50)
                 }
             }
         }
