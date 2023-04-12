@@ -126,7 +126,7 @@ class Memory {
     /// however surely there is some way to make use of Spotlight cache info on recently edited files
     /// which is a tab in Finder to avoid enumeration?
     ///
-    static func getRecentFiles(earliest: Date) -> [(URL, Date)]? {
+    static func getRecentFiles(earliest: Date, latest: Date) -> [(URL, Date)]? {
         let fileManager = FileManager.default
         let homeUrl = fileManager.homeDirectoryForCurrentUser
         
@@ -143,7 +143,8 @@ class Memory {
                 let resourceValues = try fileURL.resourceValues(forKeys: Set(properties))
                 if let modificationDate = resourceValues.contentModificationDate {
                     if !fileURL.hasDirectoryPath &&
-                        (modificationDate > earliest) {
+                        (modificationDate >= earliest) &&
+                        (modificationDate <= latest) {
                         recentFiles.append((fileURL, modificationDate))
                     }
                 }
@@ -286,7 +287,7 @@ class Memory {
     func trackFileChanges(ep: Episode) {
         if shouldTrackFileChanges {
             // Make this follow a user preference, since it chews cpu
-            let files = Memory.getRecentFiles(earliest: currentStart)
+            let files = Memory.getRecentFiles(earliest: ep.start!, latest: ep.end!)
             for fileAndModified: (URL, Date) in files! {
                 let doc = Document(context: PersistenceController.shared.container.viewContext)
                 doc.path = fileAndModified.0
