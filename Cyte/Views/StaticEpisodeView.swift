@@ -35,8 +35,8 @@ struct StaticEpisodeView: View {
     
     func generateThumbnail(offset: Double) async {
         let generator = AVAssetImageGenerator(asset: asset)
-        generator.requestedTimeToleranceBefore = CMTime.zero;
-        generator.requestedTimeToleranceAfter = CMTime.zero;
+        generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
+        generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 1);
         do {
             thumbnail = try generator.copyCGImage(at: CMTime(seconds: offset, preferredTimescale: 1), actualTime: nil)
             // Run through vision and store results
@@ -61,7 +61,7 @@ struct StaticEpisodeView: View {
     
     func recognizeTextHandler(request: VNRequest, error: Error?) {
         highlight.removeAll()
-        let recognizedStringsAndRects = procVisionResult(request: request, error: error)
+        let recognizedStringsAndRects = procVisionResult(request: request, error: error, minConfidence: 0.0)
         recognizedStringsAndRects.forEach { data in
             if data.0.lowercased().contains((filter.lowercased())) {
                 highlight.append(data.1)

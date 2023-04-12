@@ -59,18 +59,6 @@ struct EpisodePlaylistView: View {
         }
     }
     
-    ///
-    /// Set length and offset values on each of the supplied intervals
-    ///
-    func updateIntervals() {
-        var offset = 0.0
-        for i in 0..<episodeModel.appIntervals.count {
-            episodeModel.appIntervals[i].length = (episodeModel.appIntervals[i].episode.end!.timeIntervalSinceReferenceDate - episodeModel.appIntervals[i].episode.start!.timeIntervalSinceReferenceDate)
-            episodeModel.appIntervals[i].offset = offset
-            offset += episodeModel.appIntervals[i].length
-        }
-    }
-    
     func generateThumbnails(numThumbs: Int = 1) async {
         if episodeModel.appIntervals.count == 0 { return }
         highlight.removeAll()
@@ -89,8 +77,8 @@ struct EpisodePlaylistView: View {
                 let asset = AVAsset(url: urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title))
                 
                 let generator = AVAssetImageGenerator(asset: asset)
-                generator.requestedTimeToleranceBefore = CMTime.zero;
-                generator.requestedTimeToleranceAfter = CMTime.zero;
+                generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
+                generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 1);
                 do {
                     // turn the absolute time into a relative offset in the episode
                     let offset = active_interval.1 - secondsOffsetFromLastEpisode
@@ -169,7 +157,6 @@ struct EpisodePlaylistView: View {
         }
         
         if active_interval.0 == nil || active_interval.0!.episode.title!.count == 0 || player == nil {
-            player = nil
             return
         }
         // reset the AVPlayer to the new asset
@@ -249,13 +236,9 @@ struct EpisodePlaylistView: View {
                     .gesture(
                         DragGesture()
                             .onChanged { gesture in
-                                if self.player != nil {
-                                    self.player!.pause()
+                                Task {
+                                    updateDisplayInterval(proxy: proxy, geometry: geometry, gesture: gesture)
                                 }
-                                updateDisplayInterval(proxy: proxy, geometry: geometry, gesture: gesture)
-                            }
-                            .onEnded { gesture in
-                                updateData()
                             }
                     )
             }
@@ -263,8 +246,9 @@ struct EpisodePlaylistView: View {
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
         .onAppear {
-            updateIntervals()
-            updateData()
+            Task {
+                updateData()
+            }
         }
     }
     
@@ -288,16 +272,6 @@ struct EpisodePlaylistView: View {
                                 )
                         })
                         .frame(width: width, height: height)
-                        .onReceive(NotificationCenter.default.publisher(for: AVPlayerItem.timeJumpedNotification)) { _ in
-                            if (player != nil && player!.error != nil) || episodeModel.appIntervals.count == 0 {
-                                return
-                            }
-                            let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
-                            if active_interval.0 != nil {
-                                secondsOffsetFromLastEpisode = ((Double(active_interval.0!.offset) + Double(active_interval.0!.length)) - (player!.currentTime().seconds))
-                                updateData()
-                            }
-                        }
                     }
                 }
                 .contextMenu {

@@ -34,6 +34,18 @@ class EpisodeModel: ObservableObject {
     @Published var appIntervals : [AppInterval] = []
     private var refreshTask: Task<(), Never>? = nil
     
+    ///
+    /// Set length and offset values on each of the supplied intervals
+    ///
+    func updateIntervals() {
+        var offset = 0.0
+        for i in 0..<appIntervals.count {
+            appIntervals[i].length = (appIntervals[i].episode.end!.timeIntervalSinceReferenceDate - appIntervals[i].episode.start!.timeIntervalSinceReferenceDate)
+            appIntervals[i].offset = offset
+            offset += appIntervals[i].length
+        }
+    }
+    
     func activeInterval(at: Double) -> (AppInterval?, Double) {
         var offset_sum = 0.0
         let active_interval: AppInterval? = appIntervals.first { interval in
@@ -103,7 +115,7 @@ class EpisodeModel: ObservableObject {
                         return false
                     }
                     let is_within = interval.episode.start ?? Date() >= startDate && interval.episode.end ?? Date() <= endDate
-                    let ep_included: Episode? = episodes.first(where: { ep in
+                    let ep_included: Episode? = _episodes.first(where: { ep in
                         return ep.start == interval.episode.start
                     })
                     if ep_included == nil && is_within {
@@ -119,6 +131,7 @@ class EpisodeModel: ObservableObject {
             episodesLengthSum += (episode.end!).timeIntervalSinceReferenceDate - (episode.start!).timeIntervalSinceReferenceDate
             return AppInterval(episode: episode)
         }
+        updateIntervals()
         
         withAnimation(.easeInOut(duration: 0.3)) {
             episodes = _episodes
