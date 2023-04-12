@@ -74,6 +74,7 @@ struct Settings: View {
     @State var isHovering: Bool = false
     @State var currentRetention: Int = 0
     @State var browserAware: Bool = false
+    @State var hideDock: Bool = false
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -141,44 +142,72 @@ struct Settings: View {
                     Text("Privacy note: This feature will make requests to the OpenAI servers if you supply an API key")
                         .font(.caption)
                         .padding(EdgeInsets(top: 5.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
+                    
+                    HStack {
+                        if Agent.shared.isSetup {
+                            Text("Knowledge base enabled")
+                                .frame(width: 1000, height: 50)
+                                .background(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0))
+                            Button(action: {
+                                let keys = KeychainSwift()
+                                let _ = keys.delete("CYTE_LLM_KEY")
+                                Agent.shared.teardown()
+                            }) {
+                                Image(systemName: "multiply")
+                            }
+                            
+                        } else {
+                            TextField(
+                                "OpenAI API Key or path to LLaMA model",
+                                text: $apiDetails
+                            )
+                            .padding(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
+                            .textFieldStyle(.plain)
+                            .background(.white)
+                            .font(.title)
+                            .frame(width: 1000)
+                            .onSubmit {
+                                Agent.shared.setup(key: apiDetails)
+                                apiDetails = ""
+                            }
+                            Button(action: {
+                                Agent.shared.setup(key: apiDetails)
+                                apiDetails = ""
+                            }) {
+                                Image(systemName: "checkmark.message")
+                            }
+                        }
+                    }
+                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 }
                 
                 HStack {
-                    if Agent.shared.isSetup {
-                        Text("Knowledge base enabled")
-                            .frame(width: 1000, height: 50)
-                            .background(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0))
-                        Button(action: {
-                            let keys = KeychainSwift()
-                            let _ = keys.delete("CYTE_LLM_KEY")
-                            Agent.shared.teardown()
-                        }) {
-                            Image(systemName: "multiply")
+                    let binding = Binding<Bool>(get: {
+                        return hideDock
+                    }, set: {
+                        if $0 {
+                            NSApp.setActivationPolicy(.accessory)
                         }
+                        else {
+                            NSApp.setActivationPolicy(.regular)
+                        }
+                        defaults.set($0, forKey: "CYTE_HIDE_DOCK")
+                        hideDock = $0
+                        NSApplication.shared.activate(ignoringOtherApps: true)
+                    })
+                    Text("Hide dock icon")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(width: 1000, height: 50, alignment: .leading)
+                        .onAppear {
+                            hideDock = NSApp.activationPolicy() == .accessory
+                        }
+                    Toggle(isOn: binding) {
                         
-                    } else {
-                        TextField(
-                            "OpenAI API Key or path to LLaMA model",
-                            text: $apiDetails
-                        )
-                        .padding(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
-                        .textFieldStyle(.plain)
-                        .background(.white)
-                        .font(.title)
-                        .frame(width: 1000)
-                        .onSubmit {
-                            Agent.shared.setup(key: apiDetails)
-                            apiDetails = ""
-                        }
-                        Button(action: {
-                            Agent.shared.setup(key: apiDetails)
-                            apiDetails = ""
-                        }) {
-                            Image(systemName: "checkmark.message")
-                        }
                     }
+                    .accessibilityLabel("Checkbox to enable browser awareness")
                 }
-                .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
+                .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
                 
                 HStack {
                     let binding = Binding<Bool>(get: {

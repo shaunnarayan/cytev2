@@ -29,6 +29,10 @@ struct CyteApp: App {
         if defaults.object(forKey: "CYTE_RETENTION") == nil {
             defaults.set(90, forKey: "CYTE_RETENTION")
         }
+        if defaults.bool(forKey: "CYTE_HIDE_DOCK") {
+            NSApp.setActivationPolicy(.accessory)
+            NSApplication.shared.activate(ignoringOtherApps: true)
+        }
         Task {
             if await screenRecorder.canRecord {
                 await screenRecorder.start()
@@ -91,6 +95,8 @@ struct CyteApp: App {
                             }
                             .keyboardShortcut("R")
                         }
+                        Button("Open") { NSApplication.shared.activate(ignoringOtherApps: true); }
+                            .keyboardShortcut("O")
                         Divider()
                         Button("Quit") { self.teardown(); NSApplication.shared.terminate(nil); }
                             .keyboardShortcut("Q")
