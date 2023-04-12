@@ -40,6 +40,7 @@
 - The title of the recording is the title of the first window you opened in that application
 - Right click the title to delete the memory
 - Right click the tile to show the original recording file in the Finder. Do not delete/move this file from the finder, make a copy for your use.
+- Recordings with less than 1 captured frame are not saved, in terms of time this translates to 2-4 seconds on M1/M2, and 4-8 seconds on Intel
 
 ## Search
 

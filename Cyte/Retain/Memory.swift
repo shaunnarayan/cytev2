@@ -187,7 +187,6 @@ class Memory {
             doc.episode = episode
             doc.start = currentUrlTime
             doc.end = Date()
-            log.info("Saving doc for url \(currentUrlContext)")
             do {
                 try PersistenceController.shared.container.viewContext.save()
             } catch {
@@ -323,24 +322,26 @@ class Memory {
         if assetWriter == nil {
             return
         }
-                
+        log.info("Close \(episode?.title ?? "")")
         //close everything
         assetWriterInput!.markAsFinished()
-        if frameCount < 2 || currentContext.starts(with:Bundle.main.bundleIdentifier!) {
+        if frameCount < 1 || currentContext.starts(with:Bundle.main.bundleIdentifier!) {
             assetWriter!.cancelWriting()
             delete(delete_episode: episode!)
             log.info("Supressed small episode for \(self.currentContext)")
         } else {
+            self.episode!.end = Date()
             let ep = self.episode!
+            let frame_count = self.frameCount
             assetWriter!.finishWriting {
-                if (self.frameCount * Memory.secondsBetweenFrames) > 60 {
+                log.info("Finished writing episode")
+                if (frame_count * Memory.secondsBetweenFrames) > 30 {
+                    log.info("Tracking file changes...")
                     self.trackFileChanges(ep:ep)
-                } else {
-                    log.info("Skip file tracking for small episode")
+                    log.info("Finished tracking")
                 }
             }
             
-            self.episode!.end = Date()
             do {
                 try PersistenceController.shared.container.viewContext.save()
             } catch {
@@ -409,7 +410,9 @@ class Memory {
     @MainActor
     func observe(what: String) async {
         if episode == nil {
-            fatalError("ERROR: NIL EPISODE")
+            // @todo was likely closed from another source, this does mean the last frame loses observations, should really
+            // be able to get the original episode via query for latest
+            return
         }
         let start = Date()
         let result: NSMutableArray = differ.diff_main(ofOldString: lastObservation, andNewString: what)!

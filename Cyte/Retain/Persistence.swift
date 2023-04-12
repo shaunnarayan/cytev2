@@ -21,7 +21,7 @@ class ModelMigration1to2: NSEntityMigrationPolicy {
             let ep = res.value(forKey: "episode") as! NSManagedObject
             let start = ep.value(forKey:"start")
             if start == nil {
-                log.info("Culling episode \(res.value(forKey: "path"))")
+                log.info("Culling episode \(res.value(forKey: "path") ?? "?")")
                 context.delete(res)
             }
         }

@@ -133,10 +133,11 @@ struct ContentView: View {
             )
         )
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            if !Thread.isMainThread {
-                DispatchQueue.main.async {
-                    self.episodeModel.refreshData()
-                }
+            Memory.shared.closeEpisode()
+            Task {
+                // @todo there are likely some cases in which this shouldn't be updated
+                episodeModel.endDate = Date()
+                self.episodeModel.refreshData()
             }
         }
     }
