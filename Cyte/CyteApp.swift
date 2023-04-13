@@ -34,6 +34,15 @@ struct CyteApp: App {
             NSApp.setActivationPolicy(.accessory)
             NSApplication.shared.activate(ignoringOtherApps: true)
         }
+        // Prefetch icons
+        let bundleFetch : NSFetchRequest<BundleExclusion> = BundleExclusion.fetchRequest()
+        do {
+            let fetched = try PersistenceController.shared.container.viewContext.fetch(bundleFetch)
+            for bundle in fetched {
+                let _ = bundleCache.getIcon(bundleID: bundle.bundle!)
+            }
+        } catch { }
+        
         Task {
             if await screenRecorder.canRecord {
                 await screenRecorder.start()
