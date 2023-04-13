@@ -13,7 +13,7 @@
 - - Cyte will already have detected the applications currently running, and displayed them in a grid. Tick boxes for any applications you don't want Cyte to record. If your application isn't showing, press the add application button and select it there
 - Once happy with your setup, press the back icon at the top of the window.
 - Minimize Cyte, and use your computer as normal. Fairly soon you will get up to 3 permission requests for access to your Download, Documents and User folders (used to track files worked on)
-- When you need help remembering something, select the Cyte application in your dock or press CMD + Period
+- When you need help remembering something, select the Cyte application in your dock or Menu Bar, or use Spotlight
 - Type anything you do remember vaguely related to what you're looking for, and press return
 - Look through the results and refresh your memory
 - Press expand on any memory to view in more detail
@@ -34,7 +34,7 @@
 ## Feed
 
 - When no search terms or filters are applied, shows the last 30 days of recordings, from latest to oldest
-- Each item in the grid has a full video preview player that can play, seek, and copy test
+- Each item in the grid has a full video preview player that can play, seek, and copy text
 - Tapping the expand icon will take you to the timeline view, at the start of the recording
 - Tapping the star icon will prevent the recording being deleted by any means until the star is tapped again
 - The title of the recording is the title of the first window you opened in that application
@@ -53,7 +53,7 @@
 
 ### Semantic search
 - You can add one or more ‘>’ characters to the start of your search to run an [inexact search](https://github.com/shaunnarayan/cytev2/blob/main/Cyte/Retain/Memory.swift#:~:text=expanding%20+=%201). 
-- Each charater adds one alternative to every [verb/noun in the search term](https://developer.apple.com/documentation/naturallanguage/identifying_parts_of_speech)
+- Each character adds one alternative to every [verb/noun in the search term](https://developer.apple.com/documentation/naturallanguage/identifying_parts_of_speech)
 - Alternatives are picked using [word embeddings](https://developer.apple.com/documentation/naturallanguage/nlembedding)
 
 

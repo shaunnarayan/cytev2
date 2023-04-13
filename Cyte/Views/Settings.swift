@@ -205,6 +205,7 @@ struct Settings: View {
                     Toggle(isOn: binding) {
                         
                     }
+                    .toggleStyle(SwitchToggleStyle())
                     .accessibilityLabel("Checkbox to enable browser awareness")
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
@@ -227,6 +228,7 @@ struct Settings: View {
                     Toggle(isOn: binding) {
                         
                     }
+                    .toggleStyle(SwitchToggleStyle())
                     .accessibilityLabel("Checkbox to enable browser awareness")
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))

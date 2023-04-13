@@ -304,23 +304,25 @@ struct EpisodePlaylistView: View {
                     }
                 }
                 .accessibilityLabel("A slider visually displaying segments for each application/website used, using a colored bar with icon overlay. Drag to move in time.")
-                Spacer().frame(height: 10)
-                HStack(alignment: .center) {
+                HStack(alignment: .top) {
                     Text(activeTime())
+                    Group {
+                        Button(action: { secondsOffsetFromLastEpisode += 2.0; updateData(); }) {}
+                            .keyboardShortcut(.leftArrow, modifiers: [])
+                        Button(action: { secondsOffsetFromLastEpisode = max(0.0, secondsOffsetFromLastEpisode - 2.0); updateData(); }) {}
+                            .keyboardShortcut(.rightArrow, modifiers: [])
+                        Button(action: { secondsOffsetFromLastEpisode = 0; updateData(); }) {}
+                            .keyboardShortcut(.return, modifiers: [])
+                        Button(action: { if player == nil { return }; player!.isPlaying ? player!.pause() : player!.play(); }) {}
+                            .keyboardShortcut(.space, modifiers: [])
+                    }.frame(maxWidth: 0, maxHeight: 0).opacity(0)
                     Text(humanReadableOffset())
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+                .frame(height: 10)
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
                 .font(Font.caption)
-                Group {
-                    Button(action: { secondsOffsetFromLastEpisode += 2.0; updateData(); }) {}
-                        .keyboardShortcut(.leftArrow, modifiers: [])
-                    Button(action: { secondsOffsetFromLastEpisode = max(0.0, secondsOffsetFromLastEpisode - 2.0); updateData(); }) {}
-                        .keyboardShortcut(.rightArrow, modifiers: [])
-                    Button(action: { secondsOffsetFromLastEpisode = 0; updateData(); }) {}
-                        .keyboardShortcut(.return, modifiers: [])
-                    Button(action: { if player == nil { return }; player!.isPlaying ? player!.pause() : player!.play(); }) {}
-                        .keyboardShortcut(.space, modifiers: [])
-                }.frame(maxWidth: 0, maxHeight: 0).opacity(0)
+                
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .toolbar {
