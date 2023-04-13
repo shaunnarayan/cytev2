@@ -18,6 +18,7 @@ struct CyteApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
     @StateObject var screenRecorder = ScreenRecorder.shared
+    @Environment(\.openWindow) var openWindow
     
     ///
     /// On first run, sets default prefernce values (90 day retention)
@@ -55,7 +56,7 @@ struct CyteApp: App {
     }
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "cyte-app") {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(bundleCache)
@@ -95,7 +96,15 @@ struct CyteApp: App {
                             }
                             .keyboardShortcut("R")
                         }
-                        Button("Open") { NSApplication.shared.activate(ignoringOtherApps: true); }
+                        Button("Open") {
+                            if NSApplication.shared.windows.count > 2 {
+                                // this check assumes the user cannot dismiss the NSStatusBarWindow,
+                                // NSMenuWindowManagerWindow instances, and can only edit the AppKitWindow
+                                NSApplication.shared.activate(ignoringOtherApps: true)
+                            } else {
+                                openWindow(id: "cyte-app")
+                            }
+                        }
                             .keyboardShortcut("O")
                         Divider()
                         Button("Quit") { self.teardown(); NSApplication.shared.terminate(nil); }
