@@ -561,8 +561,9 @@ class Memory {
                     let inter = CyteInterval(from: Date(timeIntervalSinceReferenceDate:interval[0] as! Double), to: Date(timeIntervalSinceReferenceDate:interval[1] as! Double), episode: ep!, document: interval[3] as! String, snippet: interval[4] as? String)
                     result.append(inter)
                 } else {
-                    log.error("Found an interval without base episode - dangling ref?")
-                    //@todo maybe should delete?
+                    log.error("Found an interval without base episode - dangling ref")
+                    let inter = intervalTable.filter(IntervalExpression.episodeStart == epStart.timeIntervalSinceReferenceDate)
+                    try intervalDb!.run(inter.delete())
                 }
             }
         } catch { }

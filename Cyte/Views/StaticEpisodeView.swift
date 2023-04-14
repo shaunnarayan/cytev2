@@ -154,7 +154,7 @@ struct StaticEpisodeView: View {
                                 .foregroundColor(Color(red: 210.0 / 255.0, green: 210.0 / 255.0, blue: 210.0 / 255.0))
                         )
                     }
-                    NavigationLink(value: episode) {
+                    NavigationLink(value: result) {
                         Image(systemName: "arrow.up.left.and.arrow.down.right")
                     }
                     .buttonStyle(.plain)

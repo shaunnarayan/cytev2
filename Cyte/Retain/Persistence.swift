@@ -42,9 +42,12 @@ struct CyteAppContext {
 ///
 /// CoreData style wrapper for Intervals so it is observable in the UI
 ///
-class CyteInterval: ObservableObject, Identifiable, Equatable {
+class CyteInterval: ObservableObject, Identifiable, Equatable, Hashable {
     static func == (lhs: CyteInterval, rhs: CyteInterval) -> Bool {
         return (lhs.from == rhs.from) && (lhs.to == rhs.to)
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     @Published var from: Date

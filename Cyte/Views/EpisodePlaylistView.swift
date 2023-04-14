@@ -108,7 +108,7 @@ struct EpisodePlaylistView: View {
     
     func recognizeTextHandler(request: VNRequest, error: Error?) {
         highlight.removeAll()
-        let recognizedStringsAndRects = procVisionResult(request: request, error: error)
+        let recognizedStringsAndRects = procVisionResult(request: request, error: error, minConfidence: 0.0)
         recognizedStringsAndRects.forEach { data in
             if data.0.lowercased().contains((episodeModel.filter.lowercased())) {
                 highlight.append(data.1)

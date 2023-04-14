@@ -43,7 +43,7 @@ struct ContentView: View {
             offset_sum = offset_sum + (interval.episode.end!.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate)
             return episode.start == interval.episode.start
         }
-        return offset_sum + (active_interval?.length ?? 0.0)
+        return offset_sum
     }
     
     var feed: some View {
@@ -114,6 +114,10 @@ struct ContentView: View {
             }
             .navigationDestination(for: Episode.self) { episode in
                 EpisodePlaylistView(player: AVPlayer(url:  urlForEpisode(start: episode.start, title: episode.title)), secondsOffsetFromLastEpisode: offsetForEpisode(episode: episode), filter: episodeModel.filter
+                )
+            }
+            .navigationDestination(for: CyteInterval.self) { interval in
+                EpisodePlaylistView(player: AVPlayer(url:  urlForEpisode(start: interval.episode.start, title: interval.episode.title)), secondsOffsetFromLastEpisode: offsetForEpisode(episode: interval.episode) - (interval.from.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate), filter: episodeModel.filter
                 )
             }
             .navigationDestination(for: Int.self) { path in

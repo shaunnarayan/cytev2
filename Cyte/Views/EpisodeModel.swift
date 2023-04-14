@@ -123,6 +123,7 @@ class EpisodeModel: ObservableObject {
                     }
                     return is_within
                 }
+                _episodes = _episodes.sorted(by: { el,er in el.start! > er.start! })
             }
         }
         
