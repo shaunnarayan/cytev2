@@ -38,7 +38,7 @@ struct ContentView: View {
 
     func offsetForEpisode(episode: Episode) -> Double {
         var offset_sum = 0.0
-        let active_interval: AppInterval? = episodeModel.appIntervals.first { interval in
+        let _: AppInterval? = episodeModel.appIntervals.first { interval in
             if interval.episode.start == nil || interval.episode.end == nil { return false }
             offset_sum = offset_sum + (interval.episode.end!.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate)
             return episode.start == interval.episode.start

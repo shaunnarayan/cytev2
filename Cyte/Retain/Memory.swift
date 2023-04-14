@@ -467,12 +467,22 @@ class Memory {
             }
         }
         let intervals = intervalTable.filter(IntervalExpression.episodeStart == delete_episode.start!.timeIntervalSinceReferenceDate)
-        PersistenceController.shared.container.viewContext.delete(delete_episode)
+        do {
+            let url = urlForEpisode(start: delete_episode.start, title: delete_episode.title)
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            log.error(error)
+        }
         do {
             try intervalDb!.run(intervals.delete())
-            try PersistenceController.shared.container.viewContext.save()
-            try FileManager.default.removeItem(at: urlForEpisode(start: delete_episode.start, title: delete_episode.title))
         } catch {
+            log.error(error)
+        }
+        PersistenceController.shared.container.viewContext.delete(delete_episode)
+        do {
+            try PersistenceController.shared.container.viewContext.save()
+        } catch {
+            log.error(error)
         }
     }
     
