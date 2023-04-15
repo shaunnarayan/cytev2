@@ -85,12 +85,15 @@ func homeDirectory() -> URL {
 /// Format the title for an episode given its start time and unformatted title
 ///
 func urlForEpisode(start: Date?, title: String?) -> URL {
+    if title!.count > 256 {
+        fatalError("Title was too large!")
+    }
     var url: URL = homeDirectory()
     let components = Calendar.current.dateComponents([.year, .month, .day], from: start ?? Date())
     url = url.appendingPathComponent("\(components.year ?? 0)")
     url = url.appendingPathComponent("\(components.month ?? 0)")
     url = url.appendingPathComponent("\(components.day ?? 0)")
-    url = url.appendingPathComponent("\(title ?? "").mov")
+    url = url.appendingPathComponent("\(title!).mov")
     return url
 }
 

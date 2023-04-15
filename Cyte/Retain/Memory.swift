@@ -244,7 +244,7 @@ class Memory {
         log.info("Open \(title)")
         
         currentStart = Date()
-        let full_title = "\(title.replacingOccurrences(of: ":", with: ".")) \(currentStart.formatted(date: .abbreviated, time: .standard).replacingOccurrences(of: ":", with: "."))"
+        let full_title = "\(String(title.replacingOccurrences(of: "/", with: ".").replacingOccurrences(of: ":", with: ".").prefix(200))) \(currentStart.formatted(date: .abbreviated, time: .standard).replacingOccurrences(of: ":", with: "."))"
         let outputMovieURL = urlForEpisode(start: currentStart, title: full_title)
         do {
             try FileManager.default.createDirectory(at: outputMovieURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
