@@ -11,6 +11,7 @@ import Charts
 import AVKit
 import Combine
 import Vision
+import CoreData
 
 struct EpisodePlaylistView: View {
     @EnvironmentObject var bundleCache: BundleCache
@@ -225,7 +226,7 @@ struct EpisodePlaylistView: View {
                     y: .value("?", 0),
                     height: MarkDimension(floatLiteral: timelineSize * 2)
                 )
-                .foregroundStyle(Color(nsColor:bundleCache.getColor(bundleID: interval.episode.bundle!) ?? NSColor.gray))
+                .foregroundStyle(bundleCache.getColor(bundleID: interval.episode.bundle!) ?? Color.gray)
                 .cornerRadius(40.0)
             }
         }
@@ -274,6 +275,7 @@ struct EpisodePlaylistView: View {
                         .frame(width: width, height: height)
                     }
                 }
+#if os(macOS)
                 .contextMenu {
                     Button {
                         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
@@ -283,6 +285,7 @@ struct EpisodePlaylistView: View {
                         Label("Reveal in Finder", systemImage: "questionmark.folder")
                     }
                 }
+#endif
                 .accessibilityLabel("A large video preview pinned to the current slider time")
                 
                 ZStack {
@@ -293,7 +296,7 @@ struct EpisodePlaylistView: View {
                                 return startTimeForEpisode(interval: interval) <= Double(EpisodePlaylistView.windowLengthInSeconds) &&
                                 endTimeForEpisode(interval: interval) >= 0
                             }) { interval in
-                                Image(nsImage: bundleCache.getIcon(bundleID: interval.episode.bundle!))
+                                PortableImage(uiImage: bundleCache.getIcon(bundleID: interval.episode.bundle!))
                                     .frame(width: timelineSize * 2, height: timelineSize * 2)
                                     .id(interval.episode.start)
                                     .offset(CGSize(width: (windowOffsetToCenter(of:interval) * metrics.size.width) - timelineSize, height: 0))
@@ -330,7 +333,7 @@ struct EpisodePlaylistView: View {
                     ToolbarItem {
                         Button("Resume") {
                             // Handle button tap here
-                            NSWorkspace.shared.open(documents.first!.path!)
+                            openFile(path: documents.first!.path!)
                         }
                         .frame(width: 70)
                     }

@@ -11,7 +11,7 @@ import OSLog
 import Combine
 import SQLite
 import NaturalLanguage
-import AXSwift
+import CoreData
 
 ///
 ///  Tracks active application context (driven by external caller)
@@ -116,7 +116,7 @@ class Memory {
             }
         }
     }
-
+#if os(macOS)
     ///
     /// Enumerates target directories and filters by last edit time.
     /// This is imperfect for a number of reasons, it is very low granularity for long episodes
@@ -156,7 +156,7 @@ class Memory {
         recentFiles.sort(by: { $0.1 > $1.1 })
         return recentFiles
     }
-    
+
     ///
     /// Wraps the provided context and updates with browser awareness
     ///
@@ -203,7 +203,7 @@ class Memory {
         }
         return CyteAppContext(front: front, title: title, context: context, isPrivate: isPrivate)
     }
-    
+#endif
     ///
     /// Check the currently active app, if different since last check
     /// then close the current episode and start a new one
@@ -212,9 +212,13 @@ class Memory {
     ///
     @MainActor
     func updateActiveContext(windowTitles: Dictionary<String, String>) {
+#if os(macOS)
         guard let front = NSWorkspace.shared.frontmostApplication else { return }
         let title: String = windowTitles[front.bundleIdentifier ?? ""] ?? ""
         let ctx = browserAwareContext(front: front, window_title:title)
+#else
+        let ctx = CyteAppContext(front: iRunningApplication(bundleID: "?", isActive: false, localizedName: "?"), title: "?", context: "?", isPrivate: false)
+#endif
         
         if ctx.front.isActive && (currentContext != ctx.context || currentContextIsPrivate != ctx.isPrivate) {
             if assetWriter != nil && assetWriterInput!.isReadyForMoreMediaData {
@@ -225,8 +229,8 @@ class Memory {
             let exclusion = Memory.shared.getOrCreateBundleExclusion(name: currentContext)
             if assetWriter == nil && currentContext != Bundle.main.bundleIdentifier && exclusion.excluded == false && !currentContextIsPrivate {
                 var title = ctx.title
-                if title.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
-                    title = front.localizedName ?? currentContext
+                if title.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
+                    title = ctx.front.localizedName ?? currentContext
                 }
                 // hack always skip 1 frame for sync issue between tracking and record
                 skipNextNFrames = 1
@@ -279,7 +283,7 @@ class Memory {
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
-    
+#if os(macOS)
     ///
     /// Saves all files edited within the episodes interval (as per last edit time)
     /// to the index for querying
@@ -304,7 +308,7 @@ class Memory {
             }
         }
     }
-    
+#endif
     ///
     /// Helper function for closeEpisode, clear values
     ///
@@ -336,11 +340,13 @@ class Memory {
             let frame_count = self.frameCount
             assetWriter!.finishWriting {
                 log.info("Finished writing episode")
+#if os(macOS)
                 if (frame_count * Memory.secondsBetweenFrames) > 30 {
                     log.info("Tracking file changes...")
                     self.trackFileChanges(ep:ep)
                     log.info("Finished tracking")
                 }
+#endif
             }
             
             do {

@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreGraphics
-import Cocoa
 import NaturalLanguage
 import OpenAI
 import KeychainSwift

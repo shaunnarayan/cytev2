@@ -138,6 +138,7 @@ struct StaticEpisodeView: View {
                                     updateSelection()
                                 }
                                 .opacity(isHoveringNext ? 0.8 : 1.0)
+#if os(macOS)
                                 .onHover(perform: { hovering in
                                     self.isHoveringNext = hovering
                                     if hovering {
@@ -146,6 +147,7 @@ struct StaticEpisodeView: View {
                                         NSCursor.arrow.set()
                                     }
                                 })
+#endif
                         }
                         .foregroundColor(Color(red: 120.0 / 255.0, green: 120.0 / 255.0, blue: 120.0 / 255.0))
                         .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
@@ -159,6 +161,7 @@ struct StaticEpisodeView: View {
                     }
                     .buttonStyle(.plain)
                     .opacity(isHoveringExpand ? 0.8 : 1.0)
+#if os(macOS)
                     .onHover(perform: { hovering in
                         self.isHoveringExpand = hovering
                         if hovering {
@@ -167,7 +170,7 @@ struct StaticEpisodeView: View {
                             NSCursor.arrow.set()
                         }
                     })
-
+#endif
                     Image(systemName: episode.save ? "star.fill" : "star")
                         .onTapGesture {
                             episode.save = !episode.save
@@ -177,6 +180,7 @@ struct StaticEpisodeView: View {
                             }
                         }
                         .opacity(isHoveringSave ? 0.8 : 1.0)
+#if os(macOS)
                         .onHover(perform: { hovering in
                             self.isHoveringSave = hovering
                             if hovering {
@@ -185,7 +189,8 @@ struct StaticEpisodeView: View {
                                 NSCursor.arrow.set()
                             }
                         })
-                    Image(nsImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier)!))
+#endif
+                    PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier)!))
                         .frame(width: 32, height: 32)
                 }
                 .padding(EdgeInsets(top: 10.0, leading: 0.0, bottom: 10.0, trailing: 0.0))

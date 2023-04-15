@@ -136,6 +136,7 @@ struct ContentView: View {
                 Color(red: 240.0 / 255.0, green: 240.0 / 255.0, blue: 240.0 / 255.0 )
             )
         )
+#if os(macOS)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             Memory.shared.closeEpisode()
             Task {
@@ -144,5 +145,6 @@ struct ContentView: View {
                 self.episodeModel.refreshData()
             }
         }
+#endif
     }
 }

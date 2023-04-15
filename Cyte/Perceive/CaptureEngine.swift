@@ -13,9 +13,6 @@ An object that captures a stream of captured sample buffers containing screen an
 
 import Foundation
 import AVFAudio
-import ScreenCaptureKit
-import OSLog
-import Combine
 
 /// A structure that contains the video data to render.
 struct CapturedFrame {
@@ -28,6 +25,11 @@ struct CapturedFrame {
     let scaleFactor: CGFloat
     var size: CGSize { contentRect.size }
 }
+
+#if os(macOS)
+import ScreenCaptureKit
+import OSLog
+import Combine
 
 /// An object that wraps an instance of `SCStream`, and returns its results as an `AsyncThrowingStream`.
 class CaptureEngine: NSObject, @unchecked Sendable {
@@ -167,3 +169,4 @@ private class CaptureEngineStreamOutput: NSObject, SCStreamOutput, SCStreamDeleg
         continuation?.finish(throwing: error)
     }
 }
+#endif

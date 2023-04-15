@@ -28,8 +28,11 @@
 		3FAD36A629B1BB5C00CCCE82 /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A529B1BB5C00CCCE82 /* Analysis.swift */; };
 		3FAD36A929B1BB9800CCCE82 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A829B1BB9800CCCE82 /* Memory.swift */; };
 		3FAD36AC29B1BD1A00CCCE82 /* Agent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36AB29B1BD1A00CCCE82 /* Agent.swift */; };
-		3FC6C78029CBBD5A004E19FF /* DiffMatchPatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC6C77E29CBBCCB004E19FF /* DiffMatchPatch.framework */; };
-		3FC6C78129CBBD5A004E19FF /* DiffMatchPatch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FC6C77E29CBBCCB004E19FF /* DiffMatchPatch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB92F8729EA885C0048CDAF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F8629EA885C0048CDAF /* MobileCoreServices.framework */; platformFilter = ios; };
+		3FB92F8A29EA89660048CDAF /* AppIconFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92F8929EA89660048CDAF /* AppIconFetcher.m */; platformFilter = ios; };
+		3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; };
+		3FB92F9D29EAA2770048CDAF /* DiffMatchPatch.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB92FA329EAA69A0048CDAF /* PortableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA229EAA69A0048CDAF /* PortableImage.swift */; };
 		3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FC6C78A29CC2EA2004E19FF /* KeychainSwift */; };
 		3FCAA20029AC7C0100898995 /* CyteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA1FF29AC7C0100898995 /* CyteApp.swift */; };
 		3FCAA20229AC7C0100898995 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20129AC7C0100898995 /* Persistence.swift */; };
@@ -40,18 +43,18 @@
 		3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5BA29D0029800A4C6C0 /* ObjcExceptionBridging */; };
 		3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5BC29D0029800A4C6C0 /* XCGLogger */; };
 		3FDBE5C429D4704300A4C6C0 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDBE5C329D4704300A4C6C0 /* Export.swift */; };
-		3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE7822229DB15A8008CB97D /* AXSwift */; };
+		3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 3FE7822229DB15A8008CB97D /* AXSwift */; };
 		3FE7822629DBDB4A008CB97D /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE7822529DBDB4A008CB97D /* llama */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3FC6C78229CBBD5A004E19FF /* Embed Frameworks */ = {
+		3FB92F9E29EAA2780048CDAF /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3FC6C78129CBBD5A004E19FF /* DiffMatchPatch.framework in Embed Frameworks */,
+				3FB92F9D29EAA2770048CDAF /* DiffMatchPatch.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,8 +88,12 @@
 		3FAD36AD29B1BE8700CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FAD36AE29B1C18600CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FAD36B129B1C29300CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3FB92F8629EA885C0048CDAF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		3FB92F8829EA893C0048CDAF /* AppIconFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppIconFetcher.h; sourceTree = "<group>"; };
+		3FB92F8929EA89660048CDAF /* AppIconFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppIconFetcher.m; sourceTree = "<group>"; };
+		3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = DiffMatchPatch.xcframework; sourceTree = "<group>"; };
+		3FB92FA229EAA69A0048CDAF /* PortableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortableImage.swift; sourceTree = "<group>"; };
 		3FC6C76929CBBB74004E19FF /* Cyte-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cyte-Bridging-Header.h"; sourceTree = "<group>"; };
-		3FC6C77E29CBBCCB004E19FF /* DiffMatchPatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DiffMatchPatch.framework; sourceTree = "<group>"; };
 		3FCAA1FC29AC7C0100898995 /* Cyte.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cyte.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FCAA1FF29AC7C0100898995 /* CyteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyteApp.swift; sourceTree = "<group>"; };
 		3FCAA20129AC7C0100898995 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -109,8 +116,9 @@
 				3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */,
 				3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */,
 				3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */,
+				3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */,
 				3F14BDD629C0D4A900F12FE7 /* AVKit.framework in Frameworks */,
-				3FC6C78029CBBD5A004E19FF /* DiffMatchPatch.framework in Frameworks */,
+				3FB92F8729EA885C0048CDAF /* MobileCoreServices.framework in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,8 +139,9 @@
 		3F8F932829B5CF9C00C938DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */,
+				3FB92F8629EA885C0048CDAF /* MobileCoreServices.framework */,
 				3F14BDD529C0D4A800F12FE7 /* AVKit.framework */,
-				3FC6C77E29CBBCCB004E19FF /* DiffMatchPatch.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -153,6 +162,8 @@
 				3FDBE5C329D4704300A4C6C0 /* Export.swift */,
 				3F7BB7DA29E0112900D8A0BB /* Browser.swift */,
 				3F7BB7E029E2AF8700D8A0BB /* View.swift */,
+				3FB92F8829EA893C0048CDAF /* AppIconFetcher.h */,
+				3FB92F8929EA89660048CDAF /* AppIconFetcher.m */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -188,6 +199,7 @@
 				3F7BB7DC29E26C7000D8A0BB /* EpisodeModel.swift */,
 				3F7BB7DE29E2AC9F00D8A0BB /* AdvancedSearchView.swift */,
 				3F7BB7E229E2B39700D8A0BB /* SearchBarView.swift */,
+				3FB92FA229EAA69A0048CDAF /* PortableImage.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -265,7 +277,7 @@
 				3FCAA1F829AC7C0100898995 /* Sources */,
 				3FCAA1F929AC7C0100898995 /* Frameworks */,
 				3FCAA1FA29AC7C0100898995 /* Resources */,
-				3FC6C78229CBBD5A004E19FF /* Embed Frameworks */,
+				3FB92F9E29EAA2780048CDAF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -364,9 +376,11 @@
 				3F68242229AEBF270044A0F2 /* Cyte.xcdatamodeld in Sources */,
 				3F58AE2629B18344007E7703 /* Events.swift in Sources */,
 				3F6FE07E29C424230061DBF5 /* StaticEpisodeView.swift in Sources */,
+				3FB92FA329EAA69A0048CDAF /* PortableImage.swift in Sources */,
 				3FAD36A929B1BB9800CCCE82 /* Memory.swift in Sources */,
 				3FAD36A629B1BB5C00CCCE82 /* Analysis.swift in Sources */,
 				3FCAA20229AC7C0100898995 /* Persistence.swift in Sources */,
+				3FB92F8A29EA89660048CDAF /* AppIconFetcher.m in Sources */,
 				3FDBE5C429D4704300A4C6C0 /* Export.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,7 +505,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIconMac;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Cyte/Cyte.entitlements;
 				CODE_SIGN_IDENTITY = "-";
@@ -505,9 +522,11 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/ios",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cyte/Info.plist;
@@ -531,13 +550,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = shoplex.Cyte;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -545,7 +565,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIconMac;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Cyte/Cyte.entitlements;
 				CODE_SIGN_IDENTITY = "-";
@@ -559,9 +582,11 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/ios",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cyte/Info.plist;
@@ -585,12 +610,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = shoplex.Cyte;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

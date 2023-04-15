@@ -65,7 +65,9 @@ func makeTimelapse(episodes: [Episode], timelapse_len_seconds: Int = 60, reveal:
             } else {
                 if reveal {
                     if FileManager.default.fileExists(atPath: outputMovieURL.path(percentEncoded: false)) {
+#if os(macOS)
                         NSWorkspace.shared.activateFileViewerSelecting([outputMovieURL])
+#endif
                         log.info("movie has been exported to \(outputMovieURL)")
                     }
                 }

@@ -58,6 +58,7 @@ struct AdvancedSearchView: View {
                     Image(systemName: "folder.badge.minus")
                 }
                 .buttonStyle(.plain)
+#if os(macOS)
                 .onHover(perform: { hovering in
                     self.isHovering = hovering
                     if hovering {
@@ -66,6 +67,7 @@ struct AdvancedSearchView: View {
                         NSCursor.arrow.set()
                     }
                 })
+#endif
                 .confirmationDialog("This action cannot be undone. Are you sure?",
                  isPresented: $isPresentingConfirm) {
                     Button("Delete all results", role: .destructive) {
@@ -76,7 +78,7 @@ struct AdvancedSearchView: View {
                     }
                 }
             }
-            
+#if os(macOS)
             ScrollView {
                 LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
                     ForEach(Set(episodeModel.episodes.map { $0.bundle ?? Bundle.main.bundleIdentifier! }).sorted(by: <), id: \.self) { bundle in
@@ -131,6 +133,7 @@ struct AdvancedSearchView: View {
                     }
                 }
             }
+#endif
         }
         .contentShape(Rectangle())
         .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))

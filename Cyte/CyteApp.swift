@@ -7,15 +7,20 @@
 
 import SwiftUI
 import XCGLogger
-import AXSwift
+import CoreData
+
+#if os(macOS)
+    import AXSwift
+#endif
 
 @main
 struct CyteApp: App {
     let persistenceController = PersistenceController.shared
     let bundleCache = BundleCache()
     let episodeModel = EpisodeModel()
-
+#if os(macOS)
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+#endif
     @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
     @StateObject var screenRecorder = ScreenRecorder.shared
     @Environment(\.openWindow) var openWindow
@@ -25,14 +30,17 @@ struct CyteApp: App {
     /// On every run, starts the recorder and sets up hotkey listeners
     ///
     func setup() {
-        appDelegate.mainApp = self
         let defaults = UserDefaults.standard
-        if defaults.object(forKey: "CYTE_RETENTION") == nil {
-            defaults.set(90, forKey: "CYTE_RETENTION")
-        }
+#if os(macOS)
+        appDelegate.mainApp = self
         if defaults.bool(forKey: "CYTE_HIDE_DOCK") {
             NSApp.setActivationPolicy(.accessory)
             NSApplication.shared.activate(ignoringOtherApps: true)
+        }
+        HotkeyListener.register()
+#endif
+        if defaults.object(forKey: "CYTE_RETENTION") == nil {
+            defaults.set(90, forKey: "CYTE_RETENTION")
         }
         // Prefetch icons
         Task {
@@ -51,7 +59,6 @@ struct CyteApp: App {
             if await screenRecorder.canRecord {
                 await screenRecorder.start()
             }
-            HotkeyListener.register()
         }
     }
     
@@ -90,6 +97,7 @@ struct CyteApp: App {
             CommandGroup(replacing: .saveItem) { }
             CommandGroup(replacing: .sidebar) { }
         }
+#if os(macOS)
         MenuBarExtra(
                     "App Menu Bar Extra", image: "LogoIcon",
                     isInserted: $showMenuBarExtra)
@@ -125,10 +133,11 @@ struct CyteApp: App {
                     }
                     .frame(width: 200)
                 }
+#endif
     }
 }
-
 let log = XCGLogger.default
+#if os(macOS)
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     var mainApp: CyteApp?
@@ -181,3 +190,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Memory.shared.closeEpisode()
     }
 }
+
+#endif

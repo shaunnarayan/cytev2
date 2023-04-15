@@ -7,7 +7,9 @@
 
 import CoreData
 import SQLite
-import AppKit
+#if os(macOS)
+    import AppKit
+#endif
 
 ///
 /// This handles removing dangling refs that may have occurd due to a bug in delete_episode
@@ -32,8 +34,17 @@ class ModelMigration1to2: NSEntityMigrationPolicy {
 ///
 /// Bunch of data representing the current application context
 ///
+struct iRunningApplication {
+    let bundleID: String
+    let isActive: Bool
+    let localizedName: String?
+}
 struct CyteAppContext {
+#if os(macOS)
     let front:NSRunningApplication
+#else
+    let front: iRunningApplication
+#endif
     var title: String
     var context: String
     let isPrivate: Bool
@@ -101,8 +112,10 @@ func urlForEpisode(start: Date?, title: String?) -> URL {
 /// Helper function to open finder pinned to the supplied episode
 ///
 func revealEpisode(episode: Episode) {
+#if os(macOS)
     let url = urlForEpisode(start: episode.start, title: episode.title)
     NSWorkspace.shared.activateFileViewerSelecting([url])
+#endif
 }
 
 ///

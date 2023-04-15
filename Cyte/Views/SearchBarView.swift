@@ -40,14 +40,23 @@ struct SearchBarView: View {
                 }, set: {
                     self.episodeModel.filter = $0
                 })
-                HStack(alignment: .center) {
+                
+#if os(macOS)
+                let layout = AnyLayout(HStackLayout())
+#else
+                let layout = AnyLayout(VStackLayout())
+#endif
+                layout
+                {
                     ZStack(alignment:.trailing) {
                         TextField(
                             "Search \(Agent.shared.isSetup ? "or chat " : "")your history",
                             text: binding
                         )
                         .accessibilityLabel("The main search bar for your recordings. Use an FTS formatted search query.")
+#if os(macOS)
                         .frame(width: agent.chatLog.count == 0 ? 650 : nil, height: 48)
+#endif
                         .cornerRadius(5)
                         .padding(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
                         .textFieldStyle(.plain)
@@ -63,6 +72,7 @@ struct SearchBarView: View {
                             self.episodeModel.runSearch()
                         }) {
                             Image(systemName: "paperplane")
+#if os(macOS)
                                 .onHover(perform: { hovering in
                                     self.isHoveringSearch = hovering
                                     if hovering {
@@ -71,6 +81,7 @@ struct SearchBarView: View {
                                         NSCursor.arrow.set()
                                     }
                                 })
+#endif
                                 .foregroundColor(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0))
                         }
                         .frame(width: 60, height: 60)
@@ -96,6 +107,7 @@ struct SearchBarView: View {
                             .opacity(0.8)
                             .buttonStyle(.plain)
                             .opacity(isHoveringUsage ? 0.8 : 1.0)
+#if os(macOS)
                             .onHover(perform: { hovering in
                                 self.isHoveringUsage = hovering
                                 if hovering {
@@ -104,7 +116,7 @@ struct SearchBarView: View {
                                     NSCursor.arrow.set()
                                 }
                             })
-                            
+#endif
                             Button(action: {
                                 episodeModel.highlightedBundle = ""
                                 episodeModel.showFaves = !episodeModel.showFaves
@@ -117,6 +129,7 @@ struct SearchBarView: View {
                             .buttonStyle(.plain)
                             .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 0.0, trailing: 0.0))
                             .opacity(isHoveringFaves ? 0.8 : 1.0)
+#if os(macOS)
                             .onHover(perform: { hovering in
                                 self.isHoveringFaves = hovering
                                 if hovering {
@@ -125,7 +138,7 @@ struct SearchBarView: View {
                                     NSCursor.arrow.set()
                                 }
                             })
-                            
+#endif
                             NavigationLink(value: 1) {
                                 Image(systemName: "gearshape")
                             }
@@ -133,6 +146,7 @@ struct SearchBarView: View {
                             .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                             .opacity(isHoveringSettings ? 0.8 : 1.0)
                             .buttonStyle(.plain)
+#if os(macOS)
                             .onHover(perform: { hovering in
                                 self.isHoveringSettings = hovering
                                 if hovering {
@@ -141,7 +155,7 @@ struct SearchBarView: View {
                                     NSCursor.arrow.set()
                                 }
                             })
-                            
+#endif
                             Button(action: {
                                 episodeModel.resetFilters()
                                 self.episodeModel.refreshData()
@@ -152,6 +166,7 @@ struct SearchBarView: View {
                             .buttonStyle(.plain)
                             .transformEffect(CGAffineTransformMakeScale(-1, 1))
                             .padding(EdgeInsets(top: 0.0, leading: 25.0, bottom: 0.0, trailing: 0.0))
+#if os(macOS)
                             .onHover(perform: { hovering in
                                 self.isHovering = hovering
                                 if hovering {
@@ -160,7 +175,7 @@ struct SearchBarView: View {
                                     NSCursor.arrow.set()
                                 }
                             })
-                            
+#endif
                             if episodeModel.episodesLengthSum < (60 * 60 * 40) && (currentExport == nil || currentExport!.progress >= 1.0) {
                                 Button(action: {
                                     Task {
@@ -171,6 +186,7 @@ struct SearchBarView: View {
                                 }
                                 .buttonStyle(.plain)
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+#if os(macOS)
                                 .onHover(perform: { hovering in
                                     self.isHovering = hovering
                                     if hovering {
@@ -179,6 +195,7 @@ struct SearchBarView: View {
                                         NSCursor.arrow.set()
                                     }
                                 })
+#endif
                             }
                             
                             Spacer()
@@ -202,6 +219,7 @@ struct SearchBarView: View {
                                         timer?.invalidate()
                                     }
                                     .buttonStyle(.plain)
+#if os(macOS)
                                     .onHover(perform: { hovering in
                                         self.isHovering = hovering
                                         if hovering {
@@ -210,6 +228,7 @@ struct SearchBarView: View {
                                             NSCursor.arrow.set()
                                         }
                                     })
+#endif
                                 }
                             }
                         }

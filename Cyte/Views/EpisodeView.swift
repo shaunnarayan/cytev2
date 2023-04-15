@@ -60,11 +60,13 @@ struct EpisodeView: View {
                     .opacity(isHoveringExpand ? 0.8 : 1.0)
                     .onHover(perform: { hovering in
                         self.isHoveringExpand = hovering
+#if os(macOS)
                         if hovering {
                             NSCursor.pointingHand.set()
                         } else {
                             NSCursor.arrow.set()
                         }
+#endif
                     })
 
                     Image(systemName: episode.save ? "star.fill" : "star")
@@ -76,6 +78,7 @@ struct EpisodeView: View {
                             }
                         }
                         .opacity(isHoveringSave ? 0.8 : 1.0)
+#if os(macOS)
                         .onHover(perform: { hovering in
                             self.isHoveringSave = hovering
                             if hovering {
@@ -84,7 +87,8 @@ struct EpisodeView: View {
                                 NSCursor.arrow.set()
                             }
                         })
-                    Image(nsImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier!)) )
+#endif
+                    PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier!)) )
                         .frame(width: 32, height: 32)
                 }
                 .padding(EdgeInsets(top: 10.0, leading: 0.0, bottom: 10.0, trailing: 0.0))

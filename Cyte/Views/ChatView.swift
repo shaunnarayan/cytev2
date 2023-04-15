@@ -47,12 +47,14 @@ struct ChatView: View {
                             RoundedRectangle(cornerRadius: 15)
                                 .foregroundColor(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0))
                         )
-                        
+
                 } else {
+#if os(macOS)
                     Image(nsImage: bundleCache.getIcon(bundleID: Bundle.main.bundleIdentifier!))
                         .resizable()
                         .cornerRadius(15.0)
                         .frame(width: 30, height: 30)
+#endif
                 }
                 VStack(alignment:.leading, spacing: 0) {
                     Spacer().frame(height: 10)
@@ -64,11 +66,10 @@ struct ChatView: View {
                             .lineLimit(100)
                     }
                 }
-                
             }
             .padding(20)
             .frame(maxWidth: .infinity, alignment: Alignment.leading)
-            .animation(.easeInOut(duration: 0.3))
+//            .animation(.easeInOut(duration: 0.3))
             .foregroundColor(colorScheme == .dark ? .gray : .black)
             .background(
                 RoundedRectangle(cornerRadius: String(chat.0) == "bot" ? 0 : 17)
@@ -95,6 +96,7 @@ struct ChatView: View {
                     .padding()
                     .buttonStyle(.plain)
                     .background(RoundedRectangle(cornerRadius: 4.0).foregroundColor(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0)))
+#if os(macOS)
                     .onHover(perform: { hovering in
                         self.isHoveringReturn = hovering
                         if hovering {
@@ -103,6 +105,7 @@ struct ChatView: View {
                             NSCursor.arrow.set()
                         }
                     })
+#endif
                     Spacer()
                 }
                 .frame(minWidth: 200, maxHeight: .infinity, alignment: .leading)

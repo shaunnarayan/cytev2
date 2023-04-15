@@ -8,7 +8,10 @@
 import Foundation
 import SwiftUI
 import KeychainSwift
-import AXSwift
+import CoreData
+#if os(macOS)
+    import AXSwift
+#endif
 
 struct BundleView: View {
     @EnvironmentObject var bundleCache: BundleCache
@@ -50,7 +53,7 @@ struct BundleView: View {
                 }
                 isExcluded = bundle.excluded
             })
-            Image(nsImage: bundleCache.getIcon(bundleID: bundle.bundle!))
+            PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle.bundle!))
                 .frame(width: 32, height: 32)
             Text(getApplicationNameFromBundleID(bundleID: bundle.bundle!) ?? bundle.bundle!)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,11 +92,18 @@ struct Settings: View {
             VStack(alignment: .leading) {
                 Text("Settings").font(.title)
                     .padding()
-                
+#if os(macOS)
+                let layout = AnyLayout(HStackLayout())
+#else
+                let layout = AnyLayout(VStackLayout())
+#endif
                 HStack {
                     Text("Saving memories in: \(homeDirectory().path(percentEncoded: false))")
+                        .lineLimit(10)
+#if os(macOS)
                         .font(.title2)
                         .frame(width: 1000, height: 50, alignment: .leading)
+#endif
                     Button(action: {
                         isShowingHomeSelection.toggle()
                     }) {
@@ -113,19 +123,22 @@ struct Settings: View {
                 .accessibilityLabel("Path currently used to store memories and a button to update it")
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 
-                Text("Save recordings for (will use approximately 1GB for every four hours: this can vary greatly depending on amount of context switching)").font(.title2)
+                Text("Save recordings for (will use approximately 1GB for every four hours: this can vary greatly depending on amount of context switching)")
+                    .font(.title2)
+                    .lineLimit(10)
                     .padding()
                     .onAppear {
                         currentRetention = defaults.integer(forKey: "CYTE_RETENTION")
                     }
                 
                 
-                HStack {
+                layout {
                     ForEach(Array(["Forever", "30 Days", "60 Days", "90 Days"].enumerated()), id: \.offset) { index, retain in
                         Text(retain)
                             .frame(width: 244, height: 50)
                             .background(currentRetention == (index * 30) ? Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0) : .white)
                             .foregroundColor(currentRetention == (index * 30) ? .black : .gray)
+#if os(macOS)
                             .onHover(perform: { hovering in
                                 self.isHovering = hovering
                                 if hovering {
@@ -134,6 +147,7 @@ struct Settings: View {
                                     NSCursor.arrow.set()
                                 }
                             })
+#endif
                             .onTapGesture {
                                 defaults.set(index * 30, forKey: "CYTE_RETENTION")
                                 currentRetention = index * 30
@@ -143,16 +157,21 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 
                 VStack(alignment: .leading) {
-                    Text("To enable Knowledge base features enter your GPT4 API key, or a path to a llama.cpp compatible model file").font(.title2)
+                    Text("To enable Knowledge base features enter your GPT4 API key, or a path to a llama.cpp compatible model file")
+                        .lineLimit(10)
+                        .font(.title2)
                         .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                     Text("Privacy note: This feature will make requests to the OpenAI servers if you supply an API key")
+                        .lineLimit(10)
                         .font(.caption)
                         .padding(EdgeInsets(top: 5.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                     
                     HStack {
                         if Agent.shared.isSetup {
                             Text("Knowledge base enabled")
+#if os(macOS)
                                 .frame(width: 1000, height: 50)
+#endif
                                 .background(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0))
                             Button(action: {
                                 let keys = KeychainSwift()
@@ -171,7 +190,9 @@ struct Settings: View {
                             .textFieldStyle(.plain)
                             .background(.white)
                             .font(.title)
+#if os(macOS)
                             .frame(width: 1000)
+#endif
                             .onSubmit {
                                 Agent.shared.setup(key: apiDetails)
                                 apiDetails = ""
@@ -186,7 +207,7 @@ struct Settings: View {
                     }
                     .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 }
-                
+#if os(macOS)
                 HStack {
                     let binding = Binding<Bool>(get: {
                         return hideDock
@@ -203,8 +224,9 @@ struct Settings: View {
                     })
                     Text("Hide dock icon")
                         .font(.title2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+#if os(macOS)
                         .frame(width: 1000, height: 50, alignment: .leading)
+#endif
                         .onAppear {
                             hideDock = NSApp.activationPolicy() == .accessory
                         }
@@ -215,7 +237,7 @@ struct Settings: View {
                     .accessibilityLabel("Checkbox to enable browser awareness")
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
-                
+
                 HStack {
                     let binding = Binding<Bool>(get: {
                         return browserAware
@@ -225,12 +247,14 @@ struct Settings: View {
                         checkIsProcessTrusted(prompt: $0)
                     })
                     Text("Browser awareness (Ignore Incognito and Private Browsing windows, episodes track domains)")
+                        .lineLimit(10)
                         .font(.title2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                         .onAppear {
                             browserAware = defaults.bool(forKey: "CYTE_BROWSER")
                         }
+#if os(macOS)
                         .frame(width: 1000, height: 50, alignment: .leading)
+#endif
                     Toggle(isOn: binding) {
                         
                     }
@@ -240,9 +264,10 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
                 
                 Text("Privacy note: This feature will request icons for display from https://www.google.com/s2/favicons on startup")
+                    .lineLimit(10)
                     .font(.caption)
                     .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
-                
+#endif
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Select applications you wish to disable recording for")
@@ -257,7 +282,9 @@ struct Settings: View {
                     .textFieldStyle(.plain)
                     .background(.white)
                     .font(.title)
+#if os(macOS)
                     .frame(width: 1000)
+#endif
                     
                     Button(action: {
                         isShowing.toggle()

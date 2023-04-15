@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 struct AppInterval :Identifiable {
     let episode: Episode

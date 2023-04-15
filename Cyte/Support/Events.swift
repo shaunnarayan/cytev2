@@ -6,11 +6,22 @@
 //
 
 import Foundation
-import Carbon
-import AppKit
 import SwiftUI
+#if os(macOS)
+    import Carbon
+    import AppKit
+#endif
+
+func openFile(path: URL) {
+#if os(macOS)
+    NSWorkspace.shared.open(path)
+#else
+    UIApplication.shared.open(path)
+#endif
+}
 
 func getApplicationNameFromBundleID(bundleID: String) -> String? {
+#if os(macOS)
     guard let path = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)?.path(percentEncoded: false)
     else { return bundleID }
     guard let appBundle = Bundle(path: path),
@@ -18,6 +29,9 @@ func getApplicationNameFromBundleID(bundleID: String) -> String? {
         return bundleID
     }
     return executableName
+#else
+    return bundleID
+#endif
 }
 
 extension String {
@@ -35,7 +49,7 @@ extension String {
     return result
   }
 }
-
+#if os(macOS)
 class HotkeyListener {
   static
   func getCarbonFlagsFromCocoaFlags(cocoaFlags: NSEvent.ModifierFlags) -> UInt32 {
@@ -114,3 +128,4 @@ class HotkeyListener {
     assert(status == noErr)    
   }
 }
+#endif

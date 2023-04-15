@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if os(macOS)
 import AXSwift
 
 ///
@@ -69,3 +70,4 @@ struct FavIcon {
         URL(string:"https://www.google.com/s2/favicons?sz=\(size.rawValue)&domain=\(domain)")!
     }
 }
+#endif

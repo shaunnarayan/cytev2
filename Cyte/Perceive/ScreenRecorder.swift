@@ -12,7 +12,9 @@ A model object that provides the interface to capture screen content and system 
 */
 
 import Foundation
-import ScreenCaptureKit
+#if os(macOS)
+    import ScreenCaptureKit
+#endif
 import Combine
 import OSLog
 import SwiftUI
@@ -22,6 +24,8 @@ import CoreGraphics
 class ScreenRecorder: ObservableObject {
     static let shared = ScreenRecorder()
     
+    @Published var isRunning = false
+#if os(macOS)
     /// The supported capture types.
     enum CaptureType {
         case display
@@ -29,8 +33,6 @@ class ScreenRecorder: ObservableObject {
     }
     
     private let logger = Logger()
-    
-    @Published var isRunning = false
     
     // MARK: - Video Properties
     @Published var captureType: CaptureType = .display {
@@ -75,12 +77,15 @@ class ScreenRecorder: ObservableObject {
     
     // Combine subscribers.
     private var subscriptions = Set<AnyCancellable>()
-    
+#endif
     var canRecord: Bool {
         get async {
             do {
+#if os(macOS)
                 // If the app doesn't have Screen Recording permission, this call generates an exception.
                 try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+#else
+#endif
                 return true
             } catch {
                 return false
@@ -88,32 +93,9 @@ class ScreenRecorder: ObservableObject {
         }
     }
     
-    func monitorAvailableContent() async {
-        guard !isSetup else { return }
-        // Refresh the lists of capturable content.
-        await self.refreshAvailableContent()
-        Timer.publish(every: 3, on: .main, in: .common).autoconnect().sink { [weak self] _ in
-            guard let self = self else { return }
-            // Memory is marked as MainActor and I suspect that enforces some global context
-            Task {
-                if Memory.shared.currentContext != Bundle.main.bundleIdentifier {
-                    await self.refreshAvailableContent()
-                    if let screenNumber = NSScreen.main!.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? CGDirectDisplayID {
-                            for screen in self.availableDisplays {
-                                if screen.displayID == screenNumber && self.selectedDisplay != screen {
-                                    log.info("Matched display \(screenNumber), updating...")
-                                    self.selectedDisplay = screen
-                                }
-                            }
-                        }
-                }
-            }
-        }
-        .store(in: &subscriptions)
-    }
-
     /// Starts capturing screen content.
     func start() async {
+#if os(macOS)
         // Exit early if already running.
         guard !isRunning else { return }
         
@@ -145,10 +127,13 @@ class ScreenRecorder: ObservableObject {
             // Unable to start the stream. Set the running state to false.
             isRunning = false
         }
+#else
+#endif
     }
     
     /// Stops capturing screen content.
     func stop() async {
+#if os(macOS)
         guard isRunning else { return }
         await captureEngine.stopCapture()
         for subscription in subscriptions {
@@ -160,6 +145,32 @@ class ScreenRecorder: ObservableObject {
         Memory.shared.closeEpisode()
         
         isRunning = false
+#else
+#endif
+    }
+#if os(macOS)
+    func monitorAvailableContent() async {
+        guard !isSetup else { return }
+        // Refresh the lists of capturable content.
+        await self.refreshAvailableContent()
+        Timer.publish(every: 3, on: .main, in: .common).autoconnect().sink { [weak self] _ in
+            guard let self = self else { return }
+            // Memory is marked as MainActor and I suspect that enforces some global context
+            Task {
+                if Memory.shared.currentContext != Bundle.main.bundleIdentifier {
+                    await self.refreshAvailableContent()
+                    if let screenNumber = NSScreen.main!.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? CGDirectDisplayID {
+                            for screen in self.availableDisplays {
+                                if screen.displayID == screenNumber && self.selectedDisplay != screen {
+                                    log.info("Matched display \(screenNumber), updating...")
+                                    self.selectedDisplay = screen
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        .store(in: &subscriptions)
     }
     
     /// - Tag: UpdateCaptureConfig
@@ -259,8 +270,9 @@ class ScreenRecorder: ObservableObject {
         // Remove this app's window from the list.
             .filter { $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier }
     }
+#endif
 }
-
+#if os(macOS)
 extension SCWindow {
     var displayName: String {
         switch (owningApplication, title) {
@@ -281,7 +293,7 @@ extension SCDisplay {
         "Display: \(width) x \(height)"
     }
 }
-
+#endif
 extension utsname {
     static var sMachine: String {
         var utsname = utsname()

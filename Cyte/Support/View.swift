@@ -93,11 +93,12 @@ func procVisionResult(request: VNRequest, error: Error?, minConfidence: Float = 
     return recognizedStringsAndRects
 }
 
+#if os(macOS)
 extension NSImage {
     ///
     /// This is used as a background color for contexts related to an app, like chart axis etc
     ///
-    var averageColor: NSColor? {
+    var averageColor: Color? {
         if self.tiffRepresentation == nil { return nil }
         guard let inputImage = CIImage(data: self.tiffRepresentation!) else { return nil }
         let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
@@ -107,23 +108,63 @@ extension NSImage {
         var bitmap = [UInt8](repeating: 0, count: 4)
         let context = CIContext(options: [.workingColorSpace: NSNull()])
         context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
-        
-        return NSColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
+        return Color(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, opacity: Double(bitmap[3]) / 255)
     }
 }
+typealias UIImage = NSImage
+
+extension NSImage {
+    var cgImage: CGImage? {
+        var proposedRect = CGRect(origin: .zero, size: size)
+
+        return cgImage(forProposedRect: &proposedRect,
+                       context: nil,
+                       hints: nil)
+    }
+
+    convenience init?(named name: String) {
+        self.init(named: Name(name))
+    }
+}
+#else
+extension UIImage {
+    ///
+    /// This is used as a background color for contexts related to an app, like chart axis, etc
+    ///
+    var averageColor: Color? {
+        guard let inputImage = CIImage(image: self) else { return nil }
+        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
+        guard let filter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector]) else { return nil }
+        guard let outputImage = filter.outputImage else { return nil }
+        
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext(options: [.workingColorSpace: NSNull()])
+        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
+        
+        return Color(red: Double(bitmap[0]) / 255, green: Double(bitmap[1]) / 255, blue: Double(bitmap[2]) / 255, opacity: Double(bitmap[3]) / 255)
+    }
+}
+struct AppIcon {
+    let image: UIImage?
+    
+    init(bundleID: String) {
+        self.image = AppIconFetcher.icon(forBundleID: bundleID)
+    }
+}
+#endif
 
 class BundleCache: ObservableObject {
-    @Published var bundleImageCache: [String: NSImage] = [:]
-    @Published var bundleColorCache : Dictionary<String, NSColor> = ["": NSColor.gray]
+    @Published var bundleImageCache: [String: UIImage] = [:]
+    @Published var bundleColorCache : Dictionary<String, Color> = ["": Color.gray]
     
-    func getColor(bundleID: String) -> NSColor? {
+    func getColor(bundleID: String) -> Color? {
         if bundleColorCache[bundleID] != nil {
             return bundleColorCache[bundleID]!
         }
-        return NSColor.gray
+        return Color.gray
     }
     
-    func setCache(bundleID: String, image: NSImage) {
+    func setCache(bundleID: String, image: UIImage) {
         if !Thread.isMainThread {
             DispatchQueue.main.sync {
                 self.bundleImageCache[bundleID] = image
@@ -132,23 +173,27 @@ class BundleCache: ObservableObject {
         }
     }
     
-    func getIcon(bundleID: String) -> NSImage {
+    func getIcon(bundleID: String) -> UIImage {
         if bundleImageCache[bundleID] != nil {
             return bundleImageCache[bundleID]!
         }
+#if os(macOS)
         guard let path = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)?.path(percentEncoded: false)
         else {
             URLSession.shared.dataTask(with: FavIcon(bundleID)[.m]) { (data, response, error) in
                 guard let imageData = data else { return }
-                self.setCache(bundleID: bundleID, image: NSImage(data:imageData)!)
+                self.setCache(bundleID: bundleID, image: UIImage(data:imageData)!)
             }.resume()
-            return NSImage()
+            return UIImage()
         }
         
         guard FileManager.default.fileExists(atPath: path)
-        else { return NSImage() }
+        else { return UIImage() }
         
         let icon = NSWorkspace.shared.icon(forFile: path)
+#else
+        let icon = AppIcon(bundleID: bundleID).image!
+#endif
         Task {
             setCache(bundleID: bundleID, image: icon)
         }
