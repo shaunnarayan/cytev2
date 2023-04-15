@@ -70,6 +70,7 @@ struct Settings: View {
     @State var isShowing = false
     @State var isShowingHomeSelection = false
     @State var apiDetails: String = ""
+    @State var bundleFilter: String = ""
     private let defaults = UserDefaults.standard
     @State var isHovering: Bool = false
     @State var currentRetention: Int = 0
@@ -77,6 +78,11 @@ struct Settings: View {
     @State var hideDock: Bool = false
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    let bundlesColumnLayout = [
+        GridItem(.fixed(320), spacing: 30, alignment: .topLeading),
+        GridItem(.fixed(320), spacing: 30, alignment: .topLeading)
+    ]
     
     var body: some View {
         ScrollView {
@@ -243,6 +249,16 @@ struct Settings: View {
                             .font(Font.title2)
                             .frame(maxWidth: .infinity, alignment: .topLeading)
                     }
+                    TextField(
+                        "Filter",
+                        text: $bundleFilter
+                    )
+                    .padding(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
+                    .textFieldStyle(.plain)
+                    .background(.white)
+                    .font(.title)
+                    .frame(width: 1000)
+                    
                     Button(action: {
                         isShowing.toggle()
                     }) {
@@ -269,24 +285,15 @@ struct Settings: View {
                 }
                 .padding()
             
-                HStack {
-                    List(Array(bundles.enumerated()), id: \.offset) { index, bundle in
-                        if bundle.bundle != Bundle.main.bundleIdentifier && index % 2 == 0 {
+                LazyVGrid(columns: bundlesColumnLayout, alignment: .leading) {
+                    ForEach(bundles.filter{ bundle in bundleFilter.count == 0 || bundle.bundle!.contains(bundleFilter) }) { bundle in
+                        if bundle.bundle != Bundle.main.bundleIdentifier {
                             BundleView(bundle: bundle, isExcluded: bundle.excluded)
                         }
                     }
-                    .scrollContentBackground(.hidden)
-                    .frame(width: 400)
-                    List(Array(bundles.enumerated()), id: \.offset) { index, bundle in
-                        if bundle.bundle != Bundle.main.bundleIdentifier && index % 2 == 1 {
-                            BundleView(bundle: bundle, isExcluded: bundle.excluded)
-                        }
-                    }
-                    .scrollContentBackground(.hidden)
-                    .frame(width: 400)
                 }
                 .accessibilityLabel("Grid of known applications and if they are to be recorded")
-                .frame(height: ceil(CGFloat(bundles.count) / 2.0) * 42.0)
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 0))
             }
         }
         .toolbar {
