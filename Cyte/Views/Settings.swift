@@ -37,12 +37,14 @@ struct BundleView: View {
                         }
                     } catch {
                     }
+#if os(macOS)
                     Task {
                         if ScreenRecorder.shared.isRunning {
                             await ScreenRecorder.shared.stop()
                             await ScreenRecorder.shared.start()
                         }
                     }
+#endif
                 } else {
                     bundle.excluded = false
                     do {

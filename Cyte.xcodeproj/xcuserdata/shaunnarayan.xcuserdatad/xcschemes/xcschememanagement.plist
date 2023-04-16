@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>CyteExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>Graph (Playground) 1.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -96,6 +101,21 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>3F6AAE5729EBBC0100843D71</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3FB92FAB29EB07580048CDAF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3FB92FF929EBB1550048CDAF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>3FCAA1FB29AC7C0100898995</key>
 		<dict>
 			<key>primary</key>

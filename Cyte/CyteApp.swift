@@ -54,12 +54,13 @@ struct CyteApp: App {
                 }
             } catch { }
         }
-        
+#if os(macOS)
         Task {
             if await screenRecorder.canRecord {
                 await screenRecorder.start()
             }
         }
+#endif
     }
     
     ///
@@ -67,11 +68,13 @@ struct CyteApp: App {
     /// to disk.
     ///
     func teardown() {
+#if os(macOS)
         Task {
             if await screenRecorder.canRecord {
                 await screenRecorder.stop()
             }
         }
+#endif
         Agent.shared.teardown()
     }
 

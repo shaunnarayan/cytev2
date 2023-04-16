@@ -211,13 +211,13 @@ class Memory {
     /// memories with many layers of picture in picture
     ///
     @MainActor
-    func updateActiveContext(windowTitles: Dictionary<String, String>) {
+    func updateActiveContext(windowTitles: Dictionary<String, String>, bundleInfo: (String, String) = ("", "")) {
 #if os(macOS)
         guard let front = NSWorkspace.shared.frontmostApplication else { return }
         let title: String = windowTitles[front.bundleIdentifier ?? ""] ?? ""
         let ctx = browserAwareContext(front: front, window_title:title)
 #else
-        let ctx = CyteAppContext(front: iRunningApplication(bundleID: "?", isActive: false, localizedName: "?"), title: "?", context: "?", isPrivate: false)
+        let ctx = CyteAppContext(front: iRunningApplication(bundleID: bundleInfo.0, isActive: true, localizedName: bundleInfo.1), title: bundleInfo.1, context: bundleInfo.0, isPrivate: false)
 #endif
         
         if ctx.front.isActive && (currentContext != ctx.context || currentContextIsPrivate != ctx.isPrivate) {
