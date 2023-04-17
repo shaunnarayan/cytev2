@@ -9,6 +9,8 @@ import CoreData
 import SQLite
 #if os(macOS)
     import AppKit
+#else
+    import UIKit
 #endif
 
 ///
@@ -110,16 +112,6 @@ func urlForEpisode(start: Date?, title: String?) -> URL {
     url = url.appendingPathComponent("\(components.day ?? 0)")
     url = url.appendingPathComponent("\(title!).mov")
     return url
-}
-
-///
-/// Helper function to open finder pinned to the supplied episode
-///
-func revealEpisode(episode: Episode) {
-#if os(macOS)
-    let url = urlForEpisode(start: episode.start, title: episode.title)
-    NSWorkspace.shared.activateFileViewerSelecting([url])
-#endif
 }
 
 ///

@@ -34,7 +34,6 @@
 		3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; };
 		3FB92F9D29EAA2770048CDAF /* DiffMatchPatch.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB92FA329EAA69A0048CDAF /* PortableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA229EAA69A0048CDAF /* PortableImage.swift */; };
-		3FB92FA529EB03F70048CDAF /* BroadcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA429EB03F70048CDAF /* BroadcastView.swift */; platformFilter = ios; };
 		3FB92FA729EB041C0048CDAF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92FA629EB041C0048CDAF /* UIKit.framework */; platformFilter = ios; };
 		3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FC6C78A29CC2EA2004E19FF /* KeychainSwift */; };
 		3FCAA20029AC7C0100898995 /* CyteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA1FF29AC7C0100898995 /* CyteApp.swift */; };
@@ -144,7 +143,6 @@
 		3FAD36B129B1C29300CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = DiffMatchPatch.xcframework; sourceTree = "<group>"; };
 		3FB92FA229EAA69A0048CDAF /* PortableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortableImage.swift; sourceTree = "<group>"; };
-		3FB92FA429EB03F70048CDAF /* BroadcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastView.swift; sourceTree = "<group>"; };
 		3FB92FA629EB041C0048CDAF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3FB92FAD29EB07580048CDAF /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		3FB92FF229EB98DE0048CDAF /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
@@ -282,7 +280,6 @@
 				3F7BB7DE29E2AC9F00D8A0BB /* AdvancedSearchView.swift */,
 				3F7BB7E229E2B39700D8A0BB /* SearchBarView.swift */,
 				3FB92FA229EAA69A0048CDAF /* PortableImage.swift */,
-				3FB92FA429EB03F70048CDAF /* BroadcastView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -527,7 +524,6 @@
 				3FAD36A929B1BB9800CCCE82 /* Memory.swift in Sources */,
 				3FAD36A629B1BB5C00CCCE82 /* Analysis.swift in Sources */,
 				3FCAA20229AC7C0100898995 /* Persistence.swift in Sources */,
-				3FB92FA529EB03F70048CDAF /* BroadcastView.swift in Sources */,
 				3FDBE5C429D4704300A4C6C0 /* Export.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

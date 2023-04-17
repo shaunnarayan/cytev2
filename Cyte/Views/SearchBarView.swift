@@ -197,13 +197,6 @@ struct SearchBarView: View {
                                 })
 #endif
                             }
-#if os(macOS)
-#else
-
-                                BroadcastPickerView()
-                                    .backgroundStyle(.white)
-                                    .frame(width: 25, height: 25)
-#endif
                             
                             Spacer()
                             if currentExport != nil && currentExport!.progress < 1.0 {

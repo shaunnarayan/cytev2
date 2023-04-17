@@ -9,6 +9,26 @@ import Foundation
 import AVKit
 import SwiftUI
 
+///
+/// Helper function to open finder pinned to the supplied episode
+///
+func revealEpisode(episode: Episode) {
+    let url = urlForEpisode(start: episode.start, title: episode.title)
+#if os(macOS)
+    NSWorkspace.shared.activateFileViewerSelecting([url])
+#else
+    openFile(path: url)
+#endif
+}
+
+func openFile(path: URL) {
+#if os(macOS)
+    NSWorkspace.shared.open(path)
+#else
+    UIApplication.shared.open(path)
+#endif
+}
+
 extension Date {
     var dayOfYear: Int {
         return Calendar.current.ordinality(of: .day, in: .year, for: self)!
@@ -119,12 +139,33 @@ extension UIImage {
         
         return Color(red: Double(bitmap[0]) / 255, green: Double(bitmap[1]) / 255, blue: Double(bitmap[2]) / 255, opacity: Double(bitmap[3]) / 255)
     }
+    
+    func imageWith(newSize: CGSize) -> UIImage {
+        let image = UIGraphicsImageRenderer(size: newSize).image { _ in
+            draw(in: CGRect(origin: .zero, size: newSize))
+        }
+            
+        return image.withRenderingMode(renderingMode)
+    }
 }
+
+extension Bundle {
+    public var icon: UIImage? {
+        if let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
+            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+            let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+            let lastIcon = iconFiles.last {
+            return UIImage(named: lastIcon)?.imageWith(newSize: CGSize(width: 24, height: 24))
+        }
+        return nil
+    }
+}
+
 struct AppIcon {
     let image: UIImage?
     
     init(bundleID: String) {
-        self.image = UIImage()// AppIconFetcher.icon(forBundleID: bundleID)
+        self.image = Bundle.main.icon
     }
 }
 #endif

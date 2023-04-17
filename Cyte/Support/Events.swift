@@ -51,15 +51,6 @@ func procVisionResult(request: VNRequest, error: Error?, minConfidence: Float = 
     return recognizedStringsAndRects
 }
 
-
-func openFile(path: URL) {
-#if os(macOS)
-    NSWorkspace.shared.open(path)
-#else
-//    UIApplication.shared.open(path)
-#endif
-}
-
 func getApplicationNameFromBundleID(bundleID: String) -> String? {
 #if os(macOS)
     guard let path = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)?.path(percentEncoded: false)
