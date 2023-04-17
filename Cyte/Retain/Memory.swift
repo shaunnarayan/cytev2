@@ -210,8 +210,12 @@ class Memory {
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
+        if currentUrlContext != url {
+            // only update the url time when it changes
+            currentUrlTime = Date()
+        }
         currentUrlContext = url
-        currentUrlTime = Date()
+        
         let isPrivate = isPrivateContext(context:context)
         if !isPrivate && currentContextIsPrivate {
             skipNextNFrames = 1
