@@ -280,8 +280,12 @@ struct EpisodePlaylistView: View {
 
                                 )
                         })
+#if os(macOS)
+                        .frame(width: width, height: height)
+#else
                         .frame(width: width * 4, height: height * 4)
                         .position(x: width * 0.7, y: height * 0.50)
+#endif
                     }
                 }
 #if os(macOS)
@@ -316,7 +320,11 @@ struct EpisodePlaylistView: View {
                         .allowsHitTesting(false)
                     }
                 }
+#if os(macOS)
+                .offset(CGSize(width: 0, height: 0))
+#else
                 .offset(CGSize(width: 0, height: 270))
+#endif
                 .accessibilityLabel("A slider visually displaying segments for each application/website used, using a colored bar with icon overlay. Drag to move in time.")
                 HStack(alignment: .top) {
                     Text(activeTime())
@@ -333,7 +341,9 @@ struct EpisodePlaylistView: View {
                     Text(humanReadableOffset())
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+#if !os(macOS)
                 .background(colorScheme == .dark ? .black : .white)
+#endif
                 .frame(height: 10)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
                 .font(Font.caption)

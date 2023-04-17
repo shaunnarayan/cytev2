@@ -97,7 +97,7 @@ struct AdvancedSearchView: View {
                         HStack {
                             PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle))
                                 .frame(width: 32, height: 32)
-                            Text(bundleCache.getName(bundleID: bundle) ?? "")
+                            Text(bundleCache.getName(bundleID: bundle))
                         }
                         .contentShape(Rectangle())
 #if os(macOS)
