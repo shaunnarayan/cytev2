@@ -84,10 +84,16 @@ struct Settings: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
+#if os(macOS)
     let bundlesColumnLayout = [
         GridItem(.fixed(320), spacing: 30, alignment: .topLeading),
         GridItem(.fixed(320), spacing: 30, alignment: .topLeading)
     ]
+#else
+    let bundlesColumnLayout = [
+        GridItem(.flexible(), spacing: 30, alignment: .topLeading)
+    ]
+#endif
     
     var body: some View {
         ScrollView {

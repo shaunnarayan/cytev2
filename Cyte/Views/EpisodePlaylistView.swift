@@ -20,9 +20,11 @@ struct EpisodePlaylistView: View {
     
     @State var player: AVPlayer?
     @State private var thumbnailImages: [CGImage?] = []
-    
+#if os(macOS)
     @State static var windowLengthInSeconds: Int = 60 * 2
-    
+#else
+    @State static var windowLengthInSeconds: Int = 30
+#endif
     @State var secondsOffsetFromLastEpisode: Double
     
     @State var filter: String
@@ -258,8 +260,13 @@ struct EpisodePlaylistView: View {
             VStack {
                 VStack {
                     ZStack(alignment: .topLeading) {
+#if os(macOS)
                         let width = (metrics.size.height - 100.0) / 9.0 * 16.0
                         let height = metrics.size.height - 100.0
+#else
+                        let width = (metrics.size.height - 100.0) / 19.5 * 9.0
+                        let height = metrics.size.height - 100.0
+#endif
                         VideoPlayer(player: player, videoOverlay: {
                             Rectangle()
                                 .fill(highlight.count == 0 ? .clear : Color.black.opacity(0.5))

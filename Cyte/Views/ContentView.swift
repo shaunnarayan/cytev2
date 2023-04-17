@@ -18,11 +18,17 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var episodeModel: EpisodeModel
     @StateObject private var agent = Agent.shared
-    
+
+#if os(macOS)
     let feedColumnLayoutSmall = [
         GridItem(.fixed(360), spacing: 50),
         GridItem(.fixed(360), spacing: 50)
     ]
+#else
+    let feedColumnLayoutSmall = [
+        GridItem(.flexible(), spacing: 50),
+    ]
+#endif
     
     let feedColumnLayout = [
         GridItem(.fixed(360), spacing: 50),
@@ -128,7 +134,9 @@ struct ContentView: View {
         .onAppear {
             self.episodeModel.refreshData()
         }
+#if os(macOS)
         .padding(EdgeInsets(top: 0.0, leading: 30.0, bottom: 0.0, trailing: 30.0))
+#endif
         .background(
             Rectangle().foregroundColor(
                 colorScheme == .dark ?

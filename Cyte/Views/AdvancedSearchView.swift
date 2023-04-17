@@ -18,6 +18,7 @@ struct AdvancedSearchView: View {
     @State private var isHovering: Bool = false
     @State private var isHoveringFilter: Bool = false
     
+#if os(macOS)
     let documentsColumnLayout = [
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
@@ -25,11 +26,21 @@ struct AdvancedSearchView: View {
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading)
-    ]        
+    ]
+#else
+    let documentsColumnLayout = [
+        GridItem(.flexible(), spacing: 10, alignment: .topLeading)
+    ]
+#endif
     
     var body: some View {
+#if os(macOS)
+        let layout = AnyLayout(HStackLayout(alignment: .center))
+#else
+        let layout = AnyLayout(VStackLayout())
+#endif
         VStack {
-            HStack(alignment: .center) {
+            layout {
                 DatePicker(
                     "",
                     selection: $episodeModel.startDate,
