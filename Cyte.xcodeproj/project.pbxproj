@@ -19,7 +19,6 @@
 		3F6AAE5929EBBC0100843D71 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB9300929EBB49E0048CDAF /* ReplayKit.framework */; };
 		3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6AAE5B29EBBC0100843D71 /* SampleHandler.swift */; };
 		3F6AAE6029EBBC0100843D71 /* CyteRecorder.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		3F6AAE6529EBBC7300843D71 /* DarwinNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FCD29EB0F200048CDAF /* DarwinNotification.swift */; };
 		3F6FE07E29C424230061DBF5 /* StaticEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */; };
 		3F6FE08129CAB0170061DBF5 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6FE08029CAB0170061DBF5 /* SQLite */; };
 		3F7BB7DB29E0112900D8A0BB /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DA29E0112900D8A0BB /* Browser.swift */; };
@@ -32,14 +31,11 @@
 		3FAD36A629B1BB5C00CCCE82 /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A529B1BB5C00CCCE82 /* Analysis.swift */; };
 		3FAD36A929B1BB9800CCCE82 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A829B1BB9800CCCE82 /* Memory.swift */; };
 		3FAD36AC29B1BD1A00CCCE82 /* Agent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36AB29B1BD1A00CCCE82 /* Agent.swift */; };
-		3FB92F8729EA885C0048CDAF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F8629EA885C0048CDAF /* MobileCoreServices.framework */; platformFilter = ios; };
-		3FB92F8A29EA89660048CDAF /* AppIconFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92F8929EA89660048CDAF /* AppIconFetcher.m */; platformFilter = ios; };
 		3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; };
 		3FB92F9D29EAA2770048CDAF /* DiffMatchPatch.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB92FA329EAA69A0048CDAF /* PortableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA229EAA69A0048CDAF /* PortableImage.swift */; };
 		3FB92FA529EB03F70048CDAF /* BroadcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA429EB03F70048CDAF /* BroadcastView.swift */; platformFilter = ios; };
 		3FB92FA729EB041C0048CDAF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92FA629EB041C0048CDAF /* UIKit.framework */; platformFilter = ios; };
-		3FB92FCE29EB0F200048CDAF /* DarwinNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FCD29EB0F200048CDAF /* DarwinNotification.swift */; };
 		3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FC6C78A29CC2EA2004E19FF /* KeychainSwift */; };
 		3FCAA20029AC7C0100898995 /* CyteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA1FF29AC7C0100898995 /* CyteApp.swift */; };
 		3FCAA20229AC7C0100898995 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20129AC7C0100898995 /* Persistence.swift */; };
@@ -50,6 +46,21 @@
 		3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5BA29D0029800A4C6C0 /* ObjcExceptionBridging */; };
 		3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5BC29D0029800A4C6C0 /* XCGLogger */; };
 		3FDBE5C429D4704300A4C6C0 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDBE5C329D4704300A4C6C0 /* Export.swift */; };
+		3FDFCE4029ED0F8900988BAF /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20129AC7C0100898995 /* Persistence.swift */; };
+		3FDFCE4129ED0F8C00988BAF /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A829B1BB9800CCCE82 /* Memory.swift */; };
+		3FDFCE4229ED107500988BAF /* Cyte1-2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7E529E4E89E00D8A0BB /* Cyte1-2.xcmappingmodel */; };
+		3FDFCE4329ED107500988BAF /* Cyte-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6C76929CBBB74004E19FF /* Cyte-Bridging-Header.h */; };
+		3FDFCE4429ED107500988BAF /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A529B1BB5C00CCCE82 /* Analysis.swift */; };
+		3FDFCE4529ED107500988BAF /* Cyte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F68242029AEBF270044A0F2 /* Cyte.xcdatamodeld */; };
+		3FDFCE4729ED109200988BAF /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4629ED109200988BAF /* SQLite */; };
+		3FDFCE4929ED109700988BAF /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4829ED109700988BAF /* KeychainSwift */; };
+		3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4A29ED109F00988BAF /* XCGLogger */; };
+		3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */; };
+		3FDFCE4E29ED10B300988BAF /* DiffMatchPatch.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; };
+		3FDFCE4F29ED10B300988BAF /* DiffMatchPatch.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FDFCE5129ED111900988BAF /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
+		3FDFCE5329ED1E0400988BAF /* DarwinNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */; };
+		3FDFCE5429ED1E7C00988BAF /* DarwinNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */; };
 		3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 3FE7822229DB15A8008CB97D /* AXSwift */; };
 		3FE7822629DBDB4A008CB97D /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE7822529DBDB4A008CB97D /* llama */; };
 /* End PBXBuildFile section */
@@ -87,6 +98,17 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3FDFCE5029ED10B300988BAF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3FDFCE4F29ED10B300988BAF /* DiffMatchPatch.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -120,15 +142,11 @@
 		3FAD36AD29B1BE8700CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FAD36AE29B1C18600CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FAD36B129B1C29300CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		3FB92F8629EA885C0048CDAF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
-		3FB92F8829EA893C0048CDAF /* AppIconFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppIconFetcher.h; sourceTree = "<group>"; };
-		3FB92F8929EA89660048CDAF /* AppIconFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppIconFetcher.m; sourceTree = "<group>"; };
 		3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = DiffMatchPatch.xcframework; sourceTree = "<group>"; };
 		3FB92FA229EAA69A0048CDAF /* PortableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortableImage.swift; sourceTree = "<group>"; };
 		3FB92FA429EB03F70048CDAF /* BroadcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastView.swift; sourceTree = "<group>"; };
 		3FB92FA629EB041C0048CDAF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3FB92FAD29EB07580048CDAF /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
-		3FB92FCD29EB0F200048CDAF /* DarwinNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarwinNotification.swift; sourceTree = "<group>"; };
 		3FB92FF229EB98DE0048CDAF /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
 		3FB9300929EBB49E0048CDAF /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/ReplayKit.framework; sourceTree = DEVELOPER_DIR; };
 		3FC6C76929CBBB74004E19FF /* Cyte-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cyte-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -140,6 +158,7 @@
 		3FCAA20A29AC7C0400898995 /* Cyte.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cyte.entitlements; sourceTree = "<group>"; };
 		3FCAA20C29AC7C0400898995 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3FDBE5C329D4704300A4C6C0 /* Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Export.swift; sourceTree = "<group>"; };
+		3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarwinNotification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +166,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FDFCE4929ED109700988BAF /* KeychainSwift in Frameworks */,
+				3FDFCE4729ED109200988BAF /* SQLite in Frameworks */,
+				3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */,
+				3FDFCE4E29ED10B300988BAF /* DiffMatchPatch.xcframework in Frameworks */,
 				3F6AAE5929EBBC0100843D71 /* ReplayKit.framework in Frameworks */,
+				3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,7 +189,6 @@
 				3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */,
 				3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */,
 				3F14BDD629C0D4A900F12FE7 /* AVKit.framework in Frameworks */,
-				3FB92F8729EA885C0048CDAF /* MobileCoreServices.framework in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -200,7 +223,6 @@
 				3FB92FF229EB98DE0048CDAF /* Accelerate.framework */,
 				3FB92FA629EB041C0048CDAF /* UIKit.framework */,
 				3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */,
-				3FB92F8629EA885C0048CDAF /* MobileCoreServices.framework */,
 				3F14BDD529C0D4A800F12FE7 /* AVKit.framework */,
 				3FB92FAD29EB07580048CDAF /* ReplayKit.framework */,
 			);
@@ -223,9 +245,7 @@
 				3FDBE5C329D4704300A4C6C0 /* Export.swift */,
 				3F7BB7DA29E0112900D8A0BB /* Browser.swift */,
 				3F7BB7E029E2AF8700D8A0BB /* View.swift */,
-				3FB92F8829EA893C0048CDAF /* AppIconFetcher.h */,
-				3FB92F8929EA89660048CDAF /* AppIconFetcher.m */,
-				3FB92FCD29EB0F200048CDAF /* DarwinNotification.swift */,
+				3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -350,12 +370,19 @@
 				3F6AAE5429EBBC0100843D71 /* Sources */,
 				3F6AAE5529EBBC0100843D71 /* Frameworks */,
 				3F6AAE5629EBBC0100843D71 /* Resources */,
+				3FDFCE5029ED10B300988BAF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = CyteRecorder;
+			packageProductDependencies = (
+				3FDFCE4629ED109200988BAF /* SQLite */,
+				3FDFCE4829ED109700988BAF /* KeychainSwift */,
+				3FDFCE4A29ED109F00988BAF /* XCGLogger */,
+				3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */,
+			);
 			productName = CyteExtension;
 			productReference = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -461,7 +488,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F6AAE6529EBBC7300843D71 /* DarwinNotification.swift in Sources */,
+				3FDFCE5429ED1E7C00988BAF /* DarwinNotification.swift in Sources */,
+				3FDFCE5129ED111900988BAF /* Events.swift in Sources */,
+				3FDFCE4229ED107500988BAF /* Cyte1-2.xcmappingmodel in Sources */,
+				3FDFCE4329ED107500988BAF /* Cyte-Bridging-Header.h in Sources */,
+				3FDFCE4429ED107500988BAF /* Analysis.swift in Sources */,
+				3FDFCE4529ED107500988BAF /* Cyte.xcdatamodeld in Sources */,
+				3FDFCE4129ED0F8C00988BAF /* Memory.swift in Sources */,
+				3FDFCE4029ED0F8900988BAF /* Persistence.swift in Sources */,
 				3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,6 +506,7 @@
 			files = (
 				3F14BDD029BDE82F00F12FE7 /* EpisodePlaylistView.swift in Sources */,
 				3F14BDCC29BD920200F12FE7 /* ChatView.swift in Sources */,
+				3FDFCE5329ED1E0400988BAF /* DarwinNotification.swift in Sources */,
 				3FCAA20029AC7C0100898995 /* CyteApp.swift in Sources */,
 				3F7BB7E629E4E89E00D8A0BB /* Cyte1-2.xcmappingmodel in Sources */,
 				3F14BDD229BF06F900F12FE7 /* EpisodeView.swift in Sources */,
@@ -489,11 +524,9 @@
 				3F58AE2629B18344007E7703 /* Events.swift in Sources */,
 				3F6FE07E29C424230061DBF5 /* StaticEpisodeView.swift in Sources */,
 				3FB92FA329EAA69A0048CDAF /* PortableImage.swift in Sources */,
-				3FB92FCE29EB0F200048CDAF /* DarwinNotification.swift in Sources */,
 				3FAD36A929B1BB9800CCCE82 /* Memory.swift in Sources */,
 				3FAD36A629B1BB5C00CCCE82 /* Analysis.swift in Sources */,
 				3FCAA20229AC7C0100898995 /* Persistence.swift in Sources */,
-				3FB92F8A29EA89660048CDAF /* AppIconFetcher.m in Sources */,
 				3FB92FA529EB03F70048CDAF /* BroadcastView.swift in Sources */,
 				3FDBE5C429D4704300A4C6C0 /* Export.swift in Sources */,
 			);
@@ -537,6 +570,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -568,6 +602,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -935,6 +970,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */;
 			productName = XCGLogger;
+		};
+		3FDFCE4629ED109200988BAF /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6FE07F29CAB0170061DBF5 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+		3FDFCE4829ED109700988BAF /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FC6C78929CC2EA2004E19FF /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+		3FDFCE4A29ED109F00988BAF /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = ObjcExceptionBridging;
 		};
 		3FE7822229DB15A8008CB97D /* AXSwift */ = {
 			isa = XCSwiftPackageProductDependency;

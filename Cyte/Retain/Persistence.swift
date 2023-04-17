@@ -88,7 +88,11 @@ func homeDirectory() -> URL {
     if home != nil && FileManager.default.fileExists(atPath: home!) {
         return URL(filePath: home!)
     }
+#if os(macOS)
     let url: URL = (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("Cyte"))!
+#else
+    let url: URL = (FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.io.cyte.ios")!.appendingPathComponent("Cyte"))
+#endif
     return url
 }
 

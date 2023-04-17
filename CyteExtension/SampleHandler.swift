@@ -6,68 +6,73 @@
 //
 
 import ReplayKit
+import Combine
+import VideoToolbox
+import XCGLogger
+
+let log = XCGLogger.default
 
 class SampleHandler: RPBroadcastSampleHandler {
     
-    var extContext: NSExtensionContext? = nil
+    var lastFrameTime: Date = Date()
+    var bypass: Bool = false
     
-    override func beginRequest(with context: NSExtensionContext) {
-        print("brginRequest starting!")
-        extContext = context
-        super.beginRequest(with: context)
-        let broadcastURL = URL(string:"https://s3-us-west-1.amazonaws.com/avplayervideo/What+Is+Cloud+Communications.mov")
-        // Dictionary with setup information that will be provided to broadcast extension when broadcast is started
-
-        let setupInfo: [String : NSCoding & NSObjectProtocol] = [:]
-        
-        // Tell ReplayKit that the extension is finished setting up and can begin broadcasting
-        extContext?.completeRequest(withBroadcast: broadcastURL!, setupInfo: setupInfo)
+    override func broadcastAnnotated(withApplicationInfo applicationInfo: [AnyHashable : Any]) {
+        print(applicationInfo)
     }
 
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         print("Broadcast starting!")
+        print(setupInfo)
         // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
-//        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.on-start"), data: nil)
+        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.broadcast-start"))
+        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.app-active"), using: { [weak self] (_) in
+                self!.bypass = true
+            })
+        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.app-resigned"), using: { [weak self] (_) in
+                self!.bypass = false
+            })
     }
     
     override func broadcastPaused() {
         // User has requested to pause the broadcast. Samples will stop being delivered.
-        print("Broadcast starting!")
-//        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.on-stop"), data: nil)
+        print("Broadcast paused!")
+        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.broadcast-end"))
     }
     
     override func broadcastResumed() {
         // User has requested to resume the broadcast. Samples delivery will resume.
-        print("Broadcast starting!")
-//        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.on-start"), data: nil)
+        print("Broadcast resumed!")
+        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.broadcast-start"))
     }
     
     override func broadcastFinished() {
         // User has requested to finish the broadcast.
-        print("Broadcast starting!")
-//        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.on-stop"), data: nil)
+        print("Broadcast finished!")
+        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.broadcast-end"))
+        DarwinNotificationCenter.shared.removeObserver(self)
+        DispatchQueue.main.sync {
+            Memory.shared.closeEpisode()
+        }
     }
     
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
-        DispatchQueue.main.sync {
-            
             switch sampleBufferType {
             case RPSampleBufferType.video:
-                // Handle video sample buffer
-                extContext?.loadBroadcastingApplicationInfo(completion: { (bundle, name, icon) in
-                    print(name)
-                    guard let sourcePixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-                        assertionFailure("SampleBuffer did not have an ImageBuffer")
-                        return
+                if (Date().timeIntervalSinceReferenceDate - lastFrameTime.timeIntervalSinceReferenceDate) < 2.0 || bypass == true {
+                    return
+                }
+                if CMSampleBufferDataIsReady(sampleBuffer)
+                {
+                    lastFrameTime = Date()
+                    let bundle_id = Bundle.main.bundleIdentifier
+                    let bundle_name = Bundle.main.bundleIdentifier
+                    DispatchQueue.main.sync {
+                        Memory.shared.updateActiveContext(windowTitles: [:], bundleInfo: (bundle_id!, bundle_name!))
+                        let frame = CapturedFrame(surface: nil, data: sampleBuffer.imageBuffer, contentRect: CGRect(), contentScale: 0, scaleFactor: 0)
+                        Memory.shared.addFrame(frame: frame, secondLength: Int64(Memory.secondsBetweenFrames))
                     }
-                    
-                    var frame: [String: Any] = [:]
-                    frame["frame"] = sourcePixelBuffer
-                    frame["bundle"] = bundle
-                    frame["name"] = name
-                    frame["icon"] = icon
-                    DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.on-frame"), data: frame as CFDictionary)
-                })
+                }
                 break
             case RPSampleBufferType.audioApp:
                 // Handle audio sample buffer for app audio
@@ -79,6 +84,18 @@ class SampleHandler: RPBroadcastSampleHandler {
                 // Handle other sample buffer types
                 fatalError("Unknown type of sample buffer")
             }
+    }
+}
+
+extension UIImage {
+    public convenience init?(pixelBuffer: CVPixelBuffer) {
+        var cgImage: CGImage?
+        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
+
+        guard let cgImage = cgImage else {
+            return nil
         }
+
+        self.init(cgImage: cgImage)
     }
 }

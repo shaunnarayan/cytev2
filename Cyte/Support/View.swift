@@ -8,7 +8,6 @@
 import Foundation
 import AVKit
 import SwiftUI
-import Vision
 
 extension Date {
     var dayOfYear: Int {
@@ -70,29 +69,6 @@ func secondsToReadable(seconds: Double) -> String {
     return res
 }
 
-func procVisionResult(request: VNRequest, error: Error?, minConfidence: Float = 0.45) -> [(String, CGRect)] {
-    guard let observations =
-            request.results as? [VNRecognizedTextObservation] else {
-        return []
-    }
-    let recognizedStringsAndRects: [(String, CGRect)] = observations.compactMap { observation in
-        // Find the top observation.
-        guard let candidate = observation.topCandidates(1).first else { return ("", .zero) }
-        if observation.confidence < minConfidence { return ("", .zero) }
-        
-        // Find the bounding-box observation for the string range.
-        let stringRange = candidate.string.startIndex..<candidate.string.endIndex
-        let boxObservation = try? candidate.boundingBox(for: stringRange)
-        
-        // Get the normalized CGRect value.
-        let boundingBox = boxObservation?.boundingBox ?? .zero
-        
-        // Convert the rectangle from normalized coordinates to image coordinates.
-        return (candidate.string, boundingBox)
-    }
-    return recognizedStringsAndRects
-}
-
 #if os(macOS)
 extension NSImage {
     ///
@@ -148,7 +124,7 @@ struct AppIcon {
     let image: UIImage?
     
     init(bundleID: String) {
-        self.image = AppIconFetcher.icon(forBundleID: bundleID)
+        self.image = UIImage()// AppIconFetcher.icon(forBundleID: bundleID)
     }
 }
 #endif
@@ -198,5 +174,43 @@ class BundleCache: ObservableObject {
             setCache(bundleID: bundleID, image: icon)
         }
         return icon
+    }
+}
+
+extension UIImage {
+    func pixelBuffer() -> CVPixelBuffer? {
+        // Create pixel buffer
+        let width = Int(self.size.width)
+        let height = Int(self.size.height)
+        var pixelBuffer: CVPixelBuffer?
+        let options: [String: Any] = [
+            kCVPixelBufferCGImageCompatibilityKey as String: true,
+            kCVPixelBufferCGBitmapContextCompatibilityKey as String: true,
+            kCVPixelBufferWidthKey as String: width,
+            kCVPixelBufferHeightKey as String: height
+        ]
+        let status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                         width,
+                                         height,
+                                         kCVPixelFormatType_32ARGB,
+                                         options as CFDictionary?,
+                                         &pixelBuffer)
+        guard let buffer = pixelBuffer, status == kCVReturnSuccess else {
+            return nil
+        }
+
+        // Draw image into the pixel buffer
+        CVPixelBufferLockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: 0))
+        let context = CGContext(data: CVPixelBufferGetBaseAddress(buffer),
+                                width: width,
+                                height: height,
+                                bitsPerComponent: 8,
+                                bytesPerRow: CVPixelBufferGetBytesPerRow(buffer),
+                                space: CGColorSpaceCreateDeviceRGB(),
+                                bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)!
+        context.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: width, height: height))
+        CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: 0))
+
+        return buffer
     }
 }

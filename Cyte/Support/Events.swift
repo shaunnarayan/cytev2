@@ -7,16 +7,56 @@
 
 import Foundation
 import SwiftUI
+import Vision
 #if os(macOS)
     import Carbon
     import AppKit
 #endif
 
+extension utsname {
+    static var sMachine: String {
+        var utsname = utsname()
+        uname(&utsname)
+        return withUnsafePointer(to: &utsname.machine) {
+            $0.withMemoryRebound(to: CChar.self, capacity: Int(_SYS_NAMELEN)) {
+                String(cString: $0)
+            }
+        }
+    }
+    static var isAppleSilicon: Bool {
+        sMachine == "arm64"
+    }
+}
+
+func procVisionResult(request: VNRequest, error: Error?, minConfidence: Float = 0.45) -> [(String, CGRect)] {
+    guard let observations =
+            request.results as? [VNRecognizedTextObservation] else {
+        return []
+    }
+    let recognizedStringsAndRects: [(String, CGRect)] = observations.compactMap { observation in
+        // Find the top observation.
+        guard let candidate = observation.topCandidates(1).first else { return ("", .zero) }
+        if observation.confidence < minConfidence { return ("", .zero) }
+        
+        // Find the bounding-box observation for the string range.
+        let stringRange = candidate.string.startIndex..<candidate.string.endIndex
+        let boxObservation = try? candidate.boundingBox(for: stringRange)
+        
+        // Get the normalized CGRect value.
+        let boundingBox = boxObservation?.boundingBox ?? .zero
+        
+        // Convert the rectangle from normalized coordinates to image coordinates.
+        return (candidate.string, boundingBox)
+    }
+    return recognizedStringsAndRects
+}
+
+
 func openFile(path: URL) {
 #if os(macOS)
     NSWorkspace.shared.open(path)
 #else
-    UIApplication.shared.open(path)
+//    UIApplication.shared.open(path)
 #endif
 }
 

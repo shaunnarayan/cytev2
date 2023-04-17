@@ -13,6 +13,18 @@ import SQLite
 import NaturalLanguage
 import CoreData
 
+/// A structure that contains the video data to render.
+struct CapturedFrame {
+    static let invalid = CapturedFrame(surface: nil, data: nil, contentRect: .zero, contentScale: 0, scaleFactor: 0)
+    
+    let surface: IOSurface?
+    let data: CVPixelBuffer?
+    let contentRect: CGRect
+    let contentScale: CGFloat
+    let scaleFactor: CGFloat
+    var size: CGSize { contentRect.size }
+}
+
 ///
 ///  Tracks active application context (driven by external caller)
 ///  Opens, encodes and closes the video stream, triggers analysis on frames
@@ -227,7 +239,8 @@ class Memory {
             currentContext = ctx.context
             currentContextIsPrivate = ctx.isPrivate
             let exclusion = Memory.shared.getOrCreateBundleExclusion(name: currentContext)
-            if assetWriter == nil && currentContext != Bundle.main.bundleIdentifier && exclusion.excluded == false && !currentContextIsPrivate {
+            let is_main_bundle = !Bundle.main.bundleIdentifier!.contains(".Extension") && (currentContext == Bundle.main.bundleIdentifier)
+            if assetWriter == nil && !is_main_bundle && exclusion.excluded == false && !currentContextIsPrivate {
                 var title = ctx.title
                 if title.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
                     title = ctx.front.localizedName ?? currentContext
@@ -330,7 +343,7 @@ class Memory {
         log.info("Close \(episode?.title ?? "")")
         //close everything
         assetWriterInput!.markAsFinished()
-        if frameCount < 1 || currentContext.starts(with:Bundle.main.bundleIdentifier!) {
+        if frameCount < 1 {
             assetWriter!.cancelWriting()
             delete(delete_episode: episode!)
             log.info("Supressed small episode for \(self.currentContext)")
@@ -397,6 +410,7 @@ class Memory {
             return
         }
         if assetWriter != nil {
+            log.info("Adding frame")
             if assetWriterInput!.isReadyForMoreMediaData {
                 let frameTime = CMTimeMake(value: Int64(frameCount) * secondLength, timescale: 1)
                 //append the contents of the pixelBuffer at the correct time

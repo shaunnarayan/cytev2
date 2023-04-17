@@ -93,19 +93,6 @@ class ScreenRecorder: ObservableObject {
         }
     }
     
-    init() {
-        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.on-start"), using: { [weak self] (notification, data) in
-            Task {
-                await self?.start()
-            }
-        })
-        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.on-stop"), using: { [weak self] (notification, data) in
-            Task {
-                await self?.stop()
-            }
-        })
-    }
-    
     /// Starts capturing screen content.
     func start() async {
         // Exit early if already running.
@@ -140,20 +127,7 @@ class ScreenRecorder: ObservableObject {
             isRunning = false
         }
 #else
-        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.on-frame"), using: { [weak self] (notification, data) in
-            print("GOT A FRAME")
-            if let dict = data as? [String: AnyObject] {
-                let image: CVPixelBuffer = dict["frame"] as! CVPixelBuffer
-                let bundle_id = dict["bundle"] as! String
-                let bundle_name = dict["name"] as! String
-                let icon: UIImage = dict["icon"] as! UIImage
-                // @todo save icon somewhere to avoid private API use
-                
-                Memory.shared.updateActiveContext(windowTitles: [:], bundleInfo: (bundle_id, bundle_name))
-                let frame = CapturedFrame(surface: nil, data: image, contentRect: CGRect(), contentScale: 0, scaleFactor: 0)
-                Memory.shared.addFrame(frame: frame, secondLength: Int64(Memory.secondsBetweenFrames))
-            }
-        })
+        isRunning = true
 #endif
     }
     
@@ -168,7 +142,6 @@ class ScreenRecorder: ObservableObject {
         subscriptions.removeAll()
         isSetup = false
 #else
-        DarwinNotificationCenter.shared.removeObserver(self)
 #endif
         Memory.shared.closeEpisode()
         isRunning = false
@@ -320,17 +293,3 @@ extension SCDisplay {
     }
 }
 #endif
-extension utsname {
-    static var sMachine: String {
-        var utsname = utsname()
-        uname(&utsname)
-        return withUnsafePointer(to: &utsname.machine) {
-            $0.withMemoryRebound(to: CChar.self, capacity: Int(_SYS_NAMELEN)) {
-                String(cString: $0)
-            }
-        }
-    }
-    static var isAppleSilicon: Bool {
-        sMachine == "arm64"
-    }
-}

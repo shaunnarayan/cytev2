@@ -2,7 +2,7 @@
 //  DarwinNotification.swift
 //  Cyte
 //
-//  Created by Shaun Narayan on 16/04/23.
+//  Created by Shaun Narayan on 17/04/23.
 //
 
 import Foundation
@@ -26,7 +26,6 @@ public struct DarwinNotification {
 }
 
 // MARK: -
-
 extension DarwinNotification.Name {
     
     /// Initializes a new Notification Name, based on a custom string. This string should be identifying for not only this notification, but for the full system. Therefore, you should include a bundle identifier to the string.
@@ -46,7 +45,6 @@ extension DarwinNotification.Name {
 }
 
 // MARK: -
-
 /// A system-wide notification center. This means that all notifications will be delivered to all interested observers, regardless of the process owner. Darwin notifications don't support userInfo payloads to the notifications. This wrapper is thread-safe.
 public final class DarwinNotificationCenter {
 
@@ -72,7 +70,7 @@ public final class DarwinNotificationCenter {
     }
 
     /// The handler type to be executed when the notification is received.
-    public typealias NotificationHandler = ((DarwinNotification, CFDictionary?) -> Void)
+    public typealias NotificationHandler = ((DarwinNotification) -> Void)
     
     /// The shared DarwinNotificationCenter, it will always return the same instance.
     public static var shared = DarwinNotificationCenter()
@@ -158,7 +156,7 @@ public final class DarwinNotificationCenter {
     /// Posts the given Notification name to the system.
     ///
     /// - Parameter name: The notification name to post.
-    public func postNotification(_ name: DarwinNotification.Name, data: CFDictionary?) {
+    public func postNotification(_ name: DarwinNotification.Name) {
         // Before posting a notification, cleanup all observers that are deallocated.
         cleanupObservers()
         
@@ -166,11 +164,11 @@ public final class DarwinNotificationCenter {
             fatalError("Invalid CFNotificationCenter")
         }
         
-        CFNotificationCenterPostNotification(cfNotificationCenter, CFNotificationName(rawValue: name.rawValue), nil, data, false)
+        CFNotificationCenterPostNotification(cfNotificationCenter, CFNotificationName(rawValue: name.rawValue), nil, nil, false)
     }
     
     /// Execute the observation handler for all observers that observe the given notification name.
-    private func signalNotification(_ name: DarwinNotification.Name, data: CFDictionary?) {
+    private func signalNotification(_ name: DarwinNotification.Name) {
         cleanupObservers()
         queue.async {
             let affectedObservations = self.observations.filter({ (observation) -> Bool in
@@ -178,14 +176,13 @@ public final class DarwinNotificationCenter {
             })
             let notification = DarwinNotification(name)
             for observation in affectedObservations {
-                observation.handler(notification, data)
+                observation.handler(notification)
             }
         }
     }
 }
 
 // MARK: -
-
 extension DarwinNotificationCenter.Observation: Equatable {
     
     /// Start observing the notification.
@@ -201,7 +198,7 @@ extension DarwinNotificationCenter.Observation: Equatable {
             }
             
             let notificationName = DarwinNotification.Name(cfName)
-            DarwinNotificationCenter.shared.signalNotification(notificationName, data: userInfo)
+            DarwinNotificationCenter.shared.signalNotification(notificationName)
         }
         
         let observer = Unmanaged.passUnretained(self).toOpaque()
