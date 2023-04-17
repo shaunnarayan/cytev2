@@ -18,6 +18,7 @@ struct AdvancedSearchView: View {
     @State private var isHovering: Bool = false
     @State private var isHoveringFilter: Bool = false
     
+#if os(macOS)
     let documentsColumnLayout = [
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
@@ -25,11 +26,21 @@ struct AdvancedSearchView: View {
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading),
         GridItem(.fixed(190), spacing: 10, alignment: .topLeading)
-    ]        
+    ]
+#else
+    let documentsColumnLayout = [
+        GridItem(.flexible(), spacing: 10, alignment: .topLeading)
+    ]
+#endif
     
     var body: some View {
+#if os(macOS)
+        let layout = AnyLayout(HStackLayout(alignment: .center))
+#else
+        let layout = AnyLayout(VStackLayout())
+#endif
         VStack {
-            HStack(alignment: .center) {
+            layout {
                 DatePicker(
                     "",
                     selection: $episodeModel.startDate,
@@ -50,7 +61,9 @@ struct AdvancedSearchView: View {
                 })
                 .accessibilityLabel("Set the latest date/time for recording results")
                 .frame(width: 200, alignment: .leading)
+#if os(macOS)
                 Spacer()
+#endif
                 Text("\(secondsToReadable(seconds: episodeModel.episodesLengthSum)) displayed")
                 Button(action: {
                     isPresentingConfirm = true
@@ -78,16 +91,16 @@ struct AdvancedSearchView: View {
                     }
                 }
             }
-#if os(macOS)
             ScrollView {
                 LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
                     ForEach(Set(episodeModel.episodes.map { $0.bundle ?? Bundle.main.bundleIdentifier! }).sorted(by: <), id: \.self) { bundle in
                         HStack {
-                            Image(nsImage: bundleCache.getIcon(bundleID: bundle))
+                            PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle))
                                 .frame(width: 32, height: 32)
-                            Text(getApplicationNameFromBundleID(bundleID: bundle) ?? "")
+                            Text(bundleCache.getName(bundleID: bundle))
                         }
                         .contentShape(Rectangle())
+#if os(macOS)
                         .onHover(perform: { hovering in
                             self.isHoveringFilter = hovering
                             if hovering {
@@ -96,6 +109,7 @@ struct AdvancedSearchView: View {
                                 NSCursor.arrow.set()
                             }
                         })
+#endif
                         .onTapGesture { gesture in
                             if episodeModel.highlightedBundle.count == 0 {
                                 withAnimation(.easeOut(duration: 0.3)) {
@@ -110,6 +124,7 @@ struct AdvancedSearchView: View {
                 }
             }
             .frame(height: 50)
+#if os(macOS)
             HStack {
                 LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
                     ForEach(episodeModel.documentsForBundle) { doc in

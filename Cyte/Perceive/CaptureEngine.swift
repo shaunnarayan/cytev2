@@ -13,20 +13,6 @@ An object that captures a stream of captured sample buffers containing screen an
 
 import Foundation
 import AVFAudio
-
-/// A structure that contains the video data to render.
-struct CapturedFrame {
-    static let invalid = CapturedFrame(surface: nil, data: nil, contentRect: .zero, contentScale: 0, scaleFactor: 0)
-    
-    let surface: IOSurface?
-    let data: CVPixelBuffer?
-    let contentRect: CGRect
-    let contentScale: CGFloat
-    let scaleFactor: CGFloat
-    var size: CGSize { contentRect.size }
-}
-
-#if os(macOS)
 import ScreenCaptureKit
 import OSLog
 import Combine
@@ -169,4 +155,3 @@ private class CaptureEngineStreamOutput: NSObject, SCStreamOutput, SCStreamDeleg
         continuation?.finish(throwing: error)
     }
 }
-#endif

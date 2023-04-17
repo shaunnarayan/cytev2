@@ -192,6 +192,7 @@ struct StaticEpisodeView: View {
 #endif
                     PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier)!))
                         .frame(width: 32, height: 32)
+                        .id(bundleCache.id)
                 }
                 .padding(EdgeInsets(top: 10.0, leading: 0.0, bottom: 10.0, trailing: 0.0))
             }

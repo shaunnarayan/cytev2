@@ -236,7 +236,9 @@ struct SearchBarView: View {
                 }
             }
         }
+#if os(macOS)
         .padding(EdgeInsets(top: 10, leading: agent.chatLog.count == 0 ? 0 : 210, bottom: 10, trailing: agent.chatLog.count == 0 ? 0 : 210))
+#endif
     }
     
     var body: some View {

@@ -9,6 +9,8 @@ import CoreData
 import SQLite
 #if os(macOS)
     import AppKit
+#else
+    import UIKit
 #endif
 
 ///
@@ -88,7 +90,11 @@ func homeDirectory() -> URL {
     if home != nil && FileManager.default.fileExists(atPath: home!) {
         return URL(filePath: home!)
     }
+#if os(macOS)
     let url: URL = (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("Cyte"))!
+#else
+    let url: URL = (FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.io.cyte.ios")!.appendingPathComponent("Cyte"))
+#endif
     return url
 }
 
@@ -106,16 +112,6 @@ func urlForEpisode(start: Date?, title: String?) -> URL {
     url = url.appendingPathComponent("\(components.day ?? 0)")
     url = url.appendingPathComponent("\(title!).mov")
     return url
-}
-
-///
-/// Helper function to open finder pinned to the supplied episode
-///
-func revealEpisode(episode: Episode) {
-#if os(macOS)
-    let url = urlForEpisode(start: episode.start, title: episode.title)
-    NSWorkspace.shared.activateFileViewerSelecting([url])
-#endif
 }
 
 ///

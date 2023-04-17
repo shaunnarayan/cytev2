@@ -3,4 +3,3 @@
 //
 
 #import <DiffMatchPatch/DiffMatchPatch.h>
-#import "../Support/AppIconFetcher.h"

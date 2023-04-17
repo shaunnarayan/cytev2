@@ -16,13 +16,16 @@ import CoreData
 struct EpisodePlaylistView: View {
     @EnvironmentObject var bundleCache: BundleCache
     @EnvironmentObject var episodeModel: EpisodeModel
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State var player: AVPlayer?
     @State private var thumbnailImages: [CGImage?] = []
-    
+#if os(macOS)
     @State static var windowLengthInSeconds: Int = 60 * 2
-    
+#else
+    @State static var windowLengthInSeconds: Int = 30
+#endif
     @State var secondsOffsetFromLastEpisode: Double
     
     @State var filter: String
@@ -164,7 +167,7 @@ struct EpisodePlaylistView: View {
         let current_url = urlOfCurrentlyPlayingInPlayer(player: player!)
         let new_url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title)
         if current_url != new_url {
-            player = AVPlayer(url: new_url)
+            player?.replaceCurrentItem(with: AVPlayerItem(url: new_url))
         }
         // seek to correct offset
         let progress = (active_interval.1) - secondsOffsetFromLastEpisode
@@ -258,8 +261,13 @@ struct EpisodePlaylistView: View {
             VStack {
                 VStack {
                     ZStack(alignment: .topLeading) {
+#if os(macOS)
                         let width = (metrics.size.height - 100.0) / 9.0 * 16.0
                         let height = metrics.size.height - 100.0
+#else
+                        let width = (metrics.size.height - 100.0) / 19.5 * 9.0
+                        let height = metrics.size.height - 100.0
+#endif
                         VideoPlayer(player: player, videoOverlay: {
                             Rectangle()
                                 .fill(highlight.count == 0 ? .clear : Color.black.opacity(0.5))
@@ -272,7 +280,12 @@ struct EpisodePlaylistView: View {
 
                                 )
                         })
+#if os(macOS)
                         .frame(width: width, height: height)
+#else
+                        .frame(width: width * 4, height: height * 4)
+                        .position(x: width * 0.7, y: height * 0.50)
+#endif
                     }
                 }
 #if os(macOS)
@@ -300,12 +313,18 @@ struct EpisodePlaylistView: View {
                                     .frame(width: timelineSize * 2, height: timelineSize * 2)
                                     .id(interval.episode.start)
                                     .offset(CGSize(width: (windowOffsetToCenter(of:interval) * metrics.size.width) - timelineSize, height: 0))
+                                    .id(bundleCache.id)
                             }
                         }
                         .frame(height: timelineSize * 4)
                         .allowsHitTesting(false)
                     }
                 }
+#if os(macOS)
+                .offset(CGSize(width: 0, height: 0))
+#else
+                .offset(CGSize(width: 0, height: 270))
+#endif
                 .accessibilityLabel("A slider visually displaying segments for each application/website used, using a colored bar with icon overlay. Drag to move in time.")
                 HStack(alignment: .top) {
                     Text(activeTime())
@@ -322,6 +341,9 @@ struct EpisodePlaylistView: View {
                     Text(humanReadableOffset())
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+#if !os(macOS)
+                .background(colorScheme == .dark ? .black : .white)
+#endif
                 .frame(height: 10)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
                 .font(Font.caption)

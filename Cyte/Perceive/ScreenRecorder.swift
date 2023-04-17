@@ -12,9 +12,7 @@ A model object that provides the interface to capture screen content and system 
 */
 
 import Foundation
-#if os(macOS)
-    import ScreenCaptureKit
-#endif
+import ScreenCaptureKit
 import Combine
 import OSLog
 import SwiftUI
@@ -25,7 +23,6 @@ class ScreenRecorder: ObservableObject {
     static let shared = ScreenRecorder()
     
     @Published var isRunning = false
-#if os(macOS)
     /// The supported capture types.
     enum CaptureType {
         case display
@@ -77,15 +74,12 @@ class ScreenRecorder: ObservableObject {
     
     // Combine subscribers.
     private var subscriptions = Set<AnyCancellable>()
-#endif
+
     var canRecord: Bool {
         get async {
             do {
-#if os(macOS)
                 // If the app doesn't have Screen Recording permission, this call generates an exception.
                 try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
-#else
-#endif
                 return true
             } catch {
                 return false
@@ -95,10 +89,8 @@ class ScreenRecorder: ObservableObject {
     
     /// Starts capturing screen content.
     func start() async {
-#if os(macOS)
         // Exit early if already running.
         guard !isRunning else { return }
-        
         if !isSetup {
             // Starting polling for available screen content.
             await monitorAvailableContent()
@@ -127,13 +119,10 @@ class ScreenRecorder: ObservableObject {
             // Unable to start the stream. Set the running state to false.
             isRunning = false
         }
-#else
-#endif
     }
     
     /// Stops capturing screen content.
     func stop() async {
-#if os(macOS)
         guard isRunning else { return }
         await captureEngine.stopCapture()
         for subscription in subscriptions {
@@ -141,14 +130,11 @@ class ScreenRecorder: ObservableObject {
         }
         subscriptions.removeAll()
         isSetup = false
-        
         Memory.shared.closeEpisode()
-        
         isRunning = false
-#else
-#endif
     }
-#if os(macOS)
+    
+
     func monitorAvailableContent() async {
         guard !isSetup else { return }
         // Refresh the lists of capturable content.
@@ -270,9 +256,8 @@ class ScreenRecorder: ObservableObject {
         // Remove this app's window from the list.
             .filter { $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier }
     }
-#endif
 }
-#if os(macOS)
+
 extension SCWindow {
     var displayName: String {
         switch (owningApplication, title) {
@@ -291,20 +276,5 @@ extension SCWindow {
 extension SCDisplay {
     var displayName: String {
         "Display: \(width) x \(height)"
-    }
-}
-#endif
-extension utsname {
-    static var sMachine: String {
-        var utsname = utsname()
-        uname(&utsname)
-        return withUnsafePointer(to: &utsname.machine) {
-            $0.withMemoryRebound(to: CChar.self, capacity: Int(_SYS_NAMELEN)) {
-                String(cString: $0)
-            }
-        }
-    }
-    static var isAppleSilicon: Bool {
-        sMachine == "arm64"
     }
 }

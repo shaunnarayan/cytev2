@@ -37,12 +37,14 @@ struct BundleView: View {
                         }
                     } catch {
                     }
+#if os(macOS)
                     Task {
                         if ScreenRecorder.shared.isRunning {
                             await ScreenRecorder.shared.stop()
                             await ScreenRecorder.shared.start()
                         }
                     }
+#endif
                 } else {
                     bundle.excluded = false
                     do {
@@ -55,7 +57,7 @@ struct BundleView: View {
             })
             PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle.bundle!))
                 .frame(width: 32, height: 32)
-            Text(getApplicationNameFromBundleID(bundleID: bundle.bundle!) ?? bundle.bundle!)
+            Text(bundleCache.getName(bundleID: bundle.bundle!))
                 .frame(maxWidth: .infinity, alignment: .leading)
             Toggle(isOn: binding) {
                 
@@ -82,10 +84,16 @@ struct Settings: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
+#if os(macOS)
     let bundlesColumnLayout = [
         GridItem(.fixed(320), spacing: 30, alignment: .topLeading),
         GridItem(.fixed(320), spacing: 30, alignment: .topLeading)
     ]
+#else
+    let bundlesColumnLayout = [
+        GridItem(.flexible(), spacing: 30, alignment: .topLeading)
+    ]
+#endif
     
     var body: some View {
         ScrollView {

@@ -20,9 +20,11 @@ struct CyteApp: App {
     let episodeModel = EpisodeModel()
 #if os(macOS)
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    @StateObject var screenRecorder = ScreenRecorder.shared
+#else
+    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
 #endif
     @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
-    @StateObject var screenRecorder = ScreenRecorder.shared
     @Environment(\.openWindow) var openWindow
     
     ///
@@ -31,13 +33,15 @@ struct CyteApp: App {
     ///
     func setup() {
         let defaults = UserDefaults.standard
-#if os(macOS)
         appDelegate.mainApp = self
+#if os(macOS)
         if defaults.bool(forKey: "CYTE_HIDE_DOCK") {
             NSApp.setActivationPolicy(.accessory)
             NSApplication.shared.activate(ignoringOtherApps: true)
         }
         HotkeyListener.register()
+#else
+        try! FileManager.default.createDirectory(at: homeDirectory(), withIntermediateDirectories: true)
 #endif
         if defaults.object(forKey: "CYTE_RETENTION") == nil {
             defaults.set(90, forKey: "CYTE_RETENTION")
@@ -54,12 +58,13 @@ struct CyteApp: App {
                 }
             } catch { }
         }
-        
+#if os(macOS)
         Task {
             if await screenRecorder.canRecord {
                 await screenRecorder.start()
             }
         }
+#endif
     }
     
     ///
@@ -67,11 +72,13 @@ struct CyteApp: App {
     /// to disk.
     ///
     func teardown() {
+#if os(macOS)
         Task {
             if await screenRecorder.canRecord {
                 await screenRecorder.stop()
             }
         }
+#endif
         Agent.shared.teardown()
     }
 
@@ -82,10 +89,27 @@ struct CyteApp: App {
                 .environmentObject(bundleCache)
                 .environmentObject(episodeModel)
                 .onAppear {
+#if os(macOS)
+#else
+                    NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification,
+                                                           object: nil,
+                                                           queue: .main) { (notification) in
+                        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.app-active"))
+                    }
+                    NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification,
+                                                           object: nil,
+                                                           queue: .main) { (notification) in
+                        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.app-resigned"))
+                    }
+#endif
                     self.setup()
                 }
                 .onDisappear {
                     self.teardown()
+#if os(macOS)
+#else
+                    DarwinNotificationCenter.shared.removeObserver(appDelegate)
+#endif
                 }
         }
         .commands {
@@ -190,5 +214,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Memory.shared.closeEpisode()
     }
 }
+#else
 
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    var mainApp: CyteApp?
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.broadcast-start"), using: { (_) in
+            // if a broadcast started while we're open, tell it to bypass until we're resigned
+            DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.app-active"))
+            })
+        return true
+    }
+}
 #endif

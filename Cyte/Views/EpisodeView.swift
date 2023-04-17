@@ -42,10 +42,17 @@ struct EpisodeView: View {
             .padding(0)
             HStack {
                 VStack {
+                    #if os(macOS)
                     Text((episode.title ?? "")!.split(separator: " ").dropLast(6).joined(separator: " "))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
+                    #else
+                    Text(bundleCache.getName(bundleID: episode.bundle!))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fontWeight(selected ? .bold : .regular)
+                        .lineLimit(1)
+                    #endif
                     Text((episode.start ?? Date()).formatted(date: .abbreviated, time: .standard) )
                         .font(SwiftUI.Font.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -90,6 +97,7 @@ struct EpisodeView: View {
 #endif
                     PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier!)) )
                         .frame(width: 32, height: 32)
+                        .id(bundleCache.id)
                 }
                 .padding(EdgeInsets(top: 10.0, leading: 0.0, bottom: 10.0, trailing: 0.0))
             }

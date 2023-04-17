@@ -13,6 +13,18 @@ import SQLite
 import NaturalLanguage
 import CoreData
 
+/// A structure that contains the video data to render.
+struct CapturedFrame {
+    static let invalid = CapturedFrame(surface: nil, data: nil, contentRect: .zero, contentScale: 0, scaleFactor: 0)
+    
+    let surface: IOSurface?
+    let data: CVPixelBuffer?
+    let contentRect: CGRect
+    let contentScale: CGFloat
+    let scaleFactor: CGFloat
+    var size: CGSize { contentRect.size }
+}
+
 ///
 ///  Tracks active application context (driven by external caller)
 ///  Opens, encodes and closes the video stream, triggers analysis on frames
@@ -38,8 +50,11 @@ class Memory {
     
     /// Intel fallbacks - due to lack of hardware acelleration for video encoding and frame analysis, tradeoffs must be made
     private var shouldTrackFileChanges: Bool = true
+#if os(macOS)
     static let secondsBetweenFrames : Int = utsname.isAppleSilicon ? 2 : 4
-    
+#else
+    static let secondsBetweenFrames : Int = 2
+#endif
     var currentContext : String = "Startup"
     var currentContextIsPrivate: Bool = false
     var currentUrlContext : URL? = nil
@@ -215,13 +230,13 @@ class Memory {
     /// memories with many layers of picture in picture
     ///
     @MainActor
-    func updateActiveContext(windowTitles: Dictionary<String, String>) {
+    func updateActiveContext(windowTitles: Dictionary<String, String>, bundleId: String = "") {
 #if os(macOS)
         guard let front = NSWorkspace.shared.frontmostApplication else { return }
         let title: String = windowTitles[front.bundleIdentifier ?? ""] ?? ""
         let ctx = browserAwareContext(front: front, window_title:title)
 #else
-        let ctx = CyteAppContext(front: iRunningApplication(bundleID: "?", isActive: false, localizedName: "?"), title: "?", context: "?", isPrivate: false)
+        let ctx = CyteAppContext(front: iRunningApplication(bundleID: bundleId, isActive: true, localizedName: bundleId), title: bundleId, context: bundleId, isPrivate: false)
 #endif
         
         if ctx.front.isActive && (currentContext != ctx.context || currentContextIsPrivate != ctx.isPrivate) {
@@ -231,7 +246,8 @@ class Memory {
             currentContext = ctx.context
             currentContextIsPrivate = ctx.isPrivate
             let exclusion = Memory.shared.getOrCreateBundleExclusion(name: currentContext)
-            if assetWriter == nil && currentContext != Bundle.main.bundleIdentifier && exclusion.excluded == false && !currentContextIsPrivate {
+            let is_main_bundle = !Bundle.main.bundleIdentifier!.contains(".Extension") && (currentContext == Bundle.main.bundleIdentifier)
+            if assetWriter == nil && !is_main_bundle && exclusion.excluded == false && !currentContextIsPrivate {
                 var title = ctx.title
                 if title.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
                     title = ctx.front.localizedName ?? currentContext
@@ -334,7 +350,7 @@ class Memory {
         log.info("Close \(episode?.title ?? "")")
         //close everything
         assetWriterInput!.markAsFinished()
-        if frameCount < 1 || currentContext.starts(with:Bundle.main.bundleIdentifier!) {
+        if frameCount < 1 {
             assetWriter!.cancelWriting()
             delete(delete_episode: episode!)
             log.info("Supressed small episode for \(self.currentContext)")
