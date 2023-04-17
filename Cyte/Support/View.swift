@@ -161,18 +161,13 @@ extension Bundle {
     }
 }
 
-struct AppIcon {
-    let image: UIImage?
-    
-    init(bundleID: String) {
-        self.image = Bundle.main.icon
-    }
-}
 #endif
 
 class BundleCache: ObservableObject {
     @Published var bundleImageCache: [String: UIImage] = [:]
     @Published var bundleColorCache : Dictionary<String, Color> = ["": Color.gray]
+    @Published var bundleNameCache : Dictionary<String, String> = [:]
+    @Published var id: UUID = UUID()
     
     func getColor(bundleID: String) -> Color? {
         if bundleColorCache[bundleID] != nil {
@@ -181,13 +176,33 @@ class BundleCache: ObservableObject {
         return Color.gray
     }
     
-    func setCache(bundleID: String, image: UIImage) {
+    func getName(bundleID: String) -> String {
+        if bundleNameCache[bundleID] != nil {
+            return bundleNameCache[bundleID]!
+        }
+        return getApplicationNameFromBundleID(bundleID: bundleID) ?? bundleID
+    }
+    
+    func setCache(bundleID: String, image: UIImage, bundleName: String? = nil) {
         if !Thread.isMainThread {
             DispatchQueue.main.sync {
                 self.bundleImageCache[bundleID] = image
                 self.bundleColorCache[bundleID] = self.bundleImageCache[bundleID]!.averageColor
+                self.bundleNameCache[bundleID] = bundleName
+                id = UUID()
             }
         }
+    }
+    
+    struct ITunesResponseResults: Codable {
+        public let artworkUrl512: URL
+        public let trackName: String
+        public let bundleId: String
+    }
+    
+    struct ITunesResponse: Codable {
+        /// ID of the model to use. Currently, only gpt-3.5-turbo and gpt-3.5-turbo-0301 are supported.
+        public let results: [ITunesResponseResults]
     }
     
     func getIcon(bundleID: String) -> UIImage {
@@ -208,13 +223,37 @@ class BundleCache: ObservableObject {
         else { return UIImage() }
         
         let icon = NSWorkspace.shared.icon(forFile: path)
-#else
-        let icon = AppIcon(bundleID: bundleID).image!
-#endif
         Task {
             setCache(bundleID: bundleID, image: icon)
         }
         return icon
+#else
+        URLSession.shared.dataTask(with: URL(string: "http://itunes.apple.com/lookup?bundleId=\(bundleID)")!) { (data, response, error) in
+            if let error = error {
+                return
+            }
+            do {
+                if let data = data {
+                    let res: ITunesResponse = try JSONDecoder().decode(ITunesResponse.self, from: data)
+                    if res.results.count > 0 {
+                        let result = res.results.first
+                        if result != nil {
+                            URLSession.shared.dataTask(with: result!.artworkUrl512) { (data, response, error) in
+                                guard let imageData = data else { return }
+                                let img = UIImage(data:imageData)!
+                                self.setCache(bundleID: bundleID, image: img.imageWith(newSize: CGSize(width: 24, height: 24)), bundleName: result!.trackName)
+                            }.resume()
+                        }
+                    } else {
+                        self.setCache(bundleID: bundleID, image: Bundle.main.icon! )
+                    }
+                }
+            } catch {
+                self.setCache(bundleID: bundleID, image: Bundle.main.icon! )
+            }
+        }.resume()
+        return UIImage()
+#endif
     }
 }
 

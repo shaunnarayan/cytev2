@@ -16,6 +16,7 @@ import CoreData
 struct EpisodePlaylistView: View {
     @EnvironmentObject var bundleCache: BundleCache
     @EnvironmentObject var episodeModel: EpisodeModel
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State var player: AVPlayer?
@@ -166,7 +167,7 @@ struct EpisodePlaylistView: View {
         let current_url = urlOfCurrentlyPlayingInPlayer(player: player!)
         let new_url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title)
         if current_url != new_url {
-            player = AVPlayer(url: new_url)
+            player?.replaceCurrentItem(with: AVPlayerItem(url: new_url))
         }
         // seek to correct offset
         let progress = (active_interval.1) - secondsOffsetFromLastEpisode
@@ -279,7 +280,8 @@ struct EpisodePlaylistView: View {
 
                                 )
                         })
-                        .frame(width: width, height: height)
+                        .frame(width: width * 4, height: height * 4)
+                        .position(x: width * 0.7, y: height * 0.50)
                     }
                 }
 #if os(macOS)
@@ -307,12 +309,14 @@ struct EpisodePlaylistView: View {
                                     .frame(width: timelineSize * 2, height: timelineSize * 2)
                                     .id(interval.episode.start)
                                     .offset(CGSize(width: (windowOffsetToCenter(of:interval) * metrics.size.width) - timelineSize, height: 0))
+                                    .id(bundleCache.id)
                             }
                         }
                         .frame(height: timelineSize * 4)
                         .allowsHitTesting(false)
                     }
                 }
+                .offset(CGSize(width: 0, height: 270))
                 .accessibilityLabel("A slider visually displaying segments for each application/website used, using a colored bar with icon overlay. Drag to move in time.")
                 HStack(alignment: .top) {
                     Text(activeTime())
@@ -329,6 +333,7 @@ struct EpisodePlaylistView: View {
                     Text(humanReadableOffset())
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
+                .background(colorScheme == .dark ? .black : .white)
                 .frame(height: 10)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
                 .font(Font.caption)

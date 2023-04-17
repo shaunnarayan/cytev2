@@ -18,19 +18,10 @@ class SampleHandler: RPBroadcastSampleHandler {
     var bypass: Bool = false
     var bundle: String = Bundle.main.bundleIdentifier!
     
-    override func beginRequest(with context: NSExtensionContext) {
-        print("Begin request")
-        context.loadBroadcastingApplicationInfo(completion: { bundleId, bundleName, icon in
-            self.bundle = bundleId
-            //@todo save the icon in group folder for app to display
-        })
-    }
-    
     override func broadcastAnnotated(withApplicationInfo applicationInfo: [AnyHashable : Any]) {
         print("Broadcast annotated")
         print(applicationInfo)
         bundle = applicationInfo[RPApplicationInfoBundleIdentifierKey] as! String
-        print(bundle)
     }
 
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
@@ -65,6 +56,7 @@ class SampleHandler: RPBroadcastSampleHandler {
         DispatchQueue.main.sync {
             Memory.shared.closeEpisode()
         }
+        Thread.sleep(forTimeInterval: 2)
     }
     
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
@@ -77,9 +69,8 @@ class SampleHandler: RPBroadcastSampleHandler {
                 {
                     lastFrameTime = Date()
                     let bundle_id = bundle
-                    let bundle_name = String(bundle_id.split(separator: ".").last!)
                     DispatchQueue.main.sync {
-                        Memory.shared.updateActiveContext(windowTitles: [:], bundleInfo: (bundle_id, bundle_name))
+                        Memory.shared.updateActiveContext(windowTitles: [:], bundleId: bundle_id)
                         let frame = CapturedFrame(surface: nil, data: sampleBuffer.imageBuffer, contentRect: CGRect(), contentScale: 0, scaleFactor: 0)
                         Memory.shared.addFrame(frame: frame, secondLength: Int64(Memory.secondsBetweenFrames))
                     }

@@ -57,7 +57,7 @@ struct BundleView: View {
             })
             PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle.bundle!))
                 .frame(width: 32, height: 32)
-            Text(getApplicationNameFromBundleID(bundleID: bundle.bundle!) ?? bundle.bundle!)
+            Text(bundleCache.getName(bundleID: bundle.bundle!))
                 .frame(maxWidth: .infinity, alignment: .leading)
             Toggle(isOn: binding) {
                 

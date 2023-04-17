@@ -24,7 +24,7 @@ extension utsname {
         }
     }
     static var isAppleSilicon: Bool {
-        sMachine == "arm64"
+        return sMachine == "arm64"
     }
 }
 

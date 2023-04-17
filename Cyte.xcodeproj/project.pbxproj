@@ -7,16 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F0B8C0029B310E40018BD60 /* ScreenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */; };
-		3F0B8C0129B310E40018BD60 /* CaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */; };
+		3F0B8C0029B310E40018BD60 /* ScreenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */; platformFilters = (macos, ); };
+		3F0B8C0129B310E40018BD60 /* CaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */; platformFilters = (macos, ); };
 		3F14BDCA29BCEF6500F12FE7 /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 3F14BDC929BCEF6500F12FE7 /* Highlightr */; };
 		3F14BDCC29BD920200F12FE7 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDCB29BD920200F12FE7 /* ChatView.swift */; };
 		3F14BDD029BDE82F00F12FE7 /* EpisodePlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDCF29BDE82F00F12FE7 /* EpisodePlaylistView.swift */; };
 		3F14BDD229BF06F900F12FE7 /* EpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDD129BF06F900F12FE7 /* EpisodeView.swift */; };
-		3F14BDD629C0D4A900F12FE7 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F14BDD529C0D4A800F12FE7 /* AVKit.framework */; };
 		3F58AE2629B18344007E7703 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
 		3F68242229AEBF270044A0F2 /* Cyte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F68242029AEBF270044A0F2 /* Cyte.xcdatamodeld */; };
-		3F6AAE5929EBBC0100843D71 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB9300929EBB49E0048CDAF /* ReplayKit.framework */; };
 		3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6AAE5B29EBBC0100843D71 /* SampleHandler.swift */; };
 		3F6AAE6029EBBC0100843D71 /* CyteRecorder.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3F6FE07E29C424230061DBF5 /* StaticEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */; };
@@ -34,7 +32,6 @@
 		3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; };
 		3FB92F9D29EAA2770048CDAF /* DiffMatchPatch.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB92FA329EAA69A0048CDAF /* PortableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA229EAA69A0048CDAF /* PortableImage.swift */; };
-		3FB92FA729EB041C0048CDAF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92FA629EB041C0048CDAF /* UIKit.framework */; platformFilter = ios; };
 		3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FC6C78A29CC2EA2004E19FF /* KeychainSwift */; };
 		3FCAA20029AC7C0100898995 /* CyteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA1FF29AC7C0100898995 /* CyteApp.swift */; };
 		3FCAA20229AC7C0100898995 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20129AC7C0100898995 /* Persistence.swift */; };
@@ -118,7 +115,6 @@
 		3F14BDCB29BD920200F12FE7 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		3F14BDCF29BDE82F00F12FE7 /* EpisodePlaylistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodePlaylistView.swift; sourceTree = "<group>"; };
 		3F14BDD129BF06F900F12FE7 /* EpisodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeView.swift; sourceTree = "<group>"; };
-		3F14BDD529C0D4A800F12FE7 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		3F58AE2529B18344007E7703 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		3F68242129AEBF270044A0F2 /* Cyte.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Cyte.xcdatamodel; sourceTree = "<group>"; };
 		3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CyteRecorder.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,10 +139,6 @@
 		3FAD36B129B1C29300CCCE82 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = DiffMatchPatch.xcframework; sourceTree = "<group>"; };
 		3FB92FA229EAA69A0048CDAF /* PortableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortableImage.swift; sourceTree = "<group>"; };
-		3FB92FA629EB041C0048CDAF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		3FB92FAD29EB07580048CDAF /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
-		3FB92FF229EB98DE0048CDAF /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
-		3FB9300929EBB49E0048CDAF /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.2.sdk/System/Library/Frameworks/ReplayKit.framework; sourceTree = DEVELOPER_DIR; };
 		3FC6C76929CBBB74004E19FF /* Cyte-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cyte-Bridging-Header.h"; sourceTree = "<group>"; };
 		3FCAA1FC29AC7C0100898995 /* Cyte.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cyte.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FCAA1FF29AC7C0100898995 /* CyteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyteApp.swift; sourceTree = "<group>"; };
@@ -168,7 +160,6 @@
 				3FDFCE4729ED109200988BAF /* SQLite in Frameworks */,
 				3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */,
 				3FDFCE4E29ED10B300988BAF /* DiffMatchPatch.xcframework in Frameworks */,
-				3F6AAE5929EBBC0100843D71 /* ReplayKit.framework in Frameworks */,
 				3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,7 +169,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE7822629DBDB4A008CB97D /* llama in Frameworks */,
-				3FB92FA729EB041C0048CDAF /* UIKit.framework in Frameworks */,
 				3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */,
 				3F6FE08129CAB0170061DBF5 /* SQLite in Frameworks */,
 				3F14BDCA29BCEF6500F12FE7 /* Highlightr in Frameworks */,
@@ -186,7 +176,6 @@
 				3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */,
 				3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */,
 				3FB92F9C29EAA2770048CDAF /* DiffMatchPatch.xcframework in Frameworks */,
-				3F14BDD629C0D4A900F12FE7 /* AVKit.framework in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -217,12 +206,7 @@
 		3F8F932829B5CF9C00C938DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3FB9300929EBB49E0048CDAF /* ReplayKit.framework */,
-				3FB92FF229EB98DE0048CDAF /* Accelerate.framework */,
-				3FB92FA629EB041C0048CDAF /* UIKit.framework */,
 				3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */,
-				3F14BDD529C0D4A800F12FE7 /* AVKit.framework */,
-				3FB92FAD29EB07580048CDAF /* ReplayKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -746,7 +730,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/ios",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cyte/Info.plist;
@@ -809,7 +792,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/ios",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cyte/Info.plist;

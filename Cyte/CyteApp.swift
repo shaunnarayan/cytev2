@@ -20,11 +20,11 @@ struct CyteApp: App {
     let episodeModel = EpisodeModel()
 #if os(macOS)
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    @StateObject var screenRecorder = ScreenRecorder.shared
 #else
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
 #endif
     @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
-    @StateObject var screenRecorder = ScreenRecorder.shared
     @Environment(\.openWindow) var openWindow
     
     ///

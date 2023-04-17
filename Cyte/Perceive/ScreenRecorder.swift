@@ -12,9 +12,7 @@ A model object that provides the interface to capture screen content and system 
 */
 
 import Foundation
-#if os(macOS)
-    import ScreenCaptureKit
-#endif
+import ScreenCaptureKit
 import Combine
 import OSLog
 import SwiftUI
@@ -25,7 +23,6 @@ class ScreenRecorder: ObservableObject {
     static let shared = ScreenRecorder()
     
     @Published var isRunning = false
-#if os(macOS)
     /// The supported capture types.
     enum CaptureType {
         case display
@@ -77,15 +74,12 @@ class ScreenRecorder: ObservableObject {
     
     // Combine subscribers.
     private var subscriptions = Set<AnyCancellable>()
-#endif
+
     var canRecord: Bool {
         get async {
             do {
-#if os(macOS)
                 // If the app doesn't have Screen Recording permission, this call generates an exception.
                 try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
-#else
-#endif
                 return true
             } catch {
                 return false
@@ -97,7 +91,6 @@ class ScreenRecorder: ObservableObject {
     func start() async {
         // Exit early if already running.
         guard !isRunning else { return }
-#if os(macOS)
         if !isSetup {
             // Starting polling for available screen content.
             await monitorAvailableContent()
@@ -126,28 +119,22 @@ class ScreenRecorder: ObservableObject {
             // Unable to start the stream. Set the running state to false.
             isRunning = false
         }
-#else
-        isRunning = true
-#endif
     }
     
     /// Stops capturing screen content.
     func stop() async {
         guard isRunning else { return }
-#if os(macOS)
         await captureEngine.stopCapture()
         for subscription in subscriptions {
             subscription.cancel()
         }
         subscriptions.removeAll()
         isSetup = false
-#else
-#endif
         Memory.shared.closeEpisode()
         isRunning = false
     }
     
-#if os(macOS)
+
     func monitorAvailableContent() async {
         guard !isSetup else { return }
         // Refresh the lists of capturable content.
@@ -269,9 +256,8 @@ class ScreenRecorder: ObservableObject {
         // Remove this app's window from the list.
             .filter { $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier }
     }
-#endif
 }
-#if os(macOS)
+
 extension SCWindow {
     var displayName: String {
         switch (owningApplication, title) {
@@ -292,4 +278,3 @@ extension SCDisplay {
         "Display: \(width) x \(height)"
     }
 }
-#endif

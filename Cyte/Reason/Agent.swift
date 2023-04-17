@@ -226,7 +226,7 @@ class Agent : ObservableObject, EventSourceDelegate {
     func query(request: String, over: [CyteInterval]) async {
         var _cleanRequest = request
         var force_chat = false
-        if request.starts(with: "chat ") {
+        if request.lowercased().starts(with: "chat ") {
             force_chat = true
             _cleanRequest = String(request.dropFirst("chat ".count))
         }

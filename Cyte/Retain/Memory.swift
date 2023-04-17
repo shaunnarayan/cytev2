@@ -50,8 +50,11 @@ class Memory {
     
     /// Intel fallbacks - due to lack of hardware acelleration for video encoding and frame analysis, tradeoffs must be made
     private var shouldTrackFileChanges: Bool = true
+#if os(macOS)
     static let secondsBetweenFrames : Int = utsname.isAppleSilicon ? 2 : 4
-    
+#else
+    static let secondsBetweenFrames : Int = 2
+#endif
     var currentContext : String = "Startup"
     var currentContextIsPrivate: Bool = false
     var currentUrlContext : URL? = nil
@@ -223,13 +226,13 @@ class Memory {
     /// memories with many layers of picture in picture
     ///
     @MainActor
-    func updateActiveContext(windowTitles: Dictionary<String, String>, bundleInfo: (String, String) = ("", "")) {
+    func updateActiveContext(windowTitles: Dictionary<String, String>, bundleId: String = "") {
 #if os(macOS)
         guard let front = NSWorkspace.shared.frontmostApplication else { return }
         let title: String = windowTitles[front.bundleIdentifier ?? ""] ?? ""
         let ctx = browserAwareContext(front: front, window_title:title)
 #else
-        let ctx = CyteAppContext(front: iRunningApplication(bundleID: bundleInfo.0, isActive: true, localizedName: bundleInfo.1), title: bundleInfo.1, context: bundleInfo.0, isPrivate: false)
+        let ctx = CyteAppContext(front: iRunningApplication(bundleID: bundleId, isActive: true, localizedName: bundleId), title: bundleId, context: bundleId, isPrivate: false)
 #endif
         
         if ctx.front.isActive && (currentContext != ctx.context || currentContextIsPrivate != ctx.isPrivate) {
@@ -410,7 +413,6 @@ class Memory {
             return
         }
         if assetWriter != nil {
-            log.info("Adding frame")
             if assetWriterInput!.isReadyForMoreMediaData {
                 let frameTime = CMTimeMake(value: Int64(frameCount) * secondLength, timescale: 1)
                 //append the contents of the pixelBuffer at the correct time

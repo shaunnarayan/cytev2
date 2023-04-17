@@ -13,7 +13,6 @@ An object that captures a stream of captured sample buffers containing screen an
 
 import Foundation
 import AVFAudio
-#if os(macOS)
 import ScreenCaptureKit
 import OSLog
 import Combine
@@ -156,4 +155,3 @@ private class CaptureEngineStreamOutput: NSObject, SCStreamOutput, SCStreamDeleg
         continuation?.finish(throwing: error)
     }
 }
-#endif

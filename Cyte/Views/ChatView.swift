@@ -49,12 +49,9 @@ struct ChatView: View {
                         )
 
                 } else {
-#if os(macOS)
-                    Image(nsImage: bundleCache.getIcon(bundleID: Bundle.main.bundleIdentifier!))
-                        .resizable()
+                    PortableImage(uiImage: bundleCache.getIcon(bundleID: Bundle.main.bundleIdentifier!))
                         .cornerRadius(15.0)
                         .frame(width: 30, height: 30)
-#endif
                 }
                 VStack(alignment:.leading, spacing: 0) {
                     Spacer().frame(height: 10)
@@ -80,7 +77,12 @@ struct ChatView: View {
     var body: some View {
         VStack {
             Spacer().frame(height:40)
-            HStack(alignment: .top ) {
+#if os(macOS)
+                let layout = AnyLayout(HStackLayout(alignment: .top ))
+#else
+                let layout = AnyLayout(VStackLayout())
+#endif
+            layout {
                 VStack(alignment:.leading) {
                     Spacer().frame(height:10)
                     Button {
@@ -108,12 +110,18 @@ struct ChatView: View {
 #endif
                     Spacer()
                 }
+#if os(macOS)
                 .frame(minWidth: 200, maxHeight: .infinity, alignment: .leading)
+#else
+                .frame(minWidth: 200, maxHeight: 50, alignment: .leading)
+#endif
                 ScrollView {
                     VStack(spacing: 0) {
                         messages
                     }
+#if os(macOS)
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 245))
+#endif
                     .accessibilityLabel("A conversational view of questions asked and responses from LLM")
                 }
             }
