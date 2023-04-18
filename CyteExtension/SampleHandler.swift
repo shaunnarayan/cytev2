@@ -62,7 +62,6 @@ class SampleHandler: RPBroadcastSampleHandler {
                 if (Date().timeIntervalSinceReferenceDate - lastFrameTime.timeIntervalSinceReferenceDate) < 2.0 {
                     return
                 }
-                print("Silicon: \(utsname.isAppleSilicon)")
                 if CMSampleBufferDataIsReady(sampleBuffer)
                 {
                     lastFrameTime = Date()

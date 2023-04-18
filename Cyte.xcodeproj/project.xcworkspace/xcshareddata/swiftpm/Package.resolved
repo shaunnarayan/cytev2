@@ -55,6 +55,15 @@
       }
     },
     {
+      "identity" : "swiftdiff",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shaunnarayan/SwiftDiff",
+      "state" : {
+        "branch" : "master",
+        "revision" : "116229dec3b970a18b8c38480167d7ed22861988"
+      }
+    },
+    {
       "identity" : "xcglogger",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DaveWoodCom/XCGLogger",

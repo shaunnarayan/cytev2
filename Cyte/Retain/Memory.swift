@@ -12,6 +12,7 @@ import Combine
 import SQLite
 import NaturalLanguage
 import CoreData
+import SwiftDiff
 
 /// A structure that contains the video data to render.
 struct CapturedFrame {
@@ -46,7 +47,6 @@ class Memory {
     
     /// Context change tracking/indexing
     private var lastObservation: String = ""
-    private var differ = DiffMatchPatch()
     
     /// Intel fallbacks - due to lack of hardware acelleration for video encoding and frame analysis, tradeoffs must be made
     private var shouldTrackFileChanges: Bool = true
@@ -246,7 +246,7 @@ class Memory {
             currentContext = ctx.context
             currentContextIsPrivate = ctx.isPrivate
             let exclusion = Memory.shared.getOrCreateBundleExclusion(name: currentContext)
-            let is_main_bundle = !Bundle.main.bundleIdentifier!.contains(".Extension") && ((currentContext == Bundle.main.bundleIdentifier) || (currentContext == "io.cyte.ios"))
+            let is_main_bundle = (currentContext == Bundle.main.bundleIdentifier) || (currentContext == "io.cyte.ios")
             if assetWriter == nil && !is_main_bundle && exclusion.excluded == false && !currentContextIsPrivate {
                 var title = ctx.title
                 if title.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
@@ -450,30 +450,30 @@ class Memory {
                 return
             }
         }
-        let result: NSMutableArray = differ.diff_main(ofOldString: lastObservation, andNewString: what)!
-        differ.diff_cleanupSemantic(result)
-        // embed every 12sish
-        var edits: [(Int, String)] = []
+        let result = diff(text1: lastObservation, text2: what)
         var added: String = ""
-        // if the edit removes the entirety of the lastObservation, then consider it a new context, and embed the current document total
-        var total_match = 0
+        var equal_count = 0
         for res in result {
-            let edit: (Int, String) = (Int((res as! Diff).operation.rawValue) - 2,
-                        ((res as! Diff).text ?? ""))
-            edits.append(edit)
-            if edit.0 == 1 {
-                total_match += edit.1.count
-            }
-            if edit.0 == 0 {
-                added += edit.1
+            switch res {
+            case .insert:
+                added += res.text
+            case.delete:
+                break
+            case.equal:
+                equal_count += 1
+                break
             }
         }
-        
-        let newItem = CyteInterval(
-            from: at,
-            to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,
-            episode: _episode!, document: added)
-        insert(interval: newItem)
+        if result.count == 1 && equal_count == 1 {
+            added = ""
+        } else {
+            added = what
+            let newItem = CyteInterval(
+                from: at,
+                to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,
+                episode: _episode!, document: added)
+            insert(interval: newItem)
+        }
         lastObservation = what
     }
 
