@@ -32,7 +32,7 @@ struct CyteApp: App {
     /// On every run, starts the recorder and sets up hotkey listeners
     ///
     func setup() {
-        let defaults = UserDefaults.standard
+        let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
         appDelegate.mainApp = self
 #if os(macOS)
         if defaults.bool(forKey: "CYTE_HIDE_DOCK") {
@@ -89,27 +89,10 @@ struct CyteApp: App {
                 .environmentObject(bundleCache)
                 .environmentObject(episodeModel)
                 .onAppear {
-#if os(macOS)
-#else
-                    NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification,
-                                                           object: nil,
-                                                           queue: .main) { (notification) in
-                        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.app-active"))
-                    }
-                    NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification,
-                                                           object: nil,
-                                                           queue: .main) { (notification) in
-                        DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.app-resigned"))
-                    }
-#endif
                     self.setup()
                 }
                 .onDisappear {
                     self.teardown()
-#if os(macOS)
-#else
-                    DarwinNotificationCenter.shared.removeObserver(appDelegate)
-#endif
                 }
         }
         .commands {
@@ -167,7 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mainApp: CyteApp?
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        if UserDefaults.standard.bool(forKey: "CYTE_BROWSER") {
+        if UserDefaults(suiteName: "group.io.cyte.ios")!.bool(forKey: "CYTE_BROWSER") {
             checkIsProcessTrusted(prompt: true)
         }
         
@@ -219,12 +202,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 class AppDelegate: NSObject, UIApplicationDelegate {
     
     var mainApp: CyteApp?
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        DarwinNotificationCenter.shared.addObserver(self, for: DarwinNotification.Name("io.cyte.ios.broadcast-start"), using: { (_) in
-            // if a broadcast started while we're open, tell it to bypass until we're resigned
-            DarwinNotificationCenter.shared.postNotification(DarwinNotification.Name("io.cyte.ios.app-active"))
-            })
-        return true
-    }
 }
 #endif

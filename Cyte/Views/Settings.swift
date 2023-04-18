@@ -76,7 +76,7 @@ struct Settings: View {
     @State var isShowingHomeSelection = false
     @State var apiDetails: String = ""
     @State var bundleFilter: String = ""
-    private let defaults = UserDefaults.standard
+    private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     @State var isHovering: Bool = false
     @State var currentRetention: Int = 0
     @State var browserAware: Bool = false
@@ -119,7 +119,7 @@ struct Settings: View {
                     .fileImporter(isPresented: $isShowingHomeSelection, allowedContentTypes: [.directory], onCompletion: { result in
                         switch result {
                         case .success(let Fileurl):
-                            let defaults = UserDefaults.standard
+                            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
                             defaults.set(Fileurl.path(percentEncoded: false), forKey: "CYTE_HOME")
                             break
                         case .failure(let error):

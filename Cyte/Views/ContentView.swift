@@ -62,7 +62,9 @@ struct ContentView: View {
                                 return (ep.title ?? "").count > 0 && (ep.start != ep.end)
                             }) { episode in
                                 EpisodeView(player: AVPlayer(url: urlForEpisode(start: episode.start, title: episode.title)), episode: episode, filter: episodeModel.filter, selected: false)
+#if os(macOS)
                                     .frame(width: 360, height: 260)
+#endif
                                     .contextMenu {
                                         Button {
                                             Memory.shared.delete(delete_episode: episode)
@@ -148,6 +150,16 @@ struct ContentView: View {
         )
 #if os(macOS)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            Memory.shared.closeEpisode()
+            Task {
+                // @todo there are likely some cases in which this shouldn't be updated
+                episodeModel.endDate = Date()
+                self.episodeModel.refreshData()
+            }
+        }
+#else
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            print("Cyte became active")
             Memory.shared.closeEpisode()
             Task {
                 // @todo there are likely some cases in which this shouldn't be updated

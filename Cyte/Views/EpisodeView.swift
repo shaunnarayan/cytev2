@@ -29,13 +29,6 @@ struct EpisodeView: View {
         VStack {
             ZStack {
                 VideoPlayer(player: player)
-//                .frame(width: 360, height: 203)
-                    .onReceive(NotificationCenter.default.publisher(for: AVPlayerItem.timeJumpedNotification)) { _ in
-                        //
-                    }
-                    .onReceive(NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)) { _ in
-                        
-                    }
                     .padding(0)
                 
             }
@@ -48,7 +41,7 @@ struct EpisodeView: View {
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
                     #else
-                    Text(bundleCache.getName(bundleID: episode.bundle!))
+                    Text(bundleCache.getName(bundleID: episode.bundle ?? ""))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
@@ -65,17 +58,16 @@ struct EpisodeView: View {
                     }
                     .buttonStyle(.plain)
                     .opacity(isHoveringExpand ? 0.8 : 1.0)
+#if os(macOS)
                     .onHover(perform: { hovering in
                         self.isHoveringExpand = hovering
-#if os(macOS)
                         if hovering {
                             NSCursor.pointingHand.set()
                         } else {
                             NSCursor.arrow.set()
                         }
-#endif
                     })
-
+#endif
                     Image(systemName: episode.save ? "star.fill" : "star")
                         .onTapGesture {
                             episode.save = !episode.save

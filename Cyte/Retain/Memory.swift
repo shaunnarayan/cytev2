@@ -246,7 +246,7 @@ class Memory {
             currentContext = ctx.context
             currentContextIsPrivate = ctx.isPrivate
             let exclusion = Memory.shared.getOrCreateBundleExclusion(name: currentContext)
-            let is_main_bundle = !Bundle.main.bundleIdentifier!.contains(".Extension") && (currentContext == Bundle.main.bundleIdentifier)
+            let is_main_bundle = !Bundle.main.bundleIdentifier!.contains(".Extension") && ((currentContext == Bundle.main.bundleIdentifier) || (currentContext == "io.cyte.ios"))
             if assetWriter == nil && !is_main_bundle && exclusion.excluded == false && !currentContextIsPrivate {
                 var title = ctx.title
                 if title.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
@@ -386,7 +386,7 @@ class Memory {
     ///
     private func runRetention() {
         // delete any episodes outside retention period
-        let defaults = UserDefaults.standard
+        let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
         let retention = defaults.integer(forKey: "CYTE_RETENTION")
         if retention == 0 {
             // retain forever

@@ -40,8 +40,11 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <PathRunnable
+         runnableDebuggingMode = "0"
+         FilePath = "/Users/shaunnarayan/Library/Developer/Xcode/DerivedData/Cyte-fjxvxtltqxyzepgiohehfcpringt/Build/Products/Release-iphoneos/Cyte.app">
+      </PathRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3FCAA1FB29AC7C0100898995"
@@ -49,7 +52,7 @@
             BlueprintName = "Cyte"
             ReferencedContainer = "container:Cyte.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

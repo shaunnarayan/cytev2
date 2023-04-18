@@ -55,8 +55,6 @@
 		3FDFCE4E29ED10B300988BAF /* DiffMatchPatch.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; };
 		3FDFCE4F29ED10B300988BAF /* DiffMatchPatch.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FDFCE5129ED111900988BAF /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
-		3FDFCE5329ED1E0400988BAF /* DarwinNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */; };
-		3FDFCE5429ED1E7C00988BAF /* DarwinNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */; };
 		3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 3FE7822229DB15A8008CB97D /* AXSwift */; };
 		3FE7822629DBDB4A008CB97D /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE7822529DBDB4A008CB97D /* llama */; };
 /* End PBXBuildFile section */
@@ -148,7 +146,6 @@
 		3FCAA20A29AC7C0400898995 /* Cyte.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cyte.entitlements; sourceTree = "<group>"; };
 		3FCAA20C29AC7C0400898995 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3FDBE5C329D4704300A4C6C0 /* Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Export.swift; sourceTree = "<group>"; };
-		3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarwinNotification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,7 +224,6 @@
 				3FDBE5C329D4704300A4C6C0 /* Export.swift */,
 				3F7BB7DA29E0112900D8A0BB /* Browser.swift */,
 				3F7BB7E029E2AF8700D8A0BB /* View.swift */,
-				3FDFCE5229ED1E0400988BAF /* DarwinNotification.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -469,7 +465,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FDFCE5429ED1E7C00988BAF /* DarwinNotification.swift in Sources */,
 				3FDFCE5129ED111900988BAF /* Events.swift in Sources */,
 				3FDFCE4229ED107500988BAF /* Cyte1-2.xcmappingmodel in Sources */,
 				3FDFCE4329ED107500988BAF /* Cyte-Bridging-Header.h in Sources */,
@@ -487,7 +482,6 @@
 			files = (
 				3F14BDD029BDE82F00F12FE7 /* EpisodePlaylistView.swift in Sources */,
 				3F14BDCC29BD920200F12FE7 /* ChatView.swift in Sources */,
-				3FDFCE5329ED1E0400988BAF /* DarwinNotification.swift in Sources */,
 				3FCAA20029AC7C0100898995 /* CyteApp.swift in Sources */,
 				3F7BB7E629E4E89E00D8A0BB /* Cyte1-2.xcmappingmodel in Sources */,
 				3F14BDD229BF06F900F12FE7 /* EpisodeView.swift in Sources */,

@@ -13,7 +13,7 @@ import AXSwift
 /// Use AX API to perform a fragile string comparison for incognito/private browsing
 ///
 func isPrivateContext(context: String) -> Bool {
-    if !UserDefaults.standard.bool(forKey: "CYTE_BROWSER") || !checkIsProcessTrusted(prompt: true) {
+    if !UserDefaults(suiteName: "group.io.cyte.ios")!.bool(forKey: "CYTE_BROWSER") || !checkIsProcessTrusted(prompt: true) {
         return false
     }
     if ["com.apple.Safari", "com.google.Chrome"].contains(context) {
@@ -34,7 +34,7 @@ func isPrivateContext(context: String) -> Bool {
 }
 
 func getAddressBarContent(context: String) -> (String?, String?) {
-    if !UserDefaults.standard.bool(forKey: "CYTE_BROWSER") || !checkIsProcessTrusted(prompt: true) {
+    if !UserDefaults(suiteName: "group.io.cyte.ios")!.bool(forKey: "CYTE_BROWSER") || !checkIsProcessTrusted(prompt: true) {
         return (nil, nil)
     }
     let addressBarOffsets = [ "com.apple.Safari": (CGFloat(405), CGFloat(21)), "com.google.Chrome": (CGFloat(180), CGFloat(49))]

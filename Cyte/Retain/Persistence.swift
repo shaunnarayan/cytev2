@@ -85,7 +85,7 @@ class CyteInterval: ObservableObject, Identifiable, Equatable, Hashable {
 /// and defers to a user preference if set
 ///
 func homeDirectory() -> URL {
-    let defaults = UserDefaults.standard
+    let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     let home = defaults.string(forKey: "CYTE_HOME")
     if home != nil && FileManager.default.fileExists(atPath: home!) {
         return URL(filePath: home!)
