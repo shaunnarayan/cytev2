@@ -7,6 +7,7 @@
 
 import Foundation
 import AVKit
+import Photos
 
 ///
 /// Build up a composition with references to the assets for supplied episodes
@@ -67,6 +68,9 @@ func makeTimelapse(episodes: [Episode], timelapse_len_seconds: Int = 60, reveal:
                     if FileManager.default.fileExists(atPath: outputMovieURL.path(percentEncoded: false)) {
 #if os(macOS)
                         NSWorkspace.shared.activateFileViewerSelecting([outputMovieURL])
+#else
+                        UISaveVideoAtPathToSavedPhotosAlbum(outputMovieURL.path(percentEncoded: false), nil, nil, nil)
+                        UIApplication.shared.open(URL(string:"photos-redirect:///")!)
 #endif
                         log.info("movie has been exported to \(outputMovieURL)")
                     }

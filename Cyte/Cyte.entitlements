@@ -10,5 +10,7 @@
 	<array>
 		<string>group.io.cyte.ios</string>
 	</array>
+	<key>com.apple.security.personal-information.photos-library</key>
+	<true/>
 </dict>
 </plist>

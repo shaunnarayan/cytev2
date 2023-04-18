@@ -70,11 +70,13 @@ struct ContentView: View {
                                         } label: {
                                             Label("Delete", systemImage: "xmark.bin")
                                         }
+#if os(macOS)
                                         Button {
                                             revealEpisode(episode: episode)
                                         } label: {
                                             Label("Reveal in Finder", systemImage: "questionmark.folder")
                                         }
+#endif
                                     }
                                     .id(episode.start)
                             }

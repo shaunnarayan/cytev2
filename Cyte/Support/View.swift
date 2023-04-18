@@ -108,20 +108,6 @@ extension NSImage {
     }
 }
 typealias UIImage = NSImage
-
-extension NSImage {
-    var cgImage: CGImage? {
-        var proposedRect = CGRect(origin: .zero, size: size)
-
-        return cgImage(forProposedRect: &proposedRect,
-                       context: nil,
-                       hints: nil)
-    }
-
-    convenience init?(named name: String) {
-        self.init(named: Name(name))
-    }
-}
 #else
 extension UIImage {
     ///
@@ -229,7 +215,7 @@ class BundleCache: ObservableObject {
         return icon
 #else
         URLSession.shared.dataTask(with: URL(string: "http://itunes.apple.com/lookup?bundleId=\(bundleID)")!) { (data, response, error) in
-            if let error = error {
+            if error != nil {
                 return
             }
             do {

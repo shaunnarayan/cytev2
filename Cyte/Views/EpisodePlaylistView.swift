@@ -24,7 +24,7 @@ struct EpisodePlaylistView: View {
 #if os(macOS)
     @State static var windowLengthInSeconds: Int = 60 * 2
 #else
-    @State static var windowLengthInSeconds: Int = 30
+    @State static var windowLengthInSeconds: Int = 20
 #endif
     @State var secondsOffsetFromLastEpisode: Double
     
@@ -360,10 +360,12 @@ struct EpisodePlaylistView: View {
                         .frame(width: 70)
                     }
                 }
+#if os(macOS)
                 ToolbarItem {
                     Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
                         .frame(width: 50)
                 }
+#endif
             }
         }
         .id(episodeModel.dataID)

@@ -735,6 +735,7 @@
 				INFOPLIST_FILE = Cyte/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cyte;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cyte will access your Photo Library to save timelapses";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -752,7 +753,7 @@
 				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cyte;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = io.cyte.ios;
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = io.cyte.macos;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = shoplex.Cyte;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -797,6 +798,7 @@
 				INFOPLIST_FILE = Cyte/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cyte;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cyte will access your Photo Library to save timelapses";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -814,7 +816,7 @@
 				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cyte;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = io.cyte.ios;
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = io.cyte.macos;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = shoplex.Cyte;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";

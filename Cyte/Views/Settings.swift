@@ -105,13 +105,12 @@ struct Settings: View {
 #else
                 let layout = AnyLayout(VStackLayout())
 #endif
+#if os(macOS)
                 HStack {
                     Text("Saving memories in: \(homeDirectory().path(percentEncoded: false))")
                         .lineLimit(10)
-#if os(macOS)
                         .font(.title2)
                         .frame(width: 1000, height: 50, alignment: .leading)
-#endif
                     Button(action: {
                         isShowingHomeSelection.toggle()
                     }) {
@@ -130,7 +129,7 @@ struct Settings: View {
                 }
                 .accessibilityLabel("Path currently used to store memories and a button to update it")
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
-                
+#endif
                 Text("Save recordings for (will use approximately 1GB for every four hours: this can vary greatly depending on amount of context switching)")
                     .font(.title2)
                     .lineLimit(10)
@@ -141,12 +140,12 @@ struct Settings: View {
                 
                 
                 layout {
+#if os(macOS)
                     ForEach(Array(["Forever", "30 Days", "60 Days", "90 Days"].enumerated()), id: \.offset) { index, retain in
                         Text(retain)
                             .frame(width: 244, height: 50)
                             .background(currentRetention == (index * 30) ? Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0) : .white)
                             .foregroundColor(currentRetention == (index * 30) ? .black : .gray)
-#if os(macOS)
                             .onHover(perform: { hovering in
                                 self.isHovering = hovering
                                 if hovering {
@@ -155,12 +154,23 @@ struct Settings: View {
                                     NSCursor.arrow.set()
                                 }
                             })
-#endif
                             .onTapGesture {
                                 defaults.set(index * 30, forKey: "CYTE_RETENTION")
                                 currentRetention = index * 30
                             }
                     }
+#else
+                    ForEach(Array(["30 Days", "60 Days", "90 Days"].enumerated()), id: \.offset) { index, retain in
+                        Text(retain)
+                            .frame(width: 244, height: 50)
+                            .background(currentRetention == ((index + 1) * 30) ? Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0) : .white)
+                            .foregroundColor(currentRetention == ((index + 1) * 30) ? .black : .gray)
+                            .onTapGesture {
+                                defaults.set((index + 1) * 30, forKey: "CYTE_RETENTION")
+                                currentRetention = (index + 1) * 30
+                            }
+                    }
+#endif
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 
@@ -331,11 +341,13 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 0))
             }
         }
+#if os(macOS)
         .toolbar {
             ToolbarItem {
                 Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
                     .frame(width: 50)
             }
         }
+#endif
     }
 }
