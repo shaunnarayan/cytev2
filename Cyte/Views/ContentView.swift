@@ -62,7 +62,9 @@ struct ContentView: View {
                                 return (ep.title ?? "").count > 0 && (ep.start != ep.end)
                             }) { episode in
                                 EpisodeView(player: AVPlayer(url: urlForEpisode(start: episode.start, title: episode.title)), episode: episode, filter: episodeModel.filter, selected: false)
+#if os(macOS)
                                     .frame(width: 360, height: 260)
+#endif
                                     .contextMenu {
                                         Button {
                                             Memory.shared.delete(delete_episode: episode)

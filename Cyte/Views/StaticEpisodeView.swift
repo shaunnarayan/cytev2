@@ -90,8 +90,13 @@ struct StaticEpisodeView: View {
             ZStack {
                 if thumbnail != nil {
                     Image(thumbnail!, scale: 1.0, label: Text(""))
+#if os(macOS)
                         .resizable()
                         .frame(width: 360, height: 203)
+#else
+                    .scaleEffect(0.56)
+                    .frame(height: 600)
+#endif
                 } else {
                     Spacer().frame(width: 360, height: 203)
                 }
@@ -100,11 +105,19 @@ struct StaticEpisodeView: View {
                     if highlight.count > selection {
                         Rectangle()
                             .fill(Color.black.opacity(0.5))
+#if os(macOS)
                             .cutout(
                                 [RoundedRectangle(cornerRadius: 4)
                                     .scale(x: highlight[selection].width * 1.2, y: highlight[selection].height * 1.2)
                                     .offset(x:-180 + (highlight[selection].midX * 360), y:102 - (highlight[selection].midY * 203))]
                             )
+#else
+                            .cutout(
+                                [RoundedRectangle(cornerRadius: 4)
+                                    .scale(x: highlight[selection].width * 1.2, y: highlight[selection].height * 1.2)
+                                    .offset(x:-180 + (highlight[selection].midX * 360), y:300 - (highlight[selection].midY * 600))]
+                            )
+#endif
                     } else {
                         Color.black
                             .opacity(0.5)
@@ -197,7 +210,9 @@ struct StaticEpisodeView: View {
                 .padding(EdgeInsets(top: 10.0, leading: 0.0, bottom: 10.0, trailing: 0.0))
             }
         }
+#if os(macOS)
         .frame(width: 360, height: 260)
+#endif
         .onAppear {
             if genTask == nil {
                 genTask = Task {

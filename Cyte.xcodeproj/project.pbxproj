@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9A29EE9CEF0078EE31 /* SwiftDiff */; };
 		3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9C29EE9CFE0078EE31 /* SwiftDiff */; };
+		3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F049C9E29EEA9E30078EE31 /* AVKit.framework */; };
 		3F0B8C0029B310E40018BD60 /* ScreenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */; platformFilters = (macos, ); };
 		3F0B8C0129B310E40018BD60 /* CaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */; platformFilters = (macos, ); };
 		3F14BDCA29BCEF6500F12FE7 /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 3F14BDC929BCEF6500F12FE7 /* Highlightr */; };
@@ -82,6 +83,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F049C9E29EEA9E30078EE31 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenRecorder.swift; sourceTree = "<group>"; };
 		3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureEngine.swift; sourceTree = "<group>"; };
 		3F0B8BFF29B310E40018BD60 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			files = (
 				3FE7822629DBDB4A008CB97D /* llama in Frameworks */,
 				3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */,
+				3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */,
 				3F6FE08129CAB0170061DBF5 /* SQLite in Frameworks */,
 				3F14BDCA29BCEF6500F12FE7 /* Highlightr in Frameworks */,
 				3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */,
@@ -179,6 +182,7 @@
 		3F8F932829B5CF9C00C938DE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F049C9E29EEA9E30078EE31 /* AVKit.framework */,
 				3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */,
 			);
 			name = Frameworks;
@@ -503,7 +507,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 794T33TWQW;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyteExtension/Info.plist;
@@ -535,7 +539,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 794T33TWQW;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyteExtension/Info.plist;
@@ -690,7 +694,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Cyte/Preview Content\"";
 				DEVELOPMENT_TEAM = 794T33TWQW;
@@ -753,7 +757,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Cyte/Preview Content\"";
 				DEVELOPMENT_TEAM = 794T33TWQW;

@@ -30,6 +30,10 @@ struct EpisodeView: View {
             ZStack {
                 VideoPlayer(player: player)
                     .padding(0)
+#if !os(macOS)
+                    .aspectRatio(19.5/9.0, contentMode: .fill)
+                    .frame(height: 600)
+#endif
                 
             }
             .padding(0)

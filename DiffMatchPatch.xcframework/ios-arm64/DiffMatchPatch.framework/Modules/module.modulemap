@@ -1,6 +1,0 @@
-framework module DiffMatchPatch {
-  umbrella header "DiffMatchPatch.h"
-
-  export *
-  module * { export * }
-}
