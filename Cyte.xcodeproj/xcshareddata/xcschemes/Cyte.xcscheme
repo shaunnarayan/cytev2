@@ -42,7 +42,7 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
-         FilePath = "/Users/shaunnarayan/Library/Developer/Xcode/DerivedData/Cyte-fjxvxtltqxyzepgiohehfcpringt/Build/Products/Release-iphoneos/Cyte.app">
+         FilePath = "/Users/shaunnarayan/Library/Developer/Xcode/DerivedData/Cyte-fjxvxtltqxyzepgiohehfcpringt/Build/Products/Release/Cyte.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference

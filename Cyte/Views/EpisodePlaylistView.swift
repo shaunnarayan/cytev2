@@ -12,6 +12,11 @@ import AVKit
 import Combine
 import Vision
 import CoreData
+#if os(macOS)
+    import AppKit
+#else
+    import UIKit
+#endif
 
 struct EpisodePlaylistView: View {
     @EnvironmentObject var bundleCache: BundleCache
@@ -39,6 +44,25 @@ struct EpisodePlaylistView: View {
     private let timelineSize: CGFloat = 16
     
     @State var documents: [Document] = []
+    @State var clearMode: Bool = false
+    @State var magScale: CGFloat = 1
+    @State var progressingScale: CGFloat = 1
+    @State var magnifyFrom: CGPoint?
+    
+    var magnification: some Gesture {
+        MagnificationGesture()
+            .onChanged {
+                self.clearMode = true
+                if(self.magScale * $0 > 1.0) {
+                    progressingScale = $0
+                }
+                
+            }
+            .onEnded {
+                magScale = $0
+                progressingScale = 1
+            }
+    }
     
     func loadDocuments() {
         documents = []
@@ -216,6 +240,18 @@ struct EpisodePlaylistView: View {
         return "\(secondsToReadable(seconds: seconds)) ago"
     }
     
+    func copyThumbnail() {
+#if os(macOS)
+        if let cgImage = thumbnailImages.first {
+            let nsImage = NSImage(cgImage: cgImage!, size: .zero)
+            let pasteboard = NSPasteboard.general
+            pasteboard.clearContents()
+            pasteboard.writeObjects([nsImage])
+        }
+#else
+        UIPasteboard.general.image = thumbnailImages.first!!
+#endif
+    }
     
     var chart: some View {
         Chart {
@@ -270,7 +306,7 @@ struct EpisodePlaylistView: View {
 #endif
                         VideoPlayer(player: player, videoOverlay: {
                             Rectangle()
-                                .fill(highlight.count == 0 ? .clear : Color.black.opacity(0.5))
+                                .fill((highlight.count == 0 || self.clearMode) ? .clear : Color.black.opacity(0.5))
                                 .cutout(
                                     highlight.map { high in
                                         RoundedRectangle(cornerRadius: 4)
@@ -280,12 +316,26 @@ struct EpisodePlaylistView: View {
 
                                 )
                         })
+                        .disabled(true)
 #if os(macOS)
                         .frame(width: width, height: height)
+                        .onContinuousHover(perform: { phase in
+                            switch phase {
+                            case .active(let location):
+                                magnifyFrom = CGPoint(x: location.x / width, y: location.y / height)
+                            case .ended:
+                                break
+                            }
+                        })
 #else
                         .frame(width: width * 4, height: height * 4)
                         .position(x: width * 0.7, y: height * 0.50)
+                        .onTapGesture { location in
+                            magnifyFrom = location
+                        }
 #endif
+                        .scaleEffect(max(1.0, self.magScale * progressingScale), anchor: UnitPoint(x: magnifyFrom?.x ?? 0, y: magnifyFrom?.y ?? 0))
+                        .gesture(magnification)
                     }
                 }
 #if os(macOS)
@@ -296,6 +346,13 @@ struct EpisodePlaylistView: View {
                         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url.path(percentEncoded: false))
                     } label: {
                         Label("Reveal in Finder", systemImage: "questionmark.folder")
+                    }
+                    if thumbnailImages.count > 0 {
+                        Button {
+                            copyThumbnail()
+                        } label: {
+                            Label("Copy Image", systemImage: "questionmark.folder")
+                        }
                     }
                 }
 #endif
@@ -351,6 +408,22 @@ struct EpisodePlaylistView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .toolbar {
+                if self.clearMode == false && highlight.count > 0 {
+                    ToolbarItem {
+                        Button("Clear", action: { self.clearMode = true })
+                            .frame(width: 50)
+                    }
+                }
+                if self.clearMode == true {
+                    ToolbarItem {
+                        Button("Highlight", action: { self.clearMode = false })
+                            .frame(width: 50)
+                    }
+                }
+                ToolbarItem {
+                    Button("Copy", action: { copyThumbnail() })
+                        .frame(width: 50)
+                }
                 if documents.count > 0 {
                     ToolbarItem {
                         Button("Resume") {
