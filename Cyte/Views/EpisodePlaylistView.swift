@@ -249,7 +249,7 @@ struct EpisodePlaylistView: View {
             pasteboard.writeObjects([nsImage])
         }
 #else
-        UIPasteboard.general.image = thumbnailImages.first!!
+        UIPasteboard.general.image = UIImage(cgImage: thumbnailImages.first!!)
 #endif
     }
     
@@ -414,7 +414,7 @@ struct EpisodePlaylistView: View {
                             .frame(width: 50)
                     }
                 }
-                if self.clearMode == true {
+                if self.clearMode == true && highlight.count > 0 {
                     ToolbarItem {
                         Button("Highlight", action: { self.clearMode = false })
                             .frame(width: 50)

@@ -450,30 +450,27 @@ class Memory {
                 return
             }
         }
-        let result = diff(text1: lastObservation, text2: what)
+        let result = cleanupSemantic(diffs: diff(text1: lastObservation, text2: what))
+        
         var added: String = ""
         var equal_count = 0
         for res in result {
             switch res {
             case .insert:
                 added += res.text
-            case.delete:
+            case .delete:
                 break
-            case.equal:
+            case .equal:
                 equal_count += 1
                 break
             }
         }
-        if result.count == 1 && equal_count == 1 {
-            added = ""
-        } else {
-            added = what
-            let newItem = CyteInterval(
-                from: at,
-                to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,
-                episode: _episode!, document: added)
-            insert(interval: newItem)
-        }
+
+        let newItem = CyteInterval(
+            from: at,
+            to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,
+            episode: _episode!, document: added)
+        insert(interval: newItem)
         lastObservation = what
     }
 
