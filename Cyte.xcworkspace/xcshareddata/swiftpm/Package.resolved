@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "rncryptor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RNCryptor/RNCryptor",
+      "state" : {
+        "revision" : "5e3bbf44f08bf90049537cb8902d8f4fa911a79a",
+        "version" : "5.1.0"
+      }
+    },
+    {
       "identity" : "swiftdiff",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/shaunnarayan/SwiftDiff",

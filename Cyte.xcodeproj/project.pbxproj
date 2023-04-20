@@ -56,6 +56,7 @@
 		3F6D2F5B29F0F91F00F3472D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FCAA20C29AC7C0400898995 /* Preview Assets.xcassets */; };
 		3F6D2F5C29F0F91F00F3472D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FCAA20829AC7C0400898995 /* Assets.xcassets */; };
 		3F6D2F5E29F0F91F00F3472D /* CyteRecorder.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3F6D2F6729F0FB4100F3472D /* RNCryptor in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F6629F0FB4100F3472D /* RNCryptor */; };
 		3F6FE07E29C424230061DBF5 /* StaticEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */; };
 		3F7BB7DB29E0112900D8A0BB /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DA29E0112900D8A0BB /* Browser.swift */; };
 		3F7BB7DD29E26C7000D8A0BB /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DC29E26C7000D8A0BB /* EpisodeModel.swift */; };
@@ -234,6 +235,7 @@
 				3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */,
 				3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */,
 				3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */,
+				3F6D2F6729F0FB4100F3472D /* RNCryptor in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
 				03440CDFA68B7ADF815A4FDF /* (null) in Frameworks */,
 				C2E200DA6DEA831E07A737A7 /* Pods_Cyte.framework in Frameworks */,
@@ -504,6 +506,7 @@
 				3FE7822529DBDB4A008CB97D /* llama */,
 				3FE7822229DB15A8008CB97D /* AXSwift */,
 				3F049C9A29EE9CEF0078EE31 /* SwiftDiff */,
+				3F6D2F6629F0FB4100F3472D /* RNCryptor */,
 			);
 			productName = Cyte;
 			productReference = 3FCAA1FC29AC7C0100898995 /* Cyte.app */;
@@ -545,6 +548,7 @@
 				3FE7822429DBDB4A008CB97D /* XCRemoteSwiftPackageReference "llama" */,
 				3FE7822129DB15A8008CB97D /* XCRemoteSwiftPackageReference "AXSwift" */,
 				3F049C9929EE9CEF0078EE31 /* XCRemoteSwiftPackageReference "SwiftDiff" */,
+				3F6D2F6529F0FB4100F3472D /* XCRemoteSwiftPackageReference "RNCryptor" */,
 			);
 			productRefGroup = 3FCAA1FD29AC7C0100898995 /* Products */;
 			projectDirPath = "";
@@ -1334,6 +1338,14 @@
 				kind = branch;
 			};
 		};
+		3F6D2F6529F0FB4100F3472D /* XCRemoteSwiftPackageReference "RNCryptor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RNCryptor/RNCryptor";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		3FC6C78929CC2EA2004E19FF /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
@@ -1431,6 +1443,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3F6D2F3529F0F91F00F3472D /* XCRemoteSwiftPackageReference "SwiftDiff" */;
 			productName = SwiftDiff;
+		};
+		3F6D2F6629F0FB4100F3472D /* RNCryptor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F6529F0FB4100F3472D /* XCRemoteSwiftPackageReference "RNCryptor" */;
+			productName = RNCryptor;
 		};
 		3FC6C78A29CC2EA2004E19FF /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
