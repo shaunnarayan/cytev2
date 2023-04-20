@@ -436,13 +436,21 @@ struct EpisodePlaylistView: View {
                 if documents.count > 0 {
                     ToolbarItem {
                         Button(action: {
-                            // Handle button tap here
                             openFile(path: documents.first!.path!)
                         }) {
                             Image(systemName: "arrow.up.forward")
                         }
                     }
                 }
+#if os(macOS)
+                ToolbarItem {
+                    Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+#endif
             }
         }
         .id(episodeModel.dataID)
