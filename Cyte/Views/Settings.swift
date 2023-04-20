@@ -189,6 +189,8 @@ struct Settings: View {
                             Text("Knowledge base enabled")
 #if os(macOS)
                                 .frame(width: 1000, height: 50)
+#else
+                                .frame(width: 244, height: 50)
 #endif
                                 .background(Color(red: 177.0 / 255.0, green: 181.0 / 255.0, blue: 255.0 / 255.0))
                             Button(action: {
@@ -341,13 +343,5 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 0))
             }
         }
-#if os(macOS)
-        .toolbar {
-            ToolbarItem {
-                Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
-                    .frame(width: 50)
-            }
-        }
-#endif
     }
 }

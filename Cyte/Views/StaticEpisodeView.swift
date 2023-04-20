@@ -128,10 +128,17 @@ struct StaticEpisodeView: View {
             .padding(0)
             HStack {
                 VStack {
+#if os(macOS)
                     Text((episode.title ?? "")!.split(separator: " ").dropLast(6).joined(separator: " "))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
+#else
+                    Text(bundleCache.getName(bundleID: episode.bundle ?? ""))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fontWeight(selected ? .bold : .regular)
+                        .lineLimit(1)
+#endif
                     Text((result.from ).formatted(date: .abbreviated, time: .standard) )
                         .font(SwiftUI.Font.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)

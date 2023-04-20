@@ -316,8 +316,8 @@ struct EpisodePlaylistView: View {
 
                                 )
                         })
-                        .disabled(true)
 #if os(macOS)
+                        .disabled(true)
                         .frame(width: width, height: height)
                         .onContinuousHover(perform: { phase in
                             switch phase {
@@ -330,9 +330,9 @@ struct EpisodePlaylistView: View {
 #else
                         .frame(width: width * 4, height: height * 4)
                         .position(x: width * 0.7, y: height * 0.50)
-                        .onTapGesture { location in
-                            magnifyFrom = location
-                        }
+                       .onTapGesture { location in
+                           magnifyFrom = location
+                       }
 #endif
                         .scaleEffect(max(1.0, self.magScale * progressingScale), anchor: UnitPoint(x: magnifyFrom?.x ?? 0, y: magnifyFrom?.y ?? 0))
                         .gesture(magnification)
@@ -410,35 +410,39 @@ struct EpisodePlaylistView: View {
             .toolbar {
                 if self.clearMode == false && highlight.count > 0 {
                     ToolbarItem {
-                        Button("Clear", action: { self.clearMode = true })
-                            .frame(width: 50)
+                        Button(action: {
+                            self.clearMode = true
+                        }) {
+                            Image(systemName: "eye.slash")
+                        }
                     }
                 }
                 if self.clearMode == true && highlight.count > 0 {
                     ToolbarItem {
-                        Button("Highlight", action: { self.clearMode = false })
-                            .frame(width: 50)
+                        Button(action: {
+                            self.clearMode = false
+                        }) {
+                            Image(systemName: "eye")
+                        }
                     }
                 }
                 ToolbarItem {
-                    Button("Copy", action: { copyThumbnail() })
-                        .frame(width: 50)
+                    Button(action: {
+                        copyThumbnail()
+                    }) {
+                        Image(systemName: "doc.on.doc")
+                    }
                 }
                 if documents.count > 0 {
                     ToolbarItem {
-                        Button("Resume") {
+                        Button(action: {
                             // Handle button tap here
                             openFile(path: documents.first!.path!)
+                        }) {
+                            Image(systemName: "arrow.up.forward")
                         }
-                        .frame(width: 70)
                     }
                 }
-#if os(macOS)
-                ToolbarItem {
-                    Button("Back", action: { self.presentationMode.wrappedValue.dismiss() })
-                        .frame(width: 50)
-                }
-#endif
             }
         }
         .id(episodeModel.dataID)

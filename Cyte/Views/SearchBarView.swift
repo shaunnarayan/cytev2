@@ -52,10 +52,12 @@ struct SearchBarView: View {
                         TextField(
                             "Search \(Agent.shared.isSetup ? "or chat " : "")your history",
                             text: binding
-                        )
+                        )                        
                         .accessibilityLabel("The main search bar for your recordings. Use an FTS formatted search query.")
 #if os(macOS)
                         .frame(width: agent.chatLog.count == 0 ? 650 : nil, height: 48)
+#else
+                        .autocorrectionDisabled(true)
 #endif
                         .cornerRadius(5)
                         .padding(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
