@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03440CDFA68B7ADF815A4FDF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9A29EE9CEF0078EE31 /* SwiftDiff */; };
 		3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9C29EE9CFE0078EE31 /* SwiftDiff */; };
 		3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F049C9E29EEA9E30078EE31 /* AVKit.framework */; };
@@ -20,8 +21,42 @@
 		3F68242229AEBF270044A0F2 /* Cyte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F68242029AEBF270044A0F2 /* Cyte.xcdatamodeld */; };
 		3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6AAE5B29EBBC0100843D71 /* SampleHandler.swift */; };
 		3F6AAE6029EBBC0100843D71 /* CyteRecorder.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3F6D2F3829F0F91F00F3472D /* EpisodePlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDCF29BDE82F00F12FE7 /* EpisodePlaylistView.swift */; };
+		3F6D2F3929F0F91F00F3472D /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDCB29BD920200F12FE7 /* ChatView.swift */; };
+		3F6D2F3A29F0F91F00F3472D /* CyteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA1FF29AC7C0100898995 /* CyteApp.swift */; };
+		3F6D2F3B29F0F91F00F3472D /* Cyte1-2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7E529E4E89E00D8A0BB /* Cyte1-2.xcmappingmodel */; };
+		3F6D2F3C29F0F91F00F3472D /* EpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDD129BF06F900F12FE7 /* EpisodeView.swift */; };
+		3F6D2F3D29F0F91F00F3472D /* Agent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36AB29B1BD1A00CCCE82 /* Agent.swift */; };
+		3F6D2F3E29F0F91F00F3472D /* AdvancedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DE29E2AC9F00D8A0BB /* AdvancedSearchView.swift */; };
+		3F6D2F3F29F0F91F00F3472D /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DC29E26C7000D8A0BB /* EpisodeModel.swift */; };
+		3F6D2F4029F0F91F00F3472D /* CaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */; platformFilters = (macos, ); };
+		3F6D2F4129F0F91F00F3472D /* ScreenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */; platformFilters = (macos, ); };
+		3F6D2F4229F0F91F00F3472D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20629AC7C0100898995 /* ContentView.swift */; };
+		3F6D2F4329F0F91F00F3472D /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7E229E2B39700D8A0BB /* SearchBarView.swift */; };
+		3F6D2F4429F0F91F00F3472D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7DA05729B6F8AE00EF2F5E /* Settings.swift */; };
+		3F6D2F4529F0F91F00F3472D /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DA29E0112900D8A0BB /* Browser.swift */; };
+		3F6D2F4629F0F91F00F3472D /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7E029E2AF8700D8A0BB /* View.swift */; };
+		3F6D2F4729F0F91F00F3472D /* Cyte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F68242029AEBF270044A0F2 /* Cyte.xcdatamodeld */; };
+		3F6D2F4829F0F91F00F3472D /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
+		3F6D2F4929F0F91F00F3472D /* StaticEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */; };
+		3F6D2F4A29F0F91F00F3472D /* PortableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB92FA229EAA69A0048CDAF /* PortableImage.swift */; };
+		3F6D2F4B29F0F91F00F3472D /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A829B1BB9800CCCE82 /* Memory.swift */; };
+		3F6D2F4C29F0F91F00F3472D /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A529B1BB5C00CCCE82 /* Analysis.swift */; };
+		3F6D2F4D29F0F91F00F3472D /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20129AC7C0100898995 /* Persistence.swift */; };
+		3F6D2F4E29F0F91F00F3472D /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDBE5C329D4704300A4C6C0 /* Export.swift */; };
+		3F6D2F5029F0F91F00F3472D /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F3029F0F91F00F3472D /* llama */; };
+		3F6D2F5129F0F91F00F3472D /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F2D29F0F91F00F3472D /* ObjcExceptionBridging */; };
+		3F6D2F5229F0F91F00F3472D /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F049C9E29EEA9E30078EE31 /* AVKit.framework */; };
+		3F6D2F5329F0F91F00F3472D /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F2729F0F91F00F3472D /* Highlightr */; };
+		3F6D2F5429F0F91F00F3472D /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F2929F0F91F00F3472D /* KeychainSwift */; };
+		3F6D2F5529F0F91F00F3472D /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F2F29F0F91F00F3472D /* XCGLogger */; };
+		3F6D2F5629F0F91F00F3472D /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F2B29F0F91F00F3472D /* OpenAI */; };
+		3F6D2F5729F0F91F00F3472D /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6D2F3429F0F91F00F3472D /* SwiftDiff */; };
+		3F6D2F5829F0F91F00F3472D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 3F6D2F3229F0F91F00F3472D /* AXSwift */; };
+		3F6D2F5B29F0F91F00F3472D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FCAA20C29AC7C0400898995 /* Preview Assets.xcassets */; };
+		3F6D2F5C29F0F91F00F3472D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FCAA20829AC7C0400898995 /* Assets.xcassets */; };
+		3F6D2F5E29F0F91F00F3472D /* CyteRecorder.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3F6FE07E29C424230061DBF5 /* StaticEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */; };
-		3F6FE08129CAB0170061DBF5 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 3F6FE08029CAB0170061DBF5 /* SQLite */; };
 		3F7BB7DB29E0112900D8A0BB /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DA29E0112900D8A0BB /* Browser.swift */; };
 		3F7BB7DD29E26C7000D8A0BB /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DC29E26C7000D8A0BB /* EpisodeModel.swift */; };
 		3F7BB7DF29E2AC9F00D8A0BB /* AdvancedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BB7DE29E2AC9F00D8A0BB /* AdvancedSearchView.swift */; };
@@ -49,13 +84,15 @@
 		3FDFCE4329ED107500988BAF /* Cyte-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 3FC6C76929CBBB74004E19FF /* Cyte-Bridging-Header.h */; };
 		3FDFCE4429ED107500988BAF /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD36A529B1BB5C00CCCE82 /* Analysis.swift */; };
 		3FDFCE4529ED107500988BAF /* Cyte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F68242029AEBF270044A0F2 /* Cyte.xcdatamodeld */; };
-		3FDFCE4729ED109200988BAF /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4629ED109200988BAF /* SQLite */; };
 		3FDFCE4929ED109700988BAF /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4829ED109700988BAF /* KeychainSwift */; };
 		3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4A29ED109F00988BAF /* XCGLogger */; };
 		3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */; };
 		3FDFCE5129ED111900988BAF /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
 		3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 3FE7822229DB15A8008CB97D /* AXSwift */; };
 		3FE7822629DBDB4A008CB97D /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE7822529DBDB4A008CB97D /* llama */; };
+		5B87575F22D3CD8B7605E3B8 /* Pods_Cyte_for_iPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F51D7CD92B4D2AC3308E1744 /* Pods_Cyte_for_iPhone.framework */; };
+		C2E200DA6DEA831E07A737A7 /* Pods_Cyte.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D239A03C42750AB72A958DD /* Pods_Cyte.framework */; };
+		D54C497E02B644F4038439BA /* Pods_CyteRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A2E76A4A99DA83B49470EC6 /* Pods_CyteRecorder.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,9 +103,27 @@
 			remoteGlobalIDString = 3F6AAE5729EBBC0100843D71;
 			remoteInfo = CyteExtension;
 		};
+		3F6D2F2629F0F91F00F3472D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3FCAA1F429AC7C0100898995 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F6AAE5729EBBC0100843D71;
+			remoteInfo = CyteExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		3F6D2F5D29F0F91F00F3472D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3F6D2F5E29F0F91F00F3472D /* CyteRecorder.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3FB92FC029EB07590048CDAF /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -83,6 +138,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0BC57983F44D9B185C99262D /* Pods-Cyte for iPhone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cyte for iPhone.debug.xcconfig"; path = "Target Support Files/Pods-Cyte for iPhone/Pods-Cyte for iPhone.debug.xcconfig"; sourceTree = "<group>"; };
+		1D239A03C42750AB72A958DD /* Pods_Cyte.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cyte.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F049C9E29EEA9E30078EE31 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenRecorder.swift; sourceTree = "<group>"; };
 		3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureEngine.swift; sourceTree = "<group>"; };
@@ -97,6 +154,8 @@
 		3F6AAE5B29EBBC0100843D71 /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		3F6AAE5D29EBBC0100843D71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F6AAE6429EBBC0800843D71 /* CyteExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CyteExtension.entitlements; sourceTree = "<group>"; };
+		3F6D2F6329F0F91F00F3472D /* Cyte for iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cyte for iPhone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F6D2F6429F0F91F00F3472D /* Cyte copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Cyte copy-Info.plist"; path = "/Users/shaunnarayan/dev/cytev2/Cyte/Cyte copy-Info.plist"; sourceTree = "<absolute>"; };
 		3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticEpisodeView.swift; sourceTree = "<group>"; };
 		3F7BB7DA29E0112900D8A0BB /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		3F7BB7DC29E26C7000D8A0BB /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
@@ -124,6 +183,13 @@
 		3FCAA20A29AC7C0400898995 /* Cyte.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cyte.entitlements; sourceTree = "<group>"; };
 		3FCAA20C29AC7C0400898995 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3FDBE5C329D4704300A4C6C0 /* Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Export.swift; sourceTree = "<group>"; };
+		581311A487DAA0E3CED56B97 /* Pods-Cyte for iPhone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cyte for iPhone.release.xcconfig"; path = "Target Support Files/Pods-Cyte for iPhone/Pods-Cyte for iPhone.release.xcconfig"; sourceTree = "<group>"; };
+		5A2E76A4A99DA83B49470EC6 /* Pods_CyteRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CyteRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7013CAD90512D174EA637627 /* Pods-Cyte.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cyte.debug.xcconfig"; path = "Target Support Files/Pods-Cyte/Pods-Cyte.debug.xcconfig"; sourceTree = "<group>"; };
+		8F8936A4EFFED8D0CD8AEED3 /* Pods-CyteRecorder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyteRecorder.release.xcconfig"; path = "Target Support Files/Pods-CyteRecorder/Pods-CyteRecorder.release.xcconfig"; sourceTree = "<group>"; };
+		B68508E4BA71921A38FA5F95 /* Pods-CyteRecorder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyteRecorder.debug.xcconfig"; path = "Target Support Files/Pods-CyteRecorder/Pods-CyteRecorder.debug.xcconfig"; sourceTree = "<group>"; };
+		D666F6BE365AA3FDDED3DFA6 /* Pods-Cyte.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cyte.release.xcconfig"; path = "Target Support Files/Pods-Cyte/Pods-Cyte.release.xcconfig"; sourceTree = "<group>"; };
+		F51D7CD92B4D2AC3308E1744 /* Pods_Cyte_for_iPhone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cyte_for_iPhone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,10 +198,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FDFCE4929ED109700988BAF /* KeychainSwift in Frameworks */,
-				3FDFCE4729ED109200988BAF /* SQLite in Frameworks */,
 				3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */,
 				3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */,
 				3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */,
+				D54C497E02B644F4038439BA /* Pods_CyteRecorder.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F6D2F4F29F0F91F00F3472D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F6D2F5029F0F91F00F3472D /* llama in Frameworks */,
+				3F6D2F5129F0F91F00F3472D /* ObjcExceptionBridging in Frameworks */,
+				3F6D2F5229F0F91F00F3472D /* AVKit.framework in Frameworks */,
+				3F6D2F5329F0F91F00F3472D /* Highlightr in Frameworks */,
+				3F6D2F5429F0F91F00F3472D /* KeychainSwift in Frameworks */,
+				3F6D2F5529F0F91F00F3472D /* XCGLogger in Frameworks */,
+				3F6D2F5629F0F91F00F3472D /* OpenAI in Frameworks */,
+				3F6D2F5729F0F91F00F3472D /* SwiftDiff in Frameworks */,
+				3F6D2F5829F0F91F00F3472D /* AXSwift in Frameworks */,
+				5B87575F22D3CD8B7605E3B8 /* Pods_Cyte_for_iPhone.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,13 +229,14 @@
 				3FE7822629DBDB4A008CB97D /* llama in Frameworks */,
 				3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */,
 				3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */,
-				3F6FE08129CAB0170061DBF5 /* SQLite in Frameworks */,
 				3F14BDCA29BCEF6500F12FE7 /* Highlightr in Frameworks */,
 				3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */,
 				3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */,
 				3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */,
 				3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
+				03440CDFA68B7ADF815A4FDF /* (null) in Frameworks */,
+				C2E200DA6DEA831E07A737A7 /* Pods_Cyte.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +268,9 @@
 			children = (
 				3F049C9E29EEA9E30078EE31 /* AVKit.framework */,
 				3FB92F9B29EAA2770048CDAF /* DiffMatchPatch.xcframework */,
+				5A2E76A4A99DA83B49470EC6 /* Pods_CyteRecorder.framework */,
+				F51D7CD92B4D2AC3308E1744 /* Pods_Cyte_for_iPhone.framework */,
+				1D239A03C42750AB72A958DD /* Pods_Cyte.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -276,6 +363,8 @@
 				3F6AAE5A29EBBC0100843D71 /* CyteExtension */,
 				3FCAA1FD29AC7C0100898995 /* Products */,
 				3F8F932829B5CF9C00C938DE /* Frameworks */,
+				64685ED4DBC6DDD68F6B6683 /* Pods */,
+				3F6D2F6429F0F91F00F3472D /* Cyte copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -284,6 +373,7 @@
 			children = (
 				3FCAA1FC29AC7C0100898995 /* Cyte.app */,
 				3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */,
+				3F6D2F6329F0F91F00F3472D /* Cyte for iPhone.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -317,6 +407,19 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		64685ED4DBC6DDD68F6B6683 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7013CAD90512D174EA637627 /* Pods-Cyte.debug.xcconfig */,
+				D666F6BE365AA3FDDED3DFA6 /* Pods-Cyte.release.xcconfig */,
+				B68508E4BA71921A38FA5F95 /* Pods-CyteRecorder.debug.xcconfig */,
+				8F8936A4EFFED8D0CD8AEED3 /* Pods-CyteRecorder.release.xcconfig */,
+				0BC57983F44D9B185C99262D /* Pods-Cyte for iPhone.debug.xcconfig */,
+				581311A487DAA0E3CED56B97 /* Pods-Cyte for iPhone.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -324,6 +427,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3F6AAE6129EBBC0100843D71 /* Build configuration list for PBXNativeTarget "CyteRecorder" */;
 			buildPhases = (
+				3D89FE90DBBCAC65C90A77E8 /* [CP] Check Pods Manifest.lock */,
 				3F6AAE5429EBBC0100843D71 /* Sources */,
 				3F6AAE5529EBBC0100843D71 /* Frameworks */,
 				3F6AAE5629EBBC0100843D71 /* Resources */,
@@ -334,7 +438,6 @@
 			);
 			name = CyteRecorder;
 			packageProductDependencies = (
-				3FDFCE4629ED109200988BAF /* SQLite */,
 				3FDFCE4829ED109700988BAF /* KeychainSwift */,
 				3FDFCE4A29ED109F00988BAF /* XCGLogger */,
 				3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */,
@@ -344,14 +447,47 @@
 			productReference = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		3F6D2F2429F0F91F00F3472D /* Cyte for iPhone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3F6D2F6029F0F91F00F3472D /* Build configuration list for PBXNativeTarget "Cyte for iPhone" */;
+			buildPhases = (
+				3F6D2F3629F0F91F00F3472D /* [CP] Check Pods Manifest.lock */,
+				3F6D2F3729F0F91F00F3472D /* Sources */,
+				3F6D2F4F29F0F91F00F3472D /* Frameworks */,
+				3F6D2F5A29F0F91F00F3472D /* Resources */,
+				3F6D2F5D29F0F91F00F3472D /* Embed Foundation Extensions */,
+				3F6D2F5F29F0F91F00F3472D /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3F6D2F2529F0F91F00F3472D /* PBXTargetDependency */,
+			);
+			name = "Cyte for iPhone";
+			packageProductDependencies = (
+				3F6D2F2729F0F91F00F3472D /* Highlightr */,
+				3F6D2F2929F0F91F00F3472D /* KeychainSwift */,
+				3F6D2F2B29F0F91F00F3472D /* OpenAI */,
+				3F6D2F2D29F0F91F00F3472D /* ObjcExceptionBridging */,
+				3F6D2F2F29F0F91F00F3472D /* XCGLogger */,
+				3F6D2F3029F0F91F00F3472D /* llama */,
+				3F6D2F3229F0F91F00F3472D /* AXSwift */,
+				3F6D2F3429F0F91F00F3472D /* SwiftDiff */,
+			);
+			productName = Cyte;
+			productReference = 3F6D2F6329F0F91F00F3472D /* Cyte for iPhone.app */;
+			productType = "com.apple.product-type.application";
+		};
 		3FCAA1FB29AC7C0100898995 /* Cyte */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3FCAA21029AC7C0400898995 /* Build configuration list for PBXNativeTarget "Cyte" */;
 			buildPhases = (
+				3A5DC44843FA3BAABD429032 /* [CP] Check Pods Manifest.lock */,
 				3FCAA1F829AC7C0100898995 /* Sources */,
 				3FCAA1F929AC7C0100898995 /* Frameworks */,
 				3FCAA1FA29AC7C0100898995 /* Resources */,
 				3FB92FC029EB07590048CDAF /* Embed Foundation Extensions */,
+				88DB2DA0C3664E2B2033D7D4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -361,7 +497,6 @@
 			name = Cyte;
 			packageProductDependencies = (
 				3F14BDC929BCEF6500F12FE7 /* Highlightr */,
-				3F6FE08029CAB0170061DBF5 /* SQLite */,
 				3FC6C78A29CC2EA2004E19FF /* KeychainSwift */,
 				3FDBE5B429CD7BAC00A4C6C0 /* OpenAI */,
 				3FDBE5BA29D0029800A4C6C0 /* ObjcExceptionBridging */,
@@ -404,7 +539,6 @@
 			mainGroup = 3FCAA1F329AC7C0100898995;
 			packageReferences = (
 				3F14BDC829BCEF6500F12FE7 /* XCRemoteSwiftPackageReference "Highlightr" */,
-				3F6FE07F29CAB0170061DBF5 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				3FC6C78929CC2EA2004E19FF /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				3FDBE5B329CD7BAC00A4C6C0 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */,
@@ -418,6 +552,7 @@
 			targets = (
 				3FCAA1FB29AC7C0100898995 /* Cyte */,
 				3F6AAE5729EBBC0100843D71 /* CyteRecorder */,
+				3F6D2F2429F0F91F00F3472D /* Cyte for iPhone */,
 			);
 		};
 /* End PBXProject section */
@@ -427,6 +562,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F6D2F5A29F0F91F00F3472D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F6D2F5B29F0F91F00F3472D /* Preview Assets.xcassets in Resources */,
+				3F6D2F5C29F0F91F00F3472D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +585,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3A5DC44843FA3BAABD429032 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Cyte-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3D89FE90DBBCAC65C90A77E8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CyteRecorder-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3F6D2F3629F0F91F00F3472D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Cyte for iPhone-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3F6D2F5F29F0F91F00F3472D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Cyte for iPhone/Pods-Cyte for iPhone-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Cyte for iPhone/Pods-Cyte for iPhone-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Cyte for iPhone/Pods-Cyte for iPhone-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		88DB2DA0C3664E2B2033D7D4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Cyte/Pods-Cyte-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Cyte/Pods-Cyte-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Cyte/Pods-Cyte-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3F6AAE5429EBBC0100843D71 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -454,6 +701,36 @@
 				3FDFCE4129ED0F8C00988BAF /* Memory.swift in Sources */,
 				3FDFCE4029ED0F8900988BAF /* Persistence.swift in Sources */,
 				3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F6D2F3729F0F91F00F3472D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F6D2F3829F0F91F00F3472D /* EpisodePlaylistView.swift in Sources */,
+				3F6D2F3929F0F91F00F3472D /* ChatView.swift in Sources */,
+				3F6D2F3A29F0F91F00F3472D /* CyteApp.swift in Sources */,
+				3F6D2F3B29F0F91F00F3472D /* Cyte1-2.xcmappingmodel in Sources */,
+				3F6D2F3C29F0F91F00F3472D /* EpisodeView.swift in Sources */,
+				3F6D2F3D29F0F91F00F3472D /* Agent.swift in Sources */,
+				3F6D2F3E29F0F91F00F3472D /* AdvancedSearchView.swift in Sources */,
+				3F6D2F3F29F0F91F00F3472D /* EpisodeModel.swift in Sources */,
+				3F6D2F4029F0F91F00F3472D /* CaptureEngine.swift in Sources */,
+				3F6D2F4129F0F91F00F3472D /* ScreenRecorder.swift in Sources */,
+				3F6D2F4229F0F91F00F3472D /* ContentView.swift in Sources */,
+				3F6D2F4329F0F91F00F3472D /* SearchBarView.swift in Sources */,
+				3F6D2F4429F0F91F00F3472D /* Settings.swift in Sources */,
+				3F6D2F4529F0F91F00F3472D /* Browser.swift in Sources */,
+				3F6D2F4629F0F91F00F3472D /* View.swift in Sources */,
+				3F6D2F4729F0F91F00F3472D /* Cyte.xcdatamodeld in Sources */,
+				3F6D2F4829F0F91F00F3472D /* Events.swift in Sources */,
+				3F6D2F4929F0F91F00F3472D /* StaticEpisodeView.swift in Sources */,
+				3F6D2F4A29F0F91F00F3472D /* PortableImage.swift in Sources */,
+				3F6D2F4B29F0F91F00F3472D /* Memory.swift in Sources */,
+				3F6D2F4C29F0F91F00F3472D /* Analysis.swift in Sources */,
+				3F6D2F4D29F0F91F00F3472D /* Persistence.swift in Sources */,
+				3F6D2F4E29F0F91F00F3472D /* Export.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,11 +773,18 @@
 			target = 3F6AAE5729EBBC0100843D71 /* CyteRecorder */;
 			targetProxy = 3F6AAE5E29EBBC0100843D71 /* PBXContainerItemProxy */;
 		};
+		3F6D2F2529F0F91F00F3472D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 3F6AAE5729EBBC0100843D71 /* CyteRecorder */;
+			targetProxy = 3F6D2F2629F0F91F00F3472D /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3F6AAE6229EBBC0100843D71 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B68508E4BA71921A38FA5F95 /* Pods-CyteRecorder.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = CyteExtension/CyteExtension.entitlements;
 				CODE_SIGN_IDENTITY = "-";
@@ -533,6 +817,7 @@
 		};
 		3F6AAE6329EBBC0100843D71 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F8936A4EFFED8D0CD8AEED3 /* Pods-CyteRecorder.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = CyteExtension/CyteExtension.entitlements;
 				CODE_SIGN_IDENTITY = "-";
@@ -564,9 +849,137 @@
 			};
 			name = Release;
 		};
+		3F6D2F6129F0F91F00F3472D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BC57983F44D9B185C99262D /* Pods-Cyte for iPhone.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIconMac;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Cyte/Cyte.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Cyte/Preview Content\"";
+				DEVELOPMENT_TEAM = 794T33TWQW;
+				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
+				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Cyte copy-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Cyte;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cyte will access your Photo Library to save timelapses";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 0.8;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cyte;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = io.cyte.ios;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = shoplex.Cyte;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		3F6D2F6229F0F91F00F3472D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 581311A487DAA0E3CED56B97 /* Pods-Cyte for iPhone.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIconMac;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Cyte/Cyte.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Cyte/Preview Content\"";
+				DEVELOPMENT_TEAM = 794T33TWQW;
+				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
+				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Cyte copy-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Cyte;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cyte will access your Photo Library to save timelapses";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 0.8;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cyte;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = io.cyte.ios;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = shoplex.Cyte;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		3FCAA20E29AC7C0400898995 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -616,6 +1029,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -628,6 +1042,7 @@
 		3FCAA20F29AC7C0400898995 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -671,6 +1086,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx13.1;
@@ -681,8 +1097,9 @@
 		};
 		3FCAA21129AC7C0400898995 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7013CAD90512D174EA637627 /* Pods-Cyte.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIconMac;
@@ -722,7 +1139,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 0.8;
@@ -731,21 +1148,21 @@
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = shoplex.Cyte;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		3FCAA21229AC7C0400898995 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D666F6BE365AA3FDDED3DFA6 /* Pods-Cyte.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIconMac;
@@ -785,7 +1202,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 0.8;
@@ -794,13 +1211,12 @@
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = shoplex.Cyte;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Cyte/Diff/Cyte-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -812,6 +1228,15 @@
 			buildConfigurations = (
 				3F6AAE6229EBBC0100843D71 /* Debug */,
 				3F6AAE6329EBBC0100843D71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3F6D2F6029F0F91F00F3472D /* Build configuration list for PBXNativeTarget "Cyte for iPhone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F6D2F6129F0F91F00F3472D /* Debug */,
+				3F6D2F6229F0F91F00F3472D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -853,12 +1278,60 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		3F6FE07F29CAB0170061DBF5 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+		3F6D2F2829F0F91F00F3472D /* XCRemoteSwiftPackageReference "Highlightr" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			repositoryURL = "https://github.com/raspu/Highlightr";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.2;
+				minimumVersion = 2.0.0;
+			};
+		};
+		3F6D2F2A29F0F91F00F3472D /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		3F6D2F2C29F0F91F00F3472D /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shaunnarayan/OpenAI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		3F6D2F2E29F0F91F00F3472D /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DaveWoodCom/XCGLogger";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		3F6D2F3129F0F91F00F3472D /* XCRemoteSwiftPackageReference "llama" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ggerganov/llama.cpp";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		3F6D2F3329F0F91F00F3472D /* XCRemoteSwiftPackageReference "AXSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tmandry/AXSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.2;
+			};
+		};
+		3F6D2F3529F0F91F00F3472D /* XCRemoteSwiftPackageReference "SwiftDiff" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shaunnarayan/SwiftDiff";
+			requirement = {
+				branch = master;
+				kind = branch;
 			};
 		};
 		3FC6C78929CC2EA2004E19FF /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
@@ -919,10 +1392,45 @@
 			package = 3F14BDC829BCEF6500F12FE7 /* XCRemoteSwiftPackageReference "Highlightr" */;
 			productName = Highlightr;
 		};
-		3F6FE08029CAB0170061DBF5 /* SQLite */ = {
+		3F6D2F2729F0F91F00F3472D /* Highlightr */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3F6FE07F29CAB0170061DBF5 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
-			productName = SQLite;
+			package = 3F6D2F2829F0F91F00F3472D /* XCRemoteSwiftPackageReference "Highlightr" */;
+			productName = Highlightr;
+		};
+		3F6D2F2929F0F91F00F3472D /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F2A29F0F91F00F3472D /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+		3F6D2F2B29F0F91F00F3472D /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F2C29F0F91F00F3472D /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
+		3F6D2F2D29F0F91F00F3472D /* ObjcExceptionBridging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F2E29F0F91F00F3472D /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = ObjcExceptionBridging;
+		};
+		3F6D2F2F29F0F91F00F3472D /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F2E29F0F91F00F3472D /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		3F6D2F3029F0F91F00F3472D /* llama */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F3129F0F91F00F3472D /* XCRemoteSwiftPackageReference "llama" */;
+			productName = llama;
+		};
+		3F6D2F3229F0F91F00F3472D /* AXSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F3329F0F91F00F3472D /* XCRemoteSwiftPackageReference "AXSwift" */;
+			productName = AXSwift;
+		};
+		3F6D2F3429F0F91F00F3472D /* SwiftDiff */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F3529F0F91F00F3472D /* XCRemoteSwiftPackageReference "SwiftDiff" */;
+			productName = SwiftDiff;
 		};
 		3FC6C78A29CC2EA2004E19FF /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -943,11 +1451,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */;
 			productName = XCGLogger;
-		};
-		3FDFCE4629ED109200988BAF /* SQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3F6FE07F29CAB0170061DBF5 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
-			productName = SQLite;
 		};
 		3FDFCE4829ED109700988BAF /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;

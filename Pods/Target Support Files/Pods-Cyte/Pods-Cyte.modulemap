@@ -1,0 +1,6 @@
+framework module Pods_Cyte {
+  umbrella header "Pods-Cyte-umbrella.h"
+
+  export *
+  module * { export * }
+}
