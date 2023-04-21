@@ -572,7 +572,7 @@ class Memory {
             log.debug(finalTerm)
             let stmt = finalTerm.count > 0 ?
             try intervalDb!.prepare("SELECT *, snippet(Interval, -1, '', '', '', 1) FROM Interval WHERE Interval MATCH '\(finalTerm)' ORDER BY bm25(Interval) LIMIT 64") :
-            try intervalDb!.prepare("SELECT *, snippet(Interval, -1, '', '', '', 1) FROM Interval LIMIT 64")
+            try intervalDb!.prepare("SELECT *, snippet(Interval, -1, '', '', '', 1) FROM Interval")
         
             while let interval = try stmt.failableNext() {
                 let epStart: Date = Date(timeIntervalSinceReferenceDate: interval[2] as! Double)
