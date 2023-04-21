@@ -343,5 +343,16 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 0))
             }
         }
+#if os(macOS)
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                }
+            }
+        }
+#endif
     }
 }

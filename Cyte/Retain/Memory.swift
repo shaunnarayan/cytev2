@@ -103,10 +103,31 @@ class Memory {
     func migrate() {
         if intervalDb!.userVersion == 0 {
             log.info("Migrating 0 -> 1")
+            var intervals: [CyteInterval] = []
             do {
                 // Moving from fts4 to fts5
                 // Read intervals into mem, drop the table.
-                let intervals = search(term: "")
+                let stmt = try intervalDb!.prepare("SELECT * FROM Interval")
+                while let interval = try stmt.failableNext() {
+                    let epStart: Date = Date(timeIntervalSinceReferenceDate: interval[2] as! Double)
+                    
+                    let epFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
+                    epFetch.predicate = NSPredicate(format: "start == %@", epStart as CVarArg)
+                    var ep: Episode? = nil
+                    do {
+                        let fetched = try PersistenceController.shared.container.viewContext.fetch(epFetch)
+                        if fetched.count > 0 {
+                            ep = fetched.first!
+                        }
+                        
+                    } catch { }
+                    
+                    if ep != nil {
+                        let inter = CyteInterval(from: Date(timeIntervalSinceReferenceDate:interval[0] as! Double), to: Date(timeIntervalSinceReferenceDate:interval[1] as! Double), episode: ep!, document: interval[3] as! String)
+                        intervals.append(inter)
+                    }
+                }
+                
                 try intervalDb!.run(intervalTable.drop())
                 // Create with new FTS config
                 do {
