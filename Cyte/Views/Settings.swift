@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import KeychainSwift
-import CoreData
 #if os(macOS)
     import AXSwift
 #endif
@@ -16,7 +15,7 @@ import CoreData
 struct BundleView: View {
     @EnvironmentObject var bundleCache: BundleCache
     
-    @State var bundle: BundleExclusion
+    @State var bundle: CyteBundleExclusion
     @State var isExcluded: Bool
     
     var body: some View {
@@ -27,11 +26,9 @@ struct BundleView: View {
                 if $0 {
                     bundle.excluded = true
                     do {
-                        try PersistenceController.shared.container.viewContext.save()
+                        try! bundle.update()
                         
-                        let episodeFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-                        episodeFetch.predicate = NSPredicate(format: "bundle == %@", bundle.bundle!)
-                        let episodes: [Episode] = try PersistenceController.shared.container.viewContext.fetch(episodeFetch)
+                        let episodes: [CyteEpisode] = try CyteEpisode.list(predicate: "bundle == \"\(bundle.bundle)\"")
                         for episode in episodes {
                             Memory.shared.delete(delete_episode: episode)
                         }
@@ -47,17 +44,13 @@ struct BundleView: View {
 #endif
                 } else {
                     bundle.excluded = false
-                    do {
-                        try PersistenceController.shared.container.viewContext.save()
-                    } catch {
-                        
-                    }
+                    try! bundle.update()
                 }
                 isExcluded = bundle.excluded
             })
-            PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle.bundle!))
+            PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle.bundle))
                 .frame(width: 32, height: 32)
-            Text(bundleCache.getName(bundleID: bundle.bundle!))
+            Text(bundleCache.getName(bundleID: bundle.bundle))
                 .frame(maxWidth: .infinity, alignment: .leading)
             Toggle(isOn: binding) {
                 
@@ -68,10 +61,7 @@ struct BundleView: View {
 }
 
 struct Settings: View {
-    @FetchRequest(
-            sortDescriptors: [NSSortDescriptor(keyPath: \BundleExclusion.bundle, ascending: true)],
-            animation: .default)
-    private var bundles: FetchedResults<BundleExclusion>
+    @State var bundles: [CyteBundleExclusion]
     @State var isShowing = false
     @State var isShowingHomeSelection = false
     @State var apiDetails: String = ""
@@ -333,7 +323,7 @@ struct Settings: View {
                 .padding()
             
                 LazyVGrid(columns: bundlesColumnLayout, alignment: .leading) {
-                    ForEach(bundles.filter{ bundle in bundleFilter.count == 0 || bundle.bundle!.contains(bundleFilter) }) { bundle in
+                    ForEach(bundles.filter{ bundle in bundleFilter.count == 0 || bundle.bundle.contains(bundleFilter) }) { bundle in
                         if bundle.bundle != Bundle.main.bundleIdentifier {
                             BundleView(bundle: bundle, isExcluded: bundle.excluded)
                         }

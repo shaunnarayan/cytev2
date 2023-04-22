@@ -7,21 +7,19 @@
 
 import Foundation
 import SwiftUI
-import CoreData
 
 struct AppInterval :Identifiable {
-    let episode: Episode
+    let episode: CyteEpisode
     var offset: Double = 0.0
     var length: Double = 0.0
     var id: Int { episode.hashValue }
 }
 
 class EpisodeModel: ObservableObject {
-    private var viewContext = PersistenceController.shared.container.viewContext
     @Published var dataID = UUID()
-    @Published var episodes: [Episode] = []
+    @Published var episodes: [CyteEpisode] = []
     @Published var intervals: [CyteInterval] = []
-    @Published var documentsForBundle: [Document] = []
+    @Published var documentsForBundle: [CyteDocument] = []
     @Published var episodesLengthSum: Double = 0.0
     
     // The search terms currently active
@@ -41,7 +39,7 @@ class EpisodeModel: ObservableObject {
     func updateIntervals() {
         var offset = 0.0
         for i in 0..<appIntervals.count {
-            appIntervals[i].length = (appIntervals[i].episode.end!.timeIntervalSinceReferenceDate - appIntervals[i].episode.start!.timeIntervalSinceReferenceDate)
+            appIntervals[i].length = (appIntervals[i].episode.end.timeIntervalSinceReferenceDate - appIntervals[i].episode.start.timeIntervalSinceReferenceDate)
             appIntervals[i].offset = offset
             offset += appIntervals[i].length
         }
@@ -50,9 +48,8 @@ class EpisodeModel: ObservableObject {
     func activeInterval(at: Double) -> (AppInterval?, Double) {
         var offset_sum = 0.0
         let active_interval: AppInterval? = appIntervals.first { interval in
-            if interval.episode.start == nil || interval.episode.end == nil { return false }
             let window_center = at
-            let next_offset = offset_sum + (interval.episode.end!.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate)
+            let next_offset = offset_sum + (interval.episode.end.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate)
             let is_within = offset_sum <= window_center && next_offset >= window_center
             offset_sum = next_offset
             return is_within
@@ -84,27 +81,20 @@ class EpisodeModel: ObservableObject {
         dataID = UUID()
         episodes.removeAll()
         intervals.removeAll()
-        var _episodes: [Episode] = []
+        var _episodes: [CyteEpisode] = []
         
         if self.filter.count < 3 {
-            let episodeFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-            episodeFetch.sortDescriptors = [NSSortDescriptor(key:"start", ascending: false)]
-            var pred = String("start >= %@ AND end <= %@")
-            var args = [startDate as CVarArg, endDate as CVarArg]
+            var pred = String("start >= \(startDate.timeIntervalSinceReferenceDate) AND end <= \(endDate.timeIntervalSinceReferenceDate)")
             if highlightedBundle.count != 0 {
-                pred += String("AND bundle == %@")
-                args.append(highlightedBundle)
+                pred += String(" AND bundle == \"\(highlightedBundle)\"")
             }
             if showFaves {
-                pred += String("AND save == true")
+                pred += String(" AND save == 1")
             }
-            episodeFetch.predicate = NSPredicate(format: pred, argumentArray: args)
             do {
-                _episodes = try viewContext.fetch(episodeFetch)
+                _episodes = try CyteEpisode.list(predicate: pred)
                 intervals.removeAll()
-            } catch {
-                
-            }
+            } catch { }
         } else {
             let potentials: [CyteInterval] = Memory.shared.search(term: self.filter)
             withAnimation(.easeInOut(duration: 0.3)) {
@@ -115,8 +105,8 @@ class EpisodeModel: ObservableObject {
                     if highlightedBundle.count != 0  && interval.episode.bundle != highlightedBundle {
                         return false
                     }
-                    let is_within = interval.episode.start ?? Date() >= startDate && interval.episode.end ?? Date() <= endDate
-                    let ep_included: Episode? = _episodes.first(where: { ep in
+                    let is_within = interval.episode.start >= startDate && interval.episode.end <= endDate
+                    let ep_included: CyteEpisode? = _episodes.first(where: { ep in
                         return ep.start == interval.episode.start
                     })
                     if ep_included == nil && is_within {
@@ -124,13 +114,13 @@ class EpisodeModel: ObservableObject {
                     }
                     return is_within
                 }
-                _episodes = _episodes.sorted(by: { el,er in el.start! > er.start! })
+                _episodes = _episodes.sorted(by: { el,er in el.start > er.start })
             }
         }
         
         episodesLengthSum = 0.0
-        appIntervals = _episodes.enumerated().map { (index, episode: Episode) in
-            episodesLengthSum += (episode.end!).timeIntervalSinceReferenceDate - (episode.start!).timeIntervalSinceReferenceDate
+        appIntervals = _episodes.enumerated().map { (index, episode: CyteEpisode) in
+            episodesLengthSum += (episode.end).timeIntervalSinceReferenceDate - (episode.start).timeIntervalSinceReferenceDate
             return AppInterval(episode: episode)
         }
         updateIntervals()
@@ -142,17 +132,15 @@ class EpisodeModel: ObservableObject {
         // @todo break this out into its own component and use FetchRequest
         documentsForBundle.removeAll()
         if highlightedBundle.count != 0 {
-            let docFetch : NSFetchRequest<Document> = Document.fetchRequest()
-            docFetch.predicate = NSPredicate(format: "episode.bundle == %@", highlightedBundle)
             do {
-                let docs = try viewContext.fetch(docFetch)
+                let docs = try CyteDocument.list(predicate: "bundle == \"\(highlightedBundle)\"")
                 var paths = Set<URL>()
                 for doc in docs {
-                    if !paths.contains(doc.path!) {
+                    if !paths.contains(doc.path) {
                         withAnimation(.easeIn(duration: 0.3)) {
                             documentsForBundle.append(doc)
                         }
-                        paths.insert(doc.path!)
+                        paths.insert(doc.path)
                     }
                 }
             } catch {

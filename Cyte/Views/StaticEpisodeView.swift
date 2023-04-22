@@ -18,7 +18,7 @@ struct StaticEpisodeView: View {
     @EnvironmentObject var episodeModel: EpisodeModel
     
     @State var asset: AVAsset
-    @ObservedObject var episode: Episode
+    @ObservedObject var episode: CyteEpisode
     
     @State var selection: Int = 0
     @ObservedObject var result: CyteInterval
@@ -79,8 +79,8 @@ struct StaticEpisodeView: View {
     func offsetForEpisode(episode: Episode) -> Double {
         var offset_sum = 0.0
         let active_interval: AppInterval? = episodeModel.appIntervals.first { interval in
-            offset_sum = offset_sum + (interval.episode.end!.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate)
-            return episode.start == interval.episode.start!
+            offset_sum = offset_sum + (interval.episode.end.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate)
+            return episode.start == interval.episode.start
         }
         return offset_sum + (active_interval?.length ?? 0.0)
     }
@@ -129,17 +129,17 @@ struct StaticEpisodeView: View {
             HStack {
                 VStack {
 #if os(macOS)
-                    Text((episode.title ?? "")!.split(separator: " ").dropLast(6).joined(separator: " "))
+                    Text(episode.title.split(separator: " ").dropLast(6).joined(separator: " "))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
 #else
-                    Text(bundleCache.getName(bundleID: episode.bundle ?? ""))
+                    Text(bundleCache.getName(bundleID: episode.bundle))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
 #endif
-                    Text((result.from ).formatted(date: .abbreviated, time: .standard) )
+                    Text(result.from.formatted(date: .abbreviated, time: .standard) )
                         .font(SwiftUI.Font.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(0.8)
@@ -210,7 +210,7 @@ struct StaticEpisodeView: View {
                             }
                         })
 #endif
-                    PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier)!))
+                    PortableImage(uiImage: bundleCache.getIcon(bundleID: episode.bundle))
                         .frame(width: 32, height: 32)
                         .id(bundleCache.id)
                 }
@@ -223,7 +223,7 @@ struct StaticEpisodeView: View {
         .onAppear {
             if genTask == nil {
                 genTask = Task {
-                    await generateThumbnail(offset: ((result.from.timeIntervalSinceReferenceDate) - (episode.start ?? Date()).timeIntervalSinceReferenceDate))
+                    await generateThumbnail(offset: ((result.from.timeIntervalSinceReferenceDate) - episode.start.timeIntervalSinceReferenceDate))
                 }
             }
         }

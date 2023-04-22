@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "9A3C2354-2784-48E0-91A8-D05020636BEA"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CA4643B3-EB47-4E63-AEE8-C08A1B93C2AF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cyte/Retain/Migrations.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "391"
+            endingLineNumber = "391"
+            landmarkName = "migrate()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CA4643B3-EB47-4E63-AEE8-C08A1B93C2AF - 8faaa73de6a12254"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "371"
+                  endingLineNumber = "371"
+                  offsetFromSymbolStart = "3008">
+               </Location>
+               <Location
+                  uuid = "CA4643B3-EB47-4E63-AEE8-C08A1B93C2AF - 8faaa73de6a12254"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "371"
+                  endingLineNumber = "371"
+                  offsetFromSymbolStart = "2976">
+               </Location>
+               <Location
+                  uuid = "CA4643B3-EB47-4E63-AEE8-C08A1B93C2AF - 8faaa73de6a12254"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "371"
+                  endingLineNumber = "371"
+                  offsetFromSymbolStart = "3012">
+               </Location>
+               <Location
+                  uuid = "CA4643B3-EB47-4E63-AEE8-C08A1B93C2AF - 8faaa73de6a1239a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "373"
+                  endingLineNumber = "373"
+                  offsetFromSymbolStart = "3012">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cyte/Retain/Migrations.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "395"
+            endingLineNumber = "395"
+            landmarkName = "migrate()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074 - 8faaa73de6a123d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "375"
+                  endingLineNumber = "375"
+                  offsetFromSymbolStart = "3080">
+               </Location>
+               <Location
+                  uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074 - fb4580374d82575"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SQLite.TableBuilder) -&gt; () in Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "290"
+                  endingLineNumber = "290"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074 - 8faaa73de6a123d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "375"
+                  endingLineNumber = "375"
+                  offsetFromSymbolStart = "3048">
+               </Location>
+               <Location
+                  uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074 - 8faaa73de6a123d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "375"
+                  endingLineNumber = "375"
+                  offsetFromSymbolStart = "3084">
+               </Location>
+               <Location
+                  uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074 - 8faaa73de6a1231e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "377"
+                  endingLineNumber = "377"
+                  offsetFromSymbolStart = "3084">
+               </Location>
+               <Location
+                  uuid = "802E29F5-6995-4B3E-942A-6E5BABDF6074 - fb4580374d825b7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SQLite.TableBuilder) -&gt; () in Cyte.Memory.migrate() -&gt; ()"
+                  moduleName = "Cyte"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shaunnarayan/dev/cytev2/Cyte/Cyte/Retain/Migrations.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "292"
+                  endingLineNumber = "292"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

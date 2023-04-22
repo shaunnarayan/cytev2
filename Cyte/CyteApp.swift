@@ -7,7 +7,6 @@
 
 import SwiftUI
 import XCGLogger
-import CoreData
 
 #if os(macOS)
     import AXSwift
@@ -15,7 +14,6 @@ import CoreData
 
 @main
 struct CyteApp: App {
-    let persistenceController = PersistenceController.shared
     let bundleCache = BundleCache()
     let episodeModel = EpisodeModel()
 #if os(macOS)
@@ -32,6 +30,7 @@ struct CyteApp: App {
     /// On every run, starts the recorder and sets up hotkey listeners
     ///
     func setup() {
+        Memory.shared.migrate()
         let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
         appDelegate.mainApp = self
 #if os(macOS)
@@ -50,11 +49,9 @@ struct CyteApp: App {
         Task {
             // offset from other startup work
             try await Task.sleep(nanoseconds: 8_000_000_000)
-            let bundleFetch : NSFetchRequest<BundleExclusion> = BundleExclusion.fetchRequest()
             do {
-                let fetched = try PersistenceController.shared.container.viewContext.fetch(bundleFetch)
-                for bundle in fetched {
-                    let _ = bundleCache.getIcon(bundleID: bundle.bundle!)
+                for bundle in try CyteBundleExclusion.list() {
+                    let _ = bundleCache.getIcon(bundleID: bundle.bundle)
                 }
             } catch { }
         }
@@ -85,7 +82,6 @@ struct CyteApp: App {
     var body: some Scene {
         WindowGroup(id: "cyte-app") {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(bundleCache)
                 .environmentObject(episodeModel)
                 .onAppear {

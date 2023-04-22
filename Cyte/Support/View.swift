@@ -12,7 +12,7 @@ import SwiftUI
 ///
 /// Helper function to open finder pinned to the supplied episode
 ///
-func revealEpisode(episode: Episode) {
+func revealEpisode(episode: CyteEpisode) {
     let url = urlForEpisode(start: episode.start, title: episode.title)
 #if os(macOS)
     NSWorkspace.shared.activateFileViewerSelecting([url])

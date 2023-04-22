@@ -18,7 +18,7 @@ struct EpisodeView: View {
     @EnvironmentObject var episodeModel: EpisodeModel
     
     @State var player: AVPlayer
-    @ObservedObject var episode: Episode
+    @ObservedObject var episode: CyteEpisode
     
     @State private var isHoveringSave: Bool = false
     @State private var isHoveringExpand: Bool = false
@@ -40,7 +40,7 @@ struct EpisodeView: View {
             HStack {
                 VStack {
                     #if os(macOS)
-                    Text((episode.title ?? "")!.split(separator: " ").dropLast(6).joined(separator: " "))
+                    Text(episode.title.split(separator: " ").dropLast(6).joined(separator: " "))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
@@ -50,7 +50,7 @@ struct EpisodeView: View {
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
                     #endif
-                    Text((episode.start ?? Date()).formatted(date: .abbreviated, time: .standard) )
+                    Text(episode.start.formatted(date: .abbreviated, time: .standard) )
                         .font(SwiftUI.Font.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(0.8)
@@ -91,7 +91,7 @@ struct EpisodeView: View {
                             }
                         })
 #endif
-                    PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier!)) )
+                    PortableImage(uiImage: bundleCache.getIcon(bundleID: episode.bundle) )
                         .frame(width: 32, height: 32)
                         .id(bundleCache.id)
                 }

@@ -93,7 +93,7 @@ struct AdvancedSearchView: View {
             }
             ScrollView {
                 LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
-                    ForEach(Set(episodeModel.episodes.map { $0.bundle ?? Bundle.main.bundleIdentifier! }).sorted(by: <), id: \.self) { bundle in
+                    ForEach(Set(episodeModel.episodes.map { $0.bundle }).sorted(by: <), id: \.self) { bundle in
                         HStack {
                             PortableImage(uiImage: bundleCache.getIcon(bundleID: bundle))
                                 .frame(width: 32, height: 32)
@@ -129,8 +129,8 @@ struct AdvancedSearchView: View {
                 LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
                     ForEach(episodeModel.documentsForBundle) { doc in
                         HStack {
-                            Image(nsImage: NSWorkspace.shared.icon(forFile: String(doc.path!.absoluteString.starts(with: "http") ? doc.path!.absoluteString : String(doc.path!.absoluteString.dropFirst(7)))))
-                            Text(doc.path!.lastPathComponent)
+                            Image(nsImage: NSWorkspace.shared.icon(forFile: String(doc.path.absoluteString.starts(with: "http") ? doc.path.absoluteString : String(doc.path.absoluteString.dropFirst(7)))))
+                            Text(doc.path.lastPathComponent)
                                 .foregroundColor(.black)
                         }
                         .onHover(perform: { hovering in
@@ -143,7 +143,7 @@ struct AdvancedSearchView: View {
                         })
                         .onTapGesture { gesture in
                             // @todo should maybe open with currently highlighted bundle?
-                            NSWorkspace.shared.open(doc.path!)
+                            NSWorkspace.shared.open(doc.path)
                         }
                     }
                 }

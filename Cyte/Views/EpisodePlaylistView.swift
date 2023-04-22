@@ -11,7 +11,6 @@ import Charts
 import AVKit
 import Combine
 import Vision
-import CoreData
 #if os(macOS)
     import AppKit
 #else
@@ -43,7 +42,7 @@ struct EpisodePlaylistView: View {
     
     private let timelineSize: CGFloat = 16
     
-    @State var documents: [Document] = []
+    @State var documents: [CyteDocument] = []
     @State var clearMode: Bool = false
     @State var magScale: CGFloat = 1
     @State var progressingScale: CGFloat = 1
@@ -68,18 +67,16 @@ struct EpisodePlaylistView: View {
         documents = []
         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
         if active_interval.0 == nil { return }
-        let docFetch : NSFetchRequest<Document> = Document.fetchRequest()
         let offset = active_interval.1 - secondsOffsetFromLastEpisode
-        let pin = active_interval.0!.episode.start!.addingTimeInterval(offset)
-        docFetch.predicate = NSPredicate(format: "start <= %@ AND end >= %@", pin as CVarArg, pin as CVarArg)
+        let pin = active_interval.0!.episode.start.addingTimeInterval(offset)
         do {
-            let docs = try PersistenceController.shared.container.viewContext.fetch(docFetch)
+            let docs = try CyteDocument.list(predicate: "start <= \(pin.timeIntervalSinceReferenceDate) AND end >= \(pin.timeIntervalSinceReferenceDate)")
             var paths = Set<URL>()
             // @todo sort and pick closest doc by [(pin-end) < 0][0]
             for doc in docs {
-                if !paths.contains(doc.path!) {
+                if !paths.contains(doc.path) {
                     documents.append(doc)
-                    paths.insert(doc.path!)
+                    paths.insert(doc.path)
                 }
             }
         } catch {
@@ -98,7 +95,7 @@ struct EpisodePlaylistView: View {
         for time in times {
             // get the AppInterval at this time, load the asset and find offset
             let active_interval = episodeModel.activeInterval(at: time)
-            if active_interval.0 == nil || active_interval.0!.episode.title!.count == 0 {
+            if active_interval.0 == nil || active_interval.0!.episode.title.count == 0 {
                 // placeholder thumb
                 thumbnailImages.append(nil)
             } else {
@@ -184,7 +181,7 @@ struct EpisodePlaylistView: View {
             } catch { }
         }
         
-        if active_interval.0 == nil || active_interval.0!.episode.title!.count == 0 || player == nil {
+        if active_interval.0 == nil || active_interval.0!.episode.title.count == 0 || player == nil {
             return
         }
         // reset the AVPlayer to the new asset
@@ -221,7 +218,7 @@ struct EpisodePlaylistView: View {
         if active_interval.0 == nil || player == nil {
             return Date().formatted()
         }
-        return Date(timeIntervalSinceReferenceDate: active_interval.0!.episode.start!.timeIntervalSinceReferenceDate + player!.currentTime().seconds).formatted()
+        return Date(timeIntervalSinceReferenceDate: active_interval.0!.episode.start.timeIntervalSinceReferenceDate + player!.currentTime().seconds).formatted()
     }
     
     ///
@@ -235,7 +232,7 @@ struct EpisodePlaylistView: View {
         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
         
         let progress = active_interval.1 - secondsOffsetFromLastEpisode
-        let anchor = Date().timeIntervalSinceReferenceDate - ((active_interval.0 ?? episodeModel.appIntervals.last)!.episode.end!.timeIntervalSinceReferenceDate)
+        let anchor = Date().timeIntervalSinceReferenceDate - ((active_interval.0 ?? episodeModel.appIntervals.last)!.episode.end.timeIntervalSinceReferenceDate)
         let seconds = max(1, anchor - progress)
         return "\(secondsToReadable(seconds: seconds)) ago"
     }
@@ -265,7 +262,7 @@ struct EpisodePlaylistView: View {
                     y: .value("?", 0),
                     height: MarkDimension(floatLiteral: timelineSize * 2)
                 )
-                .foregroundStyle(bundleCache.getColor(bundleID: interval.episode.bundle!) ?? Color.gray)
+                .foregroundStyle(bundleCache.getColor(bundleID: interval.episode.bundle) ?? Color.gray)
                 .cornerRadius(40.0)
             }
         }
@@ -342,7 +339,7 @@ struct EpisodePlaylistView: View {
                 .contextMenu {
                     Button {
                         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
-                        let url = urlForEpisode(start: active_interval.0?.episode.start!, title: active_interval.0?.episode.title!).deletingLastPathComponent()
+                        let url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title).deletingLastPathComponent()
                         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url.path(percentEncoded: false))
                     } label: {
                         Label("Reveal in Finder", systemImage: "questionmark.folder")
@@ -366,7 +363,7 @@ struct EpisodePlaylistView: View {
                                 return startTimeForEpisode(interval: interval) <= Double(EpisodePlaylistView.windowLengthInSeconds) &&
                                 endTimeForEpisode(interval: interval) >= 0
                             }) { interval in
-                                PortableImage(uiImage: bundleCache.getIcon(bundleID: interval.episode.bundle!))
+                                PortableImage(uiImage: bundleCache.getIcon(bundleID: interval.episode.bundle))
                                     .frame(width: timelineSize * 2, height: timelineSize * 2)
                                     .id(interval.episode.start)
                                     .offset(CGSize(width: (windowOffsetToCenter(of:interval) * metrics.size.width) - timelineSize, height: 0))
@@ -436,7 +433,7 @@ struct EpisodePlaylistView: View {
                 if documents.count > 0 {
                     ToolbarItem {
                         Button(action: {
-                            openFile(path: documents.first!.path!)
+                            openFile(path: documents.first!.path)
                         }) {
                             Image(systemName: "arrow.up.forward")
                         }

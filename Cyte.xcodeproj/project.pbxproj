@@ -17,6 +17,9 @@
 		3F14BDCC29BD920200F12FE7 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDCB29BD920200F12FE7 /* ChatView.swift */; };
 		3F14BDD029BDE82F00F12FE7 /* EpisodePlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDCF29BDE82F00F12FE7 /* EpisodePlaylistView.swift */; };
 		3F14BDD229BF06F900F12FE7 /* EpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14BDD129BF06F900F12FE7 /* EpisodeView.swift */; };
+		3F331BBC29F28AD7005F7404 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F331BBB29F28AD7005F7404 /* Migrations.swift */; };
+		3F331BBD29F28AD7005F7404 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F331BBB29F28AD7005F7404 /* Migrations.swift */; };
+		3F331BBE29F28AD7005F7404 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F331BBB29F28AD7005F7404 /* Migrations.swift */; };
 		3F58AE2629B18344007E7703 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
 		3F68242229AEBF270044A0F2 /* Cyte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F68242029AEBF270044A0F2 /* Cyte.xcdatamodeld */; };
 		3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6AAE5B29EBBC0100843D71 /* SampleHandler.swift */; };
@@ -149,6 +152,7 @@
 		3F14BDCB29BD920200F12FE7 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		3F14BDCF29BDE82F00F12FE7 /* EpisodePlaylistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodePlaylistView.swift; sourceTree = "<group>"; };
 		3F14BDD129BF06F900F12FE7 /* EpisodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeView.swift; sourceTree = "<group>"; };
+		3F331BBB29F28AD7005F7404 /* Migrations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrations.swift; sourceTree = "<group>"; };
 		3F58AE2529B18344007E7703 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		3F68242129AEBF270044A0F2 /* Cyte.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Cyte.xcdatamodel; sourceTree = "<group>"; };
 		3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CyteRecorder.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -303,6 +307,7 @@
 				3FCAA20129AC7C0100898995 /* Persistence.swift */,
 				3FAD36A829B1BB9800CCCE82 /* Memory.swift */,
 				3FAD36B129B1C29300CCCE82 /* README.md */,
+				3F331BBB29F28AD7005F7404 /* Migrations.swift */,
 			);
 			path = Retain;
 			sourceTree = "<group>";
@@ -705,6 +710,7 @@
 				3FDFCE4129ED0F8C00988BAF /* Memory.swift in Sources */,
 				3FDFCE4029ED0F8900988BAF /* Persistence.swift in Sources */,
 				3F6AAE5C29EBBC0100843D71 /* SampleHandler.swift in Sources */,
+				3F331BBD29F28AD7005F7404 /* Migrations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,6 +726,7 @@
 				3F6D2F3D29F0F91F00F3472D /* Agent.swift in Sources */,
 				3F6D2F3E29F0F91F00F3472D /* AdvancedSearchView.swift in Sources */,
 				3F6D2F3F29F0F91F00F3472D /* EpisodeModel.swift in Sources */,
+				3F331BBE29F28AD7005F7404 /* Migrations.swift in Sources */,
 				3F6D2F4029F0F91F00F3472D /* CaptureEngine.swift in Sources */,
 				3F6D2F4129F0F91F00F3472D /* ScreenRecorder.swift in Sources */,
 				3F6D2F4229F0F91F00F3472D /* ContentView.swift in Sources */,
@@ -750,6 +757,7 @@
 				3FAD36AC29B1BD1A00CCCE82 /* Agent.swift in Sources */,
 				3F7BB7DF29E2AC9F00D8A0BB /* AdvancedSearchView.swift in Sources */,
 				3F7BB7DD29E26C7000D8A0BB /* EpisodeModel.swift in Sources */,
+				3F331BBC29F28AD7005F7404 /* Migrations.swift in Sources */,
 				3F0B8C0129B310E40018BD60 /* CaptureEngine.swift in Sources */,
 				3F0B8C0029B310E40018BD60 /* ScreenRecorder.swift in Sources */,
 				3FCAA20729AC7C0100898995 /* ContentView.swift in Sources */,
