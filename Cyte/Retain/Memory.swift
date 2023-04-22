@@ -12,6 +12,8 @@ import Combine
 import SQLite
 import NaturalLanguage
 import SwiftDiff
+import RNCryptor
+import KeychainSwift
 
 /// A structure that contains the video data to render.
 struct CapturedFrame {
@@ -74,8 +76,17 @@ class Memory {
     ///
     init() {
         do {
-            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+            var url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                url = url.appendingPathExtension("enc")
+            }
             intervalDb = try Connection(url.path(percentEncoded: false))
+            if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                let keychain = KeychainSwift()
+                let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+                try! intervalDb!.key(encryptionKey.base64EncodedString())
+            }
 
             do {
                 let config = FTS4Config()
@@ -90,6 +101,56 @@ class Memory {
             }
         } catch {
             
+        }
+    }
+    
+    func encryption(enabled: Bool) {
+        let keychain = KeychainSwift()
+        if enabled {
+            let encryptionKey = RNCryptor.randomData(ofLength: RNCryptor.FormatV3.keySize)
+            let hmacKey = RNCryptor.randomData(ofLength: RNCryptor.FormatV3.keySize)
+            
+            keychain.set(encryptionKey, forKey: "CYTE_ENCRYPTION_KEY")
+            keychain.set(hmacKey, forKey: "CYTE_ENCRYPTION_HMAC_KEY")
+            
+            let episodes = try! CyteEpisode.list()
+            let encryptor = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
+            for episode in episodes {
+                let location = urlForEpisode(start: episode.start, title: episode.title)
+                let message = try! Data(contentsOf: location)
+                let ciphertext: Data = encryptor.encrypt(data: message)
+                try! ciphertext.write(to: location.appendingPathExtension("enc"))
+                try! FileManager.default.removeItem(at: location)
+            }
+            
+            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3.enc")
+            try! intervalDb!.sqlcipher_export(.uri(url.absoluteString), key: encryptionKey.base64EncodedString())
+            intervalDb = try! Connection(url.path(percentEncoded: false))
+            try! intervalDb!.key(encryptionKey.base64EncodedString())
+            intervalDb!.userVersion = Memory.DB_VERSION
+            try! FileManager.default.removeItem(at: url.deletingPathExtension())
+        } else {
+            let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+            let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
+            
+            let episodes = try! CyteEpisode.list()
+            let decryptor = RNCryptor.DecryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
+            for episode in episodes {
+                let location = urlForEpisode(start: episode.start, title: episode.title)
+                let ciphertext = try! Data(contentsOf: location)
+                let plaintext: Data = try! decryptor.decrypt(data: ciphertext)
+                try! plaintext.write(to: location.deletingPathExtension())
+                try! FileManager.default.removeItem(at: location)
+            }
+            
+            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+            try! intervalDb!.sqlcipher_export(.uri(url.absoluteString), key: "")
+            intervalDb = try! Connection(url.path(percentEncoded: false))
+            intervalDb!.userVersion = Memory.DB_VERSION
+            try! FileManager.default.removeItem(at: url.appendingPathExtension("enc"))
+            
+            keychain.delete("CYTE_ENCRYPTION_KEY")
+            keychain.delete("CYTE_ENCRYPTION_HMAC_KEY")
         }
     }
     
@@ -295,6 +356,21 @@ class Memory {
             let frame_count = self.frameCount
             assetWriter!.finishWriting {
                 log.info("Finished writing episode")
+                let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+                if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                    // Encrypt the file and remove
+                    // @todo use writer delegate to encrypt in memory
+                    // https://developer.apple.com/documentation/avfoundation/avassetwriter/3546585-delegate
+                    let url = urlForEpisode(start: ep.start, title: ep.title)
+                    let keychain = KeychainSwift()
+                    let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+                    let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
+                    let encryptor = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
+                    let message = try! Data(contentsOf: url.deletingPathExtension())
+                    let ciphertext: Data = encryptor.encrypt(data: message)
+                    try! ciphertext.write(to: url)
+                    try! FileManager.default.removeItem(at: url.deletingPathExtension())
+                }
 #if os(macOS)
                 if (frame_count * Memory.secondsBetweenFrames) > 30 {
                     log.info("Tracking file changes...")

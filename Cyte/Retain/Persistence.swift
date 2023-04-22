@@ -83,6 +83,12 @@ func urlForEpisode(start: Date?, title: String?) -> URL {
     url = url.appendingPathComponent("\(components.month ?? 0)")
     url = url.appendingPathComponent("\(components.day ?? 0)")
     url = url.appendingPathComponent("\(title!).mov")
+    
+    let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+    if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+        url = url.appendingPathExtension("enc")
+    }
+    
     return url
 }
 
