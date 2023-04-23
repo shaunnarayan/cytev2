@@ -73,6 +73,7 @@ struct Settings: View {
     @State var encrypting: Bool = false
     @State var hideDock: Bool = false
     
+    @EnvironmentObject var episodeModel: EpisodeModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
 #if os(macOS)
@@ -285,6 +286,7 @@ struct Settings: View {
                             Memory.shared.encryption(enabled: $0)
                             defaults.set($0, forKey: "CYTE_ENCRYPTION")
                             encrypting = $0
+                            episodeModel.dataID = UUID()
                         })
                         Text("Encrypt recording data (Reduces performance, but offers some protection against malware)")
                             .lineLimit(10)

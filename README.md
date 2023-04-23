@@ -1,8 +1,5 @@
 # 🧐 Cyte
 
-[![Xcode - Build and Analyze](https://github.com/shaunnarayan/cytev2/actions/workflows/swift-xcode.yml/badge.svg)](https://github.com/shaunnarayan/cytev2/actions/workflows/swift-xcode.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cataddict42.svg?style=social&label=%20%40CatAddict42)](https://twitter.com/cataddict42)
 
 🚧 Work in progress - this is beta software, use with care
 
@@ -28,29 +25,39 @@ A lot of research involves collating information from multiple sources; internal
 > - Set applications that are not to be recorded (while taking keystrokes)
 > - Chat your data; ask questions about work you've done
 
-## Development
+## Contributing
 
-Happy to accept PRs related to any of the following
+* Generally, try to follow the surrounding style, but it's fine if you don't, linters can fix that stuff
+* Fork this repository, make any changes, and when you're happy, submit a PR and we can review it together
+* I prefer to keep documentation in the code (that's the most likely place it won't go too stale IMO). If something needs more documentation to be easily understandable, raise an issue and I'll revise it. I'll also write some technical deep dives on architectural stuff post 1.0
+* Everything in the pipeline is tracked in the Issues tab. Unless assigned to someone, feel free to pick any issue up. Just drop a note in the Issue so no one else takes a run at the same time
+* If you have a feature suggestion, please submit it in the issues tab for discussion. Let's make the app better for everyone
+* mainline is latest - if you want a 'stable' (as stable as pre-release can be) branch use a tag
 
 ### Issues
 
 - App sandbox is disabled to allow file tracking; [instead should request document permissions](https://stackoverflow.com/a/70972475)
 - Timeline slider not updating while video playing (timeJumped notification not sent until pause)
-- Build process fails on Github (Needs signing cert installed to sign embedded content?)
 - Should not [perform video analysis](https://developer.apple.com/documentation/avkit/avplayerview/3986556-allowsvideoframeanalysis) on feed
-- Some results from searching fail to highlight the result snippet
 - Keyboard navigation events: Return to open selected episode, escape to pop timeline view
 - Fallback to object recognition
-- Encryption e.g. Filevault?
+- Test automation
+- Unit tests for Memory
+- Sync between Cytes
+- Chat this episode
+- Split episodes
+- iPad support
 
 ## Credits
 
 Thanks to these great open source projects:
 
-- [DiffMatchPatch](https://github.com/google/diff-match-patch): Used to differentiate unchanged and changed text from OCR
+- [SwiftDiff](https://github.com/turbolent/SwiftDiff): Used to differentiate unchanged and changed text from OCR
 - [AXSwift](https://github.com/tmandry/AXSwift): Used for browser context awareness
 - [KeychainSwift](https://github.com/evgenyneu/keychain-swift): Used to securely store API keys in the Apple Keychain Manager
 - [SQLite.swift](https://github.com/stephencelis/SQLite.swift): Used for the text search functionality
 - [XCGLogger](https://github.com/DaveWoodCom/XCGLogger): Used to save debug logs to disk
 - [llama.cpp](https://github.com/ggerganov/llama.cpp): Used to load and run LLMs for chat when a local model is provided
 - [MacPaw OpenAI](https://github.com/MacPaw/OpenAI): Used to run LLMs for chat when OpenAI API enabled
+- [RNCryptor](https://github.com/RNCryptor/RNCryptor): Used to encrypt video files on disk
+- [sqlcipher](https://www.zetetic.net/sqlcipher/): Used to encrypt database on disk
