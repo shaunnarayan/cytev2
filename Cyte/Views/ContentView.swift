@@ -121,11 +121,11 @@ struct ContentView: View {
                 home
             }
             .navigationDestination(for: CyteEpisode.self) { episode in
-                EpisodePlaylistView(player: AVPlayer(url:  urlForEpisode(start: episode.start, title: episode.title)), secondsOffsetFromLastEpisode: offsetForEpisode(episode: episode), filter: episodeModel.filter
+                EpisodePlaylistView(url: urlForEpisode(start: episode.start, title: episode.title), secondsOffsetFromLastEpisode: offsetForEpisode(episode: episode), filter: episodeModel.filter
                 )
             }
             .navigationDestination(for: CyteInterval.self) { interval in
-                EpisodePlaylistView(player: AVPlayer(url:  urlForEpisode(start: interval.episode.start, title: interval.episode.title)), secondsOffsetFromLastEpisode: offsetForEpisode(episode: interval.episode) - (interval.from.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate), filter: episodeModel.filter
+                EpisodePlaylistView(url: urlForEpisode(start: interval.episode.start, title: interval.episode.title), secondsOffsetFromLastEpisode: offsetForEpisode(episode: interval.episode) - (interval.from.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate), filter: episodeModel.filter
                 )
             }
             .navigationDestination(for: Int.self) { path in

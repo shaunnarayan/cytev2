@@ -259,16 +259,17 @@ class DecryptedAVAssetLoaderDelegate: NSObject, AVAssetResourceLoaderDelegate {
             loadingRequest.contentInformationRequest!.contentType = AVFileType.mp4.rawValue
             loadingRequest.contentInformationRequest!.contentLength = Int64(data!.count)
             loadingRequest.contentInformationRequest!.isByteRangeAccessSupported = true
-//            loadingRequest.contentInformationRequest!.isEntireLengthAvailableOnDemand = true
         }
-
-        if loadingRequest.dataRequest!.requestsAllDataToEndOfResource {
-            loadingRequest.dataRequest?.respond(with: data![loadingRequest.dataRequest!.currentOffset...])
+        if loadingRequest.dataRequest!.requestedOffset >= data!.count {
+            loadingRequest.dataRequest!.respond(with: Data())
+        }
+        else if loadingRequest.dataRequest!.requestsAllDataToEndOfResource {
+            loadingRequest.dataRequest?.respond(with: data![loadingRequest.dataRequest!.requestedOffset...])
         } else {
             if (loadingRequest.contentInformationRequest != nil) {
                 loadingRequest.dataRequest!.respond(with: Data(data![Data.Index(loadingRequest.dataRequest!.requestedOffset)..<loadingRequest.dataRequest!.requestedLength]))
             } else {
-                loadingRequest.dataRequest?.respond(with: Data( data![loadingRequest.dataRequest!.currentOffset..<loadingRequest.dataRequest!.currentOffset+Int64(loadingRequest.dataRequest!.requestedLength)]))
+                loadingRequest.dataRequest?.respond(with: Data( data![loadingRequest.dataRequest!.requestedOffset..<loadingRequest.dataRequest!.requestedOffset+Int64(loadingRequest.dataRequest!.requestedLength)]))
             }
         }
         loadingRequest.finishLoading()
