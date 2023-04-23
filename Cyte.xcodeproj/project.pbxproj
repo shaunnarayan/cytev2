@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03440CDFA68B7ADF815A4FDF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9A29EE9CEF0078EE31 /* SwiftDiff */; };
 		3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9C29EE9CFE0078EE31 /* SwiftDiff */; };
 		3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F049C9E29EEA9E30078EE31 /* AVKit.framework */; };
@@ -94,6 +93,8 @@
 		3FDFCE5129ED111900988BAF /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F58AE2529B18344007E7703 /* Events.swift */; };
 		3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 3FE7822229DB15A8008CB97D /* AXSwift */; };
 		3FE7822629DBDB4A008CB97D /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE7822529DBDB4A008CB97D /* llama */; };
+		3FF8441529F535DC00944408 /* RNCryptor in Frameworks */ = {isa = PBXBuildFile; productRef = 3FF8441429F535DC00944408 /* RNCryptor */; };
+		3FF8441729F536D100944408 /* RNCryptor in Frameworks */ = {isa = PBXBuildFile; productRef = 3FF8441629F536D100944408 /* RNCryptor */; };
 		5B87575F22D3CD8B7605E3B8 /* Pods_Cyte_for_iPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F51D7CD92B4D2AC3308E1744 /* Pods_Cyte_for_iPhone.framework */; };
 		C2E200DA6DEA831E07A737A7 /* Pods_Cyte.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D239A03C42750AB72A958DD /* Pods_Cyte.framework */; };
 		D54C497E02B644F4038439BA /* Pods_CyteRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A2E76A4A99DA83B49470EC6 /* Pods_CyteRecorder.framework */; };
@@ -160,7 +161,6 @@
 		3F6AAE5D29EBBC0100843D71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F6AAE6429EBBC0800843D71 /* CyteExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CyteExtension.entitlements; sourceTree = "<group>"; };
 		3F6D2F6329F0F91F00F3472D /* Cyte for iPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cyte for iPhone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F6D2F6429F0F91F00F3472D /* Cyte copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Cyte copy-Info.plist"; path = "/Users/shaunnarayan/dev/cytev2/Cyte/Cyte copy-Info.plist"; sourceTree = "<absolute>"; };
 		3F6FE07D29C424230061DBF5 /* StaticEpisodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticEpisodeView.swift; sourceTree = "<group>"; };
 		3F7BB7DA29E0112900D8A0BB /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		3F7BB7DC29E26C7000D8A0BB /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
@@ -204,6 +204,7 @@
 			files = (
 				3FDFCE4929ED109700988BAF /* KeychainSwift in Frameworks */,
 				3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */,
+				3FF8441529F535DC00944408 /* RNCryptor in Frameworks */,
 				3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */,
 				3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */,
 				D54C497E02B644F4038439BA /* Pods_CyteRecorder.framework in Frameworks */,
@@ -218,6 +219,7 @@
 				3F6D2F5129F0F91F00F3472D /* ObjcExceptionBridging in Frameworks */,
 				3F6D2F5229F0F91F00F3472D /* AVKit.framework in Frameworks */,
 				3F6D2F5329F0F91F00F3472D /* Highlightr in Frameworks */,
+				3FF8441729F536D100944408 /* RNCryptor in Frameworks */,
 				3F6D2F5429F0F91F00F3472D /* KeychainSwift in Frameworks */,
 				3F6D2F5529F0F91F00F3472D /* XCGLogger in Frameworks */,
 				3F6D2F5629F0F91F00F3472D /* OpenAI in Frameworks */,
@@ -241,7 +243,6 @@
 				3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */,
 				3F6D2F6729F0FB4100F3472D /* RNCryptor in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
-				03440CDFA68B7ADF815A4FDF /* (null) in Frameworks */,
 				C2E200DA6DEA831E07A737A7 /* Pods_Cyte.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,7 +372,6 @@
 				3FCAA1FD29AC7C0100898995 /* Products */,
 				3F8F932829B5CF9C00C938DE /* Frameworks */,
 				64685ED4DBC6DDD68F6B6683 /* Pods */,
-				3F6D2F6429F0F91F00F3472D /* Cyte copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -449,6 +449,7 @@
 				3FDFCE4A29ED109F00988BAF /* XCGLogger */,
 				3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */,
 				3F049C9C29EE9CFE0078EE31 /* SwiftDiff */,
+				3FF8441429F535DC00944408 /* RNCryptor */,
 			);
 			productName = CyteExtension;
 			productReference = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */;
@@ -480,6 +481,7 @@
 				3F6D2F3029F0F91F00F3472D /* llama */,
 				3F6D2F3229F0F91F00F3472D /* AXSwift */,
 				3F6D2F3429F0F91F00F3472D /* SwiftDiff */,
+				3FF8441629F536D100944408 /* RNCryptor */,
 			);
 			productName = Cyte;
 			productReference = 3F6D2F6329F0F91F00F3472D /* Cyte for iPhone.app */;
@@ -890,7 +892,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Cyte copy-Info.plist";
+				INFOPLIST_FILE = Cyte/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cyte;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cyte will access your Photo Library to save timelapses";
@@ -954,7 +956,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Cyte copy-Info.plist";
+				INFOPLIST_FILE = Cyte/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Cyte;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cyte will access your Photo Library to save timelapses";
@@ -1501,6 +1503,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3FE7822429DBDB4A008CB97D /* XCRemoteSwiftPackageReference "llama" */;
 			productName = llama;
+		};
+		3FF8441429F535DC00944408 /* RNCryptor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F6529F0FB4100F3472D /* XCRemoteSwiftPackageReference "RNCryptor" */;
+			productName = RNCryptor;
+		};
+		3FF8441629F536D100944408 /* RNCryptor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F6D2F6529F0FB4100F3472D /* XCRemoteSwiftPackageReference "RNCryptor" */;
+			productName = RNCryptor;
 		};
 /* End XCSwiftPackageProductDependency section */
 
