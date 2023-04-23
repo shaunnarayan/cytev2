@@ -302,6 +302,10 @@ struct Settings: View {
                         .accessibilityLabel("Checkbox to enable data encryption")
                     }
                     .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
+                    Text("This may take some time to complete - please do not exit Cyte while in progress or you may lose data")
+                        .lineLimit(10)
+                        .font(.caption)
+                        .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
 #endif
                 }
                 VStack(alignment: .leading) {

@@ -59,7 +59,7 @@ struct ContentView: View {
                             ForEach(episodeModel.episodes.filter { ep in
                                 return ep.title.count > 0 && (ep.start != ep.end)
                             }) { episode in
-                                EpisodeView(player: AVPlayer(url: urlForEpisode(start: episode.start, title: episode.title)), episode: episode, filter: episodeModel.filter, selected: false)
+                                EpisodeView(url: urlForEpisode(start: episode.start, title: episode.title), episode: episode, filter: episodeModel.filter, selected: false)
 #if os(macOS)
                                     .frame(width: 360, height: 260)
 #endif
@@ -85,7 +85,7 @@ struct ContentView: View {
                             ForEach(episodeModel.intervals.filter { (interval: CyteInterval) in
                                 return interval.episode.title.count > 0
                             }) { (interval : CyteInterval) in
-                                StaticEpisodeView(asset: AVAsset(url: urlForEpisode(start: interval.episode.start, title: interval.episode.title)), episode: interval.episode, result: interval, filter: interval.snippet ?? episodeModel.filter, selected: false)
+                                StaticEpisodeView(url: urlForEpisode(start: interval.episode.start, title: interval.episode.title), episode: interval.episode, result: interval, filter: interval.snippet ?? episodeModel.filter, selected: false)
                                     .id(interval.from)
                             }
                         }

@@ -47,6 +47,7 @@ struct EpisodePlaylistView: View {
     @State var magScale: CGFloat = 1
     @State var progressingScale: CGFloat = 1
     @State var magnifyFrom: CGPoint?
+    private let assetDelegate = DecryptedAVAssetLoaderDelegate()
     
     var magnification: some Gesture {
         MagnificationGesture()
@@ -99,7 +100,11 @@ struct EpisodePlaylistView: View {
                 // placeholder thumb
                 thumbnailImages.append(nil)
             } else {
-                let asset = AVAsset(url: urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title))
+                let url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title)
+                let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+                let asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : url)
+                assetDelegate.update(encryptedURL: url)
+                asset.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
                 
                 let generator = AVAssetImageGenerator(asset: asset)
                 generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
@@ -188,7 +193,11 @@ struct EpisodePlaylistView: View {
         let current_url = urlOfCurrentlyPlayingInPlayer(player: player!)
         let new_url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title)
         if current_url != new_url {
-            player?.replaceCurrentItem(with: AVPlayerItem(url: new_url))
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            let asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : new_url)
+            assetDelegate.update(encryptedURL: new_url)
+            asset.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+            player?.replaceCurrentItem(with: AVPlayerItem(asset: asset))
         }
         // seek to correct offset
         let progress = (active_interval.1) - secondsOffsetFromLastEpisode

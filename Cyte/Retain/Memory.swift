@@ -114,11 +114,10 @@ class Memory {
             keychain.set(hmacKey, forKey: "CYTE_ENCRYPTION_HMAC_KEY")
             
             let episodes = try! CyteEpisode.list()
-            let encryptor = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
             for episode in episodes {
                 let location = urlForEpisode(start: episode.start, title: episode.title)
                 let message = try! Data(contentsOf: location)
-                let ciphertext: Data = encryptor.encrypt(data: message)
+                let ciphertext: Data = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey).encrypt(data: message)
                 try! ciphertext.write(to: location.appendingPathExtension("enc"))
                 try! FileManager.default.removeItem(at: location)
             }
@@ -134,11 +133,10 @@ class Memory {
             let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
             
             let episodes = try! CyteEpisode.list()
-            let decryptor = RNCryptor.DecryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
             for episode in episodes {
                 let location = urlForEpisode(start: episode.start, title: episode.title)
                 let ciphertext = try! Data(contentsOf: location)
-                let plaintext: Data = try! decryptor.decrypt(data: ciphertext)
+                let plaintext: Data = try! RNCryptor.DecryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey).decrypt(data: ciphertext)
                 try! plaintext.write(to: location.deletingPathExtension())
                 try! FileManager.default.removeItem(at: location)
             }

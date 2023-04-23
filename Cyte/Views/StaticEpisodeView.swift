@@ -17,7 +17,8 @@ struct StaticEpisodeView: View {
     @EnvironmentObject var bundleCache: BundleCache
     @EnvironmentObject var episodeModel: EpisodeModel
     
-    @State var asset: AVAsset
+    @State var asset: AVURLAsset?
+    @State var url: URL
     @ObservedObject var episode: CyteEpisode
     
     @State var selection: Int = 0
@@ -32,9 +33,11 @@ struct StaticEpisodeView: View {
     @State var selected: Bool
     
     @State private var genTask: Task<(), Never>?
+    private let assetDelegate = DecryptedAVAssetLoaderDelegate()
     
     func generateThumbnail(offset: Double) async {
-        let generator = AVAssetImageGenerator(asset: asset)
+        
+        let generator = AVAssetImageGenerator(asset: asset!)
         generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
         generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 1);
         do {
@@ -221,6 +224,10 @@ struct StaticEpisodeView: View {
         .frame(width: 360, height: 260)
 #endif
         .onAppear {
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : self.url)
+            assetDelegate.update(encryptedURL: self.url)
+            asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
             if genTask == nil {
                 genTask = Task {
                     await generateThumbnail(offset: ((result.from.timeIntervalSinceReferenceDate) - episode.start.timeIntervalSinceReferenceDate))

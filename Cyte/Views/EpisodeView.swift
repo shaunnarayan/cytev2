@@ -17,13 +17,15 @@ struct EpisodeView: View {
     @EnvironmentObject var bundleCache: BundleCache
     @EnvironmentObject var episodeModel: EpisodeModel
     
-    @State var player: AVPlayer
+    @State var player: AVPlayer?
+    @State var url: URL
     @ObservedObject var episode: CyteEpisode
     
     @State private var isHoveringSave: Bool = false
     @State private var isHoveringExpand: Bool = false
     @State var filter: String
     @State var selected: Bool
+    private let assetDelegate = DecryptedAVAssetLoaderDelegate()
     
     var playerView: some View {
         VStack {
@@ -101,9 +103,16 @@ struct EpisodeView: View {
 //        .frame(width: 360, height: 260)
     }
 
-
     var body: some View {
         playerView
             .accessibilityLabel("A single recording, with a video player, title, date/time and application context details.")
+            .onAppear {
+                let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+                let asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : self.url)
+                assetDelegate.update(encryptedURL: self.url)
+                asset.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+                let playerItem = AVPlayerItem(asset: asset)
+                player = AVPlayer(playerItem: playerItem)
+            }
     }
 }
