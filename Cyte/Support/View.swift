@@ -287,8 +287,14 @@ class DecryptedAVAssetLoaderDelegate: NSObject, AVAssetResourceLoaderDelegate {
         let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
         
         let decryptor = RNCryptor.DecryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
-        let plaintext: Data = try! decryptor.decrypt(data: data)
-        return plaintext
+        
+        do {
+            let plaintext: Data = try decryptor.decrypt(data: data)
+            return plaintext
+        } catch {
+            log.error(error)
+        }
+        return data
     }
     
 }

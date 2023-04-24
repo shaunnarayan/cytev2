@@ -147,7 +147,7 @@ class CyteEpisode: ObservableObject, Identifiable, Equatable, Hashable {
     }
     
     @MainActor static func list(predicate: String? = nil, limit: Int? = nil) throws -> [CyteEpisode] {
-        let query = "SELECT * FROM Episode\(predicate != nil ? " WHERE \(predicate!)" : "") ORDER BY start\(limit != nil ? " LIMIT \(limit!)" : "")"
+        let query = "SELECT * FROM Episode\(predicate != nil ? " WHERE \(predicate!)" : "") ORDER BY start DESC\(limit != nil ? " LIMIT \(limit!)" : "")"
         let stmt = try Memory.shared.intervalDb!.prepare(query)
         var results: [CyteEpisode] = []
         while let episode = try stmt.failableNext() {

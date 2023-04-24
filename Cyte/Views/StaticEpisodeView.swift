@@ -31,12 +31,17 @@ struct StaticEpisodeView: View {
     @State private var isHoveringExpand: Bool = false
     @State private var isHoveringNext: Bool = false
     @State var selected: Bool
+    @State var player: AVPlayer?
     
     @State private var genTask: Task<(), Never>?
     private let assetDelegate = DecryptedAVAssetLoaderDelegate()
+    private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     
     func generateThumbnail(offset: Double) async {
-        
+        if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+            await player?.seek(to: CMTime(seconds: offset, preferredTimescale: 1))
+            return
+        }
         let generator = AVAssetImageGenerator(asset: asset!)
         generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
         generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 1);
@@ -91,17 +96,27 @@ struct StaticEpisodeView: View {
     var playerView: some View {
         VStack {
             ZStack {
-                if thumbnail != nil {
-                    Image(thumbnail!, scale: 1.0, label: Text(""))
-#if os(macOS)
-                        .resizable()
-                        .frame(width: 360, height: 203)
-#else
-                    .scaleEffect(0.56)
-                    .frame(height: 600)
+                if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                    VideoPlayer(player: player)
+                        .padding(0)
+#if !os(macOS)
+                        .aspectRatio(19.5/9.0, contentMode: .fill)
+                        .frame(height: 600)
 #endif
                 } else {
-                    Spacer().frame(width: 360, height: 203)
+                    if thumbnail != nil {
+                        Image(thumbnail!, scale: 1.0, label: Text(""))
+#if os(macOS)
+                            .resizable()
+                            .frame(width: 360, height: 203)
+#else
+                            .scaleEffect(0.56)
+                            .frame(height: 600)
+#endif
+                    }
+                    else {
+                        Spacer().frame(width: 360, height: 203)
+                    }
                 }
                 
                 GeometryReader { metrics in
@@ -228,6 +243,7 @@ struct StaticEpisodeView: View {
             asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : self.url)
             assetDelegate.update(encryptedURL: self.url)
             asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+            player = AVPlayer(playerItem: AVPlayerItem(asset: asset!))
             if genTask == nil {
                 genTask = Task {
                     await generateThumbnail(offset: ((result.from.timeIntervalSinceReferenceDate) - episode.start.timeIntervalSinceReferenceDate))

@@ -363,11 +363,10 @@ class Memory {
                     let keychain = KeychainSwift()
                     let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
                     let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
-                    let encryptor = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
-                    let message = try! Data(contentsOf: url.deletingPathExtension())
-                    let ciphertext: Data = encryptor.encrypt(data: message)
+                    let message = try! Data(contentsOf: url)
+                    let ciphertext: Data = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey).encrypt(data: message)
+                    try! FileManager.default.removeItem(at: url)
                     try! ciphertext.write(to: url)
-                    try! FileManager.default.removeItem(at: url.deletingPathExtension())
                 }
 #if os(macOS)
                 if (frame_count * Memory.secondsBetweenFrames) > 30 {

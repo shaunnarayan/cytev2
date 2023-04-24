@@ -50,6 +50,7 @@ struct EpisodePlaylistView: View {
     @State var magnifyFrom: CGPoint?
     private let assetDelegate = DecryptedAVAssetLoaderDelegate()
     @State var asset: AVURLAsset?
+    private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     
     var magnification: some Gesture {
         MagnificationGesture()
@@ -88,7 +89,7 @@ struct EpisodePlaylistView: View {
     }
     
     func generateThumbnails(numThumbs: Int = 1) async {
-        if episodeModel.appIntervals.count == 0 { return }
+        if episodeModel.appIntervals.count == 0 || defaults.bool(forKey: "CYTE_ENCRYPTION") { return }
         highlight.removeAll()
         let start: Double = secondsOffsetFromLastEpisode
         let end: Double = secondsOffsetFromLastEpisode + Double(EpisodePlaylistView.windowLengthInSeconds)
@@ -190,10 +191,14 @@ struct EpisodePlaylistView: View {
         let new_url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title)
         if current_url != new_url {
             let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
-            asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : new_url)
-            assetDelegate.update(encryptedURL: new_url)
-            asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
-            player = AVPlayer(playerItem: AVPlayerItem(asset: asset!))
+            if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                asset = AVURLAsset(url: URL(string:"decrypt://")!)
+                assetDelegate.update(encryptedURL: new_url)
+                asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+                player = AVPlayer(playerItem: AVPlayerItem(asset: asset!))
+            } else {
+                player?.replaceCurrentItem(with: AVPlayerItem(url: new_url))
+            }
         }
         // seek to correct offset
         let progress = (active_interval.1) - secondsOffsetFromLastEpisode
