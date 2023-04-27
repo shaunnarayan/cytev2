@@ -49,7 +49,6 @@ class Memory {
     private var lastObservation: String = ""
     
     /// Intel fallbacks - due to lack of hardware acelleration for video encoding and frame analysis, tradeoffs must be made
-    private var shouldTrackFileChanges: Bool = true
 #if os(macOS)
     static let secondsBetweenFrames : Int = utsname.isAppleSilicon ? 2 : 4
 #else
@@ -64,6 +63,7 @@ class Memory {
     // 0 -> 1 = FST4 to FST5
     private static let DB_VERSION: UserVersion = 1
     private let embedding: NLEmbedding? = NLEmbedding.wordEmbedding(for: NLLanguage.english)
+    private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     
     ///
     /// Close any in-progress episodes (in case Cyte was not properly shut down)
@@ -147,6 +147,7 @@ class Memory {
                 }
                 
                 intervalDb!.userVersion = 1
+                log.info("Migration 0 -> 1 Complete")
             } catch {
                 log.error("Migration 0 -> 1 Failed")
             }
@@ -330,7 +331,8 @@ class Memory {
     /// to the index for querying
     ///
     func trackFileChanges(ep: Episode) {
-        if shouldTrackFileChanges {
+        // There is currently no UI setting for this, must be set in plist
+        if defaults.bool(forKey: "CYTE_TRACK_FILES") {
             // Make this follow a user preference, since it chews cpu
             let files = Memory.getRecentFiles(earliest: ep.start!, latest: ep.end!)
             for fileAndModified: (URL, Date) in files! {
@@ -407,7 +409,6 @@ class Memory {
     ///
     private func runRetention() {
         // delete any episodes outside retention period
-        let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
         let retention = defaults.integer(forKey: "CYTE_RETENTION")
         if retention == 0 {
             // retain forever
