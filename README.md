@@ -1,9 +1,5 @@
 # 🧐 Cyte
 
-[![Xcode - Build and Analyze](https://github.com/shaunnarayan/cytev2/actions/workflows/swift-xcode.yml/badge.svg)](https://github.com/shaunnarayan/cytev2/actions/workflows/swift-xcode.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cataddict42.svg?style=social&label=%20%40CatAddict42)](https://twitter.com/cataddict42)
-
 🚧 Work in progress - this is beta software, use with care
 
 A background screen recorder for easy history search. 
@@ -36,18 +32,22 @@ Happy to accept PRs related to any of the following
 
 - App sandbox is disabled to allow file tracking; [instead should request document permissions](https://stackoverflow.com/a/70972475)
 - Timeline slider not updating while video playing (timeJumped notification not sent until pause)
-- Build process fails on Github (Needs signing cert installed to sign embedded content?)
 - Should not [perform video analysis](https://developer.apple.com/documentation/avkit/avplayerview/3986556-allowsvideoframeanalysis) on feed
 - Some results from searching fail to highlight the result snippet
 - Keyboard navigation events: Return to open selected episode, escape to pop timeline view
-- Fallback to object recognition
-- Encryption e.g. Filevault?
+- Apply object recognition per frame
+- Test automation
+- Unit tests for Memory
+- Sync between Cytes
+- Chat this episode
+- Split episodes
+- iPad support
 
 ## Credits
 
 Thanks to these great open source projects:
 
-- [DiffMatchPatch](https://github.com/google/diff-match-patch): Used to differentiate unchanged and changed text from OCR
+- [SwiftDiff](https://github.com/turbolent/SwiftDiff): Used to differentiate unchanged and changed text from OCR
 - [AXSwift](https://github.com/tmandry/AXSwift): Used for browser context awareness
 - [KeychainSwift](https://github.com/evgenyneu/keychain-swift): Used to securely store API keys in the Apple Keychain Manager
 - [SQLite.swift](https://github.com/stephencelis/SQLite.swift): Used for the text search functionality
