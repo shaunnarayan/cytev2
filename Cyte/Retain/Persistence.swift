@@ -75,7 +75,7 @@ func homeDirectory() -> URL {
 ///
 func urlForEpisode(start: Date?, title: String?) -> URL {
     if title!.count > 256 {
-        fatalError("Title was too large!")
+        log.warning("Title was very large \(title ?? "")")
     }
     var url: URL = homeDirectory()
     let components = Calendar.current.dateComponents([.year, .month, .day], from: start ?? Date())

@@ -14,6 +14,7 @@ import KeychainSwift
 
 struct BundleView: View {
     @EnvironmentObject var bundleCache: BundleCache
+    @EnvironmentObject var episodeModel: EpisodeModel
     
     @State var bundle: CyteBundleExclusion
     @State var isExcluded: Bool
@@ -32,6 +33,7 @@ struct BundleView: View {
                         for episode in episodes {
                             Memory.shared.delete(delete_episode: episode)
                         }
+                        episodeModel.refreshData()
                     } catch {
                     }
 #if os(macOS)
@@ -72,6 +74,7 @@ struct Settings: View {
     @State var browserAware: Bool = false
     @State var encrypting: Bool = false
     @State var hideDock: Bool = false
+    @State var lowCpuMode: Bool = false
     
     @EnvironmentObject var episodeModel: EpisodeModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -122,7 +125,7 @@ struct Settings: View {
                 .accessibilityLabel("Path currently used to store memories and a button to update it")
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
 #endif
-                Text("Save recordings for (will use approximately 1GB for every four hours: this can vary greatly depending on amount of context switching)")
+                Text("Save recordings for (will use approximately 100 MB every hour: this can vary greatly depending on amount of context switching, your screen size etc.)")
                     .font(.title2)
                     .lineLimit(10)
                     .padding()
@@ -274,6 +277,7 @@ struct Settings: View {
                         .accessibilityLabel("Checkbox to enable browser awareness")
                     }
                     .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
+
                     Text("Privacy note: This feature will request icons for display from https://www.google.com/s2/favicons on startup")
                         .lineLimit(10)
                         .font(.caption)
@@ -308,6 +312,29 @@ struct Settings: View {
                         .lineLimit(10)
                         .font(.caption)
                         .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
+                    HStack {
+                        let binding = Binding<Bool>(get: {
+                            return lowCpuMode
+                        }, set: {
+                            defaults.set($0, forKey: "CYTE_LOW_CPU")
+                            lowCpuMode = $0
+                        })
+                        Text("Reduced CPU usage (uses more storage space and may impact search quality)")
+                            .lineLimit(10)
+                            .font(.title2)
+                            .onAppear {
+                                lowCpuMode = defaults.bool(forKey: "CYTE_LOW_CPU")
+                            }
+#if os(macOS)
+                            .frame(width: 1000, height: 50, alignment: .leading)
+#endif
+                        Toggle(isOn: binding) {
+                            
+                        }
+                        .toggleStyle(SwitchToggleStyle())
+                        .accessibilityLabel("Checkbox to enable reduced CPU")
+                    }
+                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
 #endif
                 }
                 VStack(alignment: .leading) {

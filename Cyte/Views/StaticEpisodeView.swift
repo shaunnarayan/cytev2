@@ -106,12 +106,11 @@ struct StaticEpisodeView: View {
                 } else {
                     if thumbnail != nil {
                         Image(thumbnail!, scale: 1.0, label: Text(""))
-#if os(macOS)
                             .resizable()
+#if os(macOS)
                             .frame(width: 360, height: 203)
 #else
-                            .scaleEffect(0.56)
-                            .frame(height: 600)
+                            .frame(width: 360, height: 720)
 #endif
                     }
                     else {
@@ -133,7 +132,7 @@ struct StaticEpisodeView: View {
                             .cutout(
                                 [RoundedRectangle(cornerRadius: 4)
                                     .scale(x: highlight[selection].width * 1.2, y: highlight[selection].height * 1.2)
-                                    .offset(x:-180 + (highlight[selection].midX * 360), y:300 - (highlight[selection].midY * 600))]
+                                    .offset(x:-180 + (highlight[selection].midX * 360), y:360 - (highlight[selection].midY * 720))]
                             )
 #endif
                     } else {
@@ -236,7 +235,7 @@ struct StaticEpisodeView: View {
             }
         }
 #if os(macOS)
-        .frame(width: 360, height: 260)
+        .frame(height: 260)
 #endif
         .onAppear {
             let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!

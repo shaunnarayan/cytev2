@@ -292,9 +292,18 @@ class Memory {
             abort()
         }
         //generate 1080p settings
-        let settingsAssistant = AVOutputSettingsAssistant(preset: .hevc1920x1080)?.videoSettings
+        let preferH264 = defaults.bool(forKey: "CYTE_LOW_CPU")
+        let useHevc = !preferH264 && AVAssetExportSession.allExportPresets().contains(AVAssetExportPresetHEVCHighestQuality)
+        let preset: AVOutputSettingsPreset = useHevc ? .hevc1920x1080 : .preset1920x1080
+        let codec: CMFormatDescription.MediaSubType = useHevc ? .hevc : .h264
+        let settingsAssistant = AVOutputSettingsAssistant(preset: preset)!
+#if os(macOS)
+        settingsAssistant.sourceVideoFormat = try! CMVideoFormatDescription(videoCodecType: codec, width: ScreenRecorder.shared.streamConfiguration.width, height: ScreenRecorder.shared.streamConfiguration.height)
+#else
+        settingsAssistant.sourceVideoFormat = try! CMVideoFormatDescription(videoCodecType: codec, width: Int(UIScreen.main.bounds.width), height: Int(UIScreen.main.bounds.height))
+#endif
         //create a single video input
-        assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: settingsAssistant)
+        assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: settingsAssistant.videoSettings)
         //create an adaptor for the pixel buffer
         assetWriterAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterInput!, sourcePixelBufferAttributes: nil)
         //add the input to the asset writer

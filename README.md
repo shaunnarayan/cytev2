@@ -1,6 +1,5 @@
 # 🧐 Cyte
 
-
 🚧 Work in progress - this is beta software, use with care
 
 A background screen recorder for easy history search. 
@@ -37,10 +36,9 @@ A lot of research involves collating information from multiple sources; internal
 ### Issues
 
 - App sandbox is disabled to allow file tracking; [instead should request document permissions](https://stackoverflow.com/a/70972475)
-- Timeline slider not updating while video playing (timeJumped notification not sent until pause)
-- Should not [perform video analysis](https://developer.apple.com/documentation/avkit/avplayerview/3986556-allowsvideoframeanalysis) on feed
+- Some results from searching fail to highlight the result snippet
 - Keyboard navigation events: Return to open selected episode, escape to pop timeline view
-- Fallback to object recognition
+- Apply object recognition per frame
 - Test automation
 - Unit tests for Memory
 - Sync between Cytes
