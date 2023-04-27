@@ -302,7 +302,8 @@ class Memory {
             abort()
         }
         //generate 1080p settings
-        let settingsAssistant = AVOutputSettingsAssistant(preset: .hevc1920x1080)?.videoSettings
+        let preset: AVOutputSettingsPreset = AVAssetExportSession.allExportPresets().contains(AVAssetExportPresetHEVCHighestQuality) ? .hevc1920x1080 : .preset1920x1080
+        let settingsAssistant = AVOutputSettingsAssistant(preset: preset)?.videoSettings
         //create a single video input
         assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: settingsAssistant)
         //create an adaptor for the pixel buffer

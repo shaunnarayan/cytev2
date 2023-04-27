@@ -31,8 +31,6 @@ Happy to accept PRs related to any of the following
 ### Issues
 
 - App sandbox is disabled to allow file tracking; [instead should request document permissions](https://stackoverflow.com/a/70972475)
-- Timeline slider not updating while video playing (timeJumped notification not sent until pause)
-- Should not [perform video analysis](https://developer.apple.com/documentation/avkit/avplayerview/3986556-allowsvideoframeanalysis) on feed
 - Some results from searching fail to highlight the result snippet
 - Keyboard navigation events: Return to open selected episode, escape to pop timeline view
 - Apply object recognition per frame
