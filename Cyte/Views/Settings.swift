@@ -327,7 +327,7 @@ struct Settings: View {
 #if os(macOS)
                     .frame(width: 1000)
 #endif
-                    
+#if os(macOS)
                     Button(action: {
                         isShowing.toggle()
                     }) {
@@ -351,6 +351,7 @@ struct Settings: View {
                             log.error(error)
                         }
                     })
+#endif
                 }
                 .padding()
             
@@ -362,7 +363,7 @@ struct Settings: View {
                     }
                 }
                 .accessibilityLabel("Grid of known applications and if they are to be recorded")
-                .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 0))
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
             }
         }
 #if os(macOS)

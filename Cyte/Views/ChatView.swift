@@ -80,7 +80,7 @@ struct ChatView: View {
 #if os(macOS)
                 let layout = AnyLayout(HStackLayout(alignment: .top ))
 #else
-                let layout = AnyLayout(VStackLayout())
+                let layout = AnyLayout(VStackLayout(alignment: .leading))
 #endif
             layout {
                 VStack(alignment:.leading) {

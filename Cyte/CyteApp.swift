@@ -43,7 +43,7 @@ struct CyteApp: App {
         try! FileManager.default.createDirectory(at: homeDirectory(), withIntermediateDirectories: true)
 #endif
         if defaults.object(forKey: "CYTE_RETENTION") == nil {
-            defaults.set(90, forKey: "CYTE_RETENTION")
+            defaults.set(30, forKey: "CYTE_RETENTION")
         }
         // Prefetch icons
         Task {
