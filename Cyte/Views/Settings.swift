@@ -83,6 +83,7 @@ struct Settings: View {
     @State var currentRetention: Int = 0
     @State var browserAware: Bool = false
     @State var hideDock: Bool = false
+    @State var lowCpuMode: Bool = false
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -132,7 +133,7 @@ struct Settings: View {
                 .accessibilityLabel("Path currently used to store memories and a button to update it")
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
 #endif
-                Text("Save recordings for (will use approximately 1GB for every four hours: this can vary greatly depending on amount of context switching)")
+                Text("Save recordings for (will use approximately 100 MB every hour: this can vary greatly depending on amount of context switching, your screen size etc.)")
                     .font(.title2)
                     .lineLimit(10)
                     .padding()
@@ -228,68 +229,93 @@ struct Settings: View {
                         }
                     }
                     .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
-                }
+                    
 #if os(macOS)
-                HStack {
-                    let binding = Binding<Bool>(get: {
-                        return hideDock
-                    }, set: {
-                        if $0 {
-                            NSApp.setActivationPolicy(.accessory)
-                        }
-                        else {
-                            NSApp.setActivationPolicy(.regular)
-                        }
-                        defaults.set($0, forKey: "CYTE_HIDE_DOCK")
-                        hideDock = $0
-                        NSApplication.shared.activate(ignoringOtherApps: true)
-                    })
-                    Text("Hide dock icon")
-                        .font(.title2)
+                    HStack {
+                        let binding = Binding<Bool>(get: {
+                            return hideDock
+                        }, set: {
+                            if $0 {
+                                NSApp.setActivationPolicy(.accessory)
+                            }
+                            else {
+                                NSApp.setActivationPolicy(.regular)
+                            }
+                            defaults.set($0, forKey: "CYTE_HIDE_DOCK")
+                            hideDock = $0
+                            NSApplication.shared.activate(ignoringOtherApps: true)
+                        })
+                        Text("Hide dock icon")
+                            .font(.title2)
 #if os(macOS)
-                        .frame(width: 1000, height: 50, alignment: .leading)
+                            .frame(width: 1000, height: 50, alignment: .leading)
 #endif
-                        .onAppear {
-                            hideDock = NSApp.activationPolicy() == .accessory
+                            .onAppear {
+                                hideDock = NSApp.activationPolicy() == .accessory
+                            }
+                        Toggle(isOn: binding) {
+                            
                         }
-                    Toggle(isOn: binding) {
-                        
+                        .toggleStyle(SwitchToggleStyle())
+                        .accessibilityLabel("Checkbox to enable browser awareness")
                     }
-                    .toggleStyle(SwitchToggleStyle())
-                    .accessibilityLabel("Checkbox to enable browser awareness")
-                }
-                .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
-
-                HStack {
-                    let binding = Binding<Bool>(get: {
-                        return browserAware
-                    }, set: {
-                        defaults.set($0, forKey: "CYTE_BROWSER")
-                        browserAware = $0
-                        checkIsProcessTrusted(prompt: $0)
-                    })
-                    Text("Browser awareness (Ignore Incognito and Private Browsing windows, episodes track domains)")
+                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
+                    
+                    HStack {
+                        let binding = Binding<Bool>(get: {
+                            return browserAware
+                        }, set: {
+                            defaults.set($0, forKey: "CYTE_BROWSER")
+                            browserAware = $0
+                            checkIsProcessTrusted(prompt: $0)
+                        })
+                        Text("Browser awareness (Ignore Incognito and Private Browsing windows, episodes track domains)")
+                            .lineLimit(10)
+                            .font(.title2)
+                            .onAppear {
+                                browserAware = defaults.bool(forKey: "CYTE_BROWSER")
+                            }
+#if os(macOS)
+                            .frame(width: 1000, height: 50, alignment: .leading)
+#endif
+                        Toggle(isOn: binding) {
+                            
+                        }
+                        .toggleStyle(SwitchToggleStyle())
+                        .accessibilityLabel("Checkbox to enable browser awareness")
+                    }
+                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
+                    
+                    Text("Privacy note: This feature will request icons for display from https://www.google.com/s2/favicons on startup")
                         .lineLimit(10)
-                        .font(.title2)
-                        .onAppear {
-                            browserAware = defaults.bool(forKey: "CYTE_BROWSER")
-                        }
+                        .font(.caption)
+                        .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
+                    
+                    HStack {
+                        let binding = Binding<Bool>(get: {
+                            return lowCpuMode
+                        }, set: {
+                            defaults.set($0, forKey: "CYTE_LOW_CPU")
+                            lowCpuMode = $0
+                        })
+                        Text("Reduced CPU usage (uses more storage space and may impact search quality)")
+                            .lineLimit(10)
+                            .font(.title2)
+                            .onAppear {
+                                lowCpuMode = defaults.bool(forKey: "CYTE_LOW_CPU")
+                            }
 #if os(macOS)
-                        .frame(width: 1000, height: 50, alignment: .leading)
+                            .frame(width: 1000, height: 50, alignment: .leading)
 #endif
-                    Toggle(isOn: binding) {
-                        
+                        Toggle(isOn: binding) {
+                            
+                        }
+                        .toggleStyle(SwitchToggleStyle())
+                        .accessibilityLabel("Checkbox to enable reduced CPU")
                     }
-                    .toggleStyle(SwitchToggleStyle())
-                    .accessibilityLabel("Checkbox to enable browser awareness")
-                }
-                .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
-                
-                Text("Privacy note: This feature will request icons for display from https://www.google.com/s2/favicons on startup")
-                    .lineLimit(10)
-                    .font(.caption)
-                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
+                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
 #endif
+                }
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Select applications you wish to disable recording for")

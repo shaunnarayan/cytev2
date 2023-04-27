@@ -298,7 +298,7 @@ struct EpisodePlaylistView: View {
                 VStack {
                     ZStack(alignment: .topLeading) {
 #if os(macOS)
-                        let width = (metrics.size.height - 100.0) / 9.0 * 16.0
+                        let width = (metrics.size.height - 100.0) / 9.0 * 14.4
                         let height = metrics.size.height - 100.0
 #else
                         let width = (metrics.size.height - 100.0) / 19.5 * 9.0
@@ -316,9 +316,9 @@ struct EpisodePlaylistView: View {
 
                                 )
                         })
+                        .frame(width: width, height: height)
 #if os(macOS)
                         .disabled(true)
-                        .frame(width: width, height: height)
                         .onContinuousHover(perform: { phase in
                             switch phase {
                             case .active(let location):
@@ -328,8 +328,6 @@ struct EpisodePlaylistView: View {
                             }
                         })
 #else
-                        .frame(width: width * 4, height: height * 4)
-                        .position(x: width * 0.7, y: height * 0.50)
                        .onTapGesture { location in
                            magnifyFrom = location
                        }
@@ -377,11 +375,6 @@ struct EpisodePlaylistView: View {
                         .allowsHitTesting(false)
                     }
                 }
-#if os(macOS)
-                .offset(CGSize(width: 0, height: 0))
-#else
-                .offset(CGSize(width: 0, height: 270))
-#endif
                 .accessibilityLabel("A slider visually displaying segments for each application/website used, using a colored bar with icon overlay. Drag to move in time.")
                 HStack(alignment: .top) {
                     Text(activeTime())

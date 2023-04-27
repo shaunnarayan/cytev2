@@ -196,7 +196,7 @@ class ScreenRecorder: ObservableObject {
         return filter
     }
     
-    private var streamConfiguration: SCStreamConfiguration {
+    public var streamConfiguration: SCStreamConfiguration {
         
         let streamConfig = SCStreamConfiguration()
         

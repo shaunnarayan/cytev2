@@ -31,8 +31,7 @@ struct EpisodeView: View {
                 VideoPlayer(player: player)
                     .padding(0)
 #if !os(macOS)
-                    .aspectRatio(19.5/9.0, contentMode: .fill)
-                    .frame(height: 600)
+                    .frame(height: 720)
 #endif
                 
             }

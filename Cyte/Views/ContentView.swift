@@ -63,7 +63,7 @@ struct ContentView: View {
                             }) { episode in
                                 EpisodeView(player: AVPlayer(url: urlForEpisode(start: episode.start, title: episode.title)), episode: episode, filter: episodeModel.filter, selected: false)
 #if os(macOS)
-                                    .frame(width: 360, height: 260)
+                                    .frame(height: 285)
 #endif
                                     .contextMenu {
                                         Button {
