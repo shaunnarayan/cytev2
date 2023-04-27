@@ -129,8 +129,9 @@ struct AdvancedSearchView: View {
                 LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
                     ForEach(episodeModel.documentsForBundle) { doc in
                         HStack {
-                            Image(nsImage: NSWorkspace.shared.icon(forFile: String(doc.path!.absoluteString.starts(with: "http") ? doc.path!.absoluteString : String(doc.path!.absoluteString.dropFirst(7)))))
-                            Text(doc.path!.lastPathComponent)
+                            let url = doc.path ?? URL(fileURLWithPath: "/")
+                            Image(nsImage: NSWorkspace.shared.icon(forFile: String(url.absoluteString.starts(with: "http") ? url.absoluteString : String(url.absoluteString.dropFirst(7)))))
+                            Text(url.lastPathComponent)
                                 .foregroundColor(.black)
                         }
                         .onHover(perform: { hovering in
@@ -143,7 +144,7 @@ struct AdvancedSearchView: View {
                         })
                         .onTapGesture { gesture in
                             // @todo should maybe open with currently highlighted bundle?
-                            NSWorkspace.shared.open(doc.path!)
+                            NSWorkspace.shared.open(doc.path ?? URL(fileURLWithPath: "/"))
                         }
                     }
                 }

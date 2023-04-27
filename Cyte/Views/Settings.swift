@@ -15,6 +15,7 @@ import CoreData
 
 struct BundleView: View {
     @EnvironmentObject var bundleCache: BundleCache
+    @EnvironmentObject var episodeModel: EpisodeModel
     
     @State var bundle: BundleExclusion
     @State var isExcluded: Bool
@@ -35,6 +36,7 @@ struct BundleView: View {
                         for episode in episodes {
                             Memory.shared.delete(delete_episode: episode)
                         }
+                        episodeModel.refreshData()
                     } catch {
                     }
 #if os(macOS)
