@@ -42,6 +42,7 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
+         BundleIdentifier = "io.cyte.ios"
          FilePath = "/Users/shaunnarayan/Library/Developer/Xcode/DerivedData/Cyte-fjxvxtltqxyzepgiohehfcpringt/Build/Products/Release-iphoneos/Cyte.app">
       </PathRunnable>
       <MacroExpansion>
