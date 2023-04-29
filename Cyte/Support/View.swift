@@ -8,11 +8,13 @@
 import Foundation
 import AVKit
 import SwiftUI
+import KeychainSwift
+import RNCryptor
 
 ///
 /// Helper function to open finder pinned to the supplied episode
 ///
-func revealEpisode(episode: Episode) {
+func revealEpisode(episode: CyteEpisode) {
     let url = urlForEpisode(start: episode.start, title: episode.title)
 #if os(macOS)
     NSWorkspace.shared.activateFileViewerSelecting([url])
@@ -243,3 +245,56 @@ class BundleCache: ObservableObject {
     }
 }
 
+class DecryptedAVAssetLoaderDelegate: NSObject, AVAssetResourceLoaderDelegate {
+    var data: Data?
+    
+    func update(encryptedURL: URL) {
+        let enc = encryptedURL.absoluteString.starts(with: "decrypted://") ? URL(string: String(encryptedURL.absoluteString.dropFirst("decrypted://".count)))! : encryptedURL
+        let encryptedData = try! Data(contentsOf: enc)
+        data = try! decryptData(encryptedData)
+    }
+    
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+        if (loadingRequest.contentInformationRequest != nil) {
+            loadingRequest.contentInformationRequest!.contentType = AVFileType.mp4.rawValue
+            loadingRequest.contentInformationRequest!.contentLength = Int64(data!.count)
+            loadingRequest.contentInformationRequest!.isByteRangeAccessSupported = true
+        }
+        if loadingRequest.dataRequest!.requestedOffset >= data!.count {
+            loadingRequest.dataRequest!.respond(with: Data())
+        }
+        else if loadingRequest.dataRequest!.requestsAllDataToEndOfResource {
+            loadingRequest.dataRequest?.respond(with: data![loadingRequest.dataRequest!.requestedOffset...])
+        } else {
+            if (loadingRequest.contentInformationRequest != nil) {
+                loadingRequest.dataRequest!.respond(with: Data(data![Data.Index(loadingRequest.dataRequest!.requestedOffset)..<loadingRequest.dataRequest!.requestedLength]))
+            } else {
+                loadingRequest.dataRequest?.respond(with: Data( data![loadingRequest.dataRequest!.requestedOffset..<loadingRequest.dataRequest!.requestedOffset+Int64(loadingRequest.dataRequest!.requestedLength)]))
+            }
+        }
+        loadingRequest.finishLoading()
+        return true
+    }
+    
+    private func decryptData(_ data: Data) throws -> Data {
+        let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+        if !defaults.bool(forKey: "CYTE_ENCRYPTION") {
+            return data
+        }
+        
+        let keychain = KeychainSwift()
+        let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+        let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
+        
+        let decryptor = RNCryptor.DecryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey)
+        
+        do {
+            let plaintext: Data = try decryptor.decrypt(data: data)
+            return plaintext
+        } catch {
+            log.error(error)
+        }
+        return data
+    }
+    
+}

@@ -11,10 +11,11 @@ import OSLog
 import Combine
 import SQLite
 import NaturalLanguage
-import CoreData
 #if !os(macOS)
 import SwiftDiff
 #endif
+import RNCryptor
+import KeychainSwift
 
 /// A structure that contains the video data to render.
 struct CapturedFrame {
@@ -43,9 +44,13 @@ class Memory {
     private var assetWriterAdaptor : AVAssetWriterInputPixelBufferAdaptor? = nil
     private var frameCount = 0
     private var currentStart: Date = Date()
-    private var episode: Episode?
-    private var intervalDb: Connection?
-    private var intervalTable: VirtualTable = VirtualTable("Interval")
+    private var episode: CyteEpisode?
+    internal var intervalDb: Connection?
+    internal var intervalTable: VirtualTable = VirtualTable("Interval")
+    internal let episodeTable = Table("Episode")
+    internal let documentTable = Table("Document")
+    internal let domainExclusionTable = Table("DomainExclusion")
+    internal let bundleExclusionTable = Table("BundleExclusion")
     
     /// Context change tracking/indexing
     private var lastObservation: String = ""
@@ -64,7 +69,7 @@ class Memory {
     private var skipNextNFrames: Int = 0
     // List of migrations:
     // 0 -> 1 = FST4 to FST5
-    private static let DB_VERSION: UserVersion = 1
+    private static let DB_VERSION: UserVersion = 2
     private let embedding: NLEmbedding? = NLEmbedding.wordEmbedding(for: NLLanguage.english)
     private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     
@@ -73,11 +78,18 @@ class Memory {
     /// Set up the aux database for FTS and embeddings
     ///
     init() {
-        let unclosedFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-        unclosedFetch.predicate = NSPredicate(format: "start == end")
         do {
-            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+            var url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                url = url.appendingPathExtension("enc")
+            }
             intervalDb = try Connection(url.path(percentEncoded: false))
+            if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                let keychain = KeychainSwift()
+                let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+                try! intervalDb!.key(encryptionKey.base64EncodedString())
+            }
 
             do {
                 let config = FTS4Config()
@@ -90,72 +102,59 @@ class Memory {
 
                 try intervalDb!.run(intervalTable.create(.FTS4(config), ifNotExists: true))
             }
-            
-            let fetched = try PersistenceController.shared.container.viewContext.fetch(unclosedFetch)
-            for unclosed in fetched {
-                delete(delete_episode: unclosed)
-            }
-            
-            // Run migrations
-            migrate()
         } catch {
             
         }
     }
     
-    func migrate() {
-        if intervalDb!.userVersion == 0 {
-            log.info("Migrating 0 -> 1")
-            var intervals: [CyteInterval] = []
-            do {
-                // Moving from fts4 to fts5
-                // Read intervals into mem, drop the table.
-                let stmt = try intervalDb!.prepare("SELECT * FROM Interval")
-                while let interval = try stmt.failableNext() {
-                    let epStart: Date = Date(timeIntervalSinceReferenceDate: interval[2] as! Double)
-                    
-                    let epFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-                    epFetch.predicate = NSPredicate(format: "start == %@", epStart as CVarArg)
-                    var ep: Episode? = nil
-                    do {
-                        let fetched = try PersistenceController.shared.container.viewContext.fetch(epFetch)
-                        if fetched.count > 0 {
-                            ep = fetched.first!
-                        }
-                        
-                    } catch { }
-                    
-                    if ep != nil {
-                        let inter = CyteInterval(from: Date(timeIntervalSinceReferenceDate:interval[0] as! Double), to: Date(timeIntervalSinceReferenceDate:interval[1] as! Double), episode: ep!, document: interval[3] as! String)
-                        intervals.append(inter)
-                    }
-                }
-                
-                try intervalDb!.run(intervalTable.drop())
-                // Create with new FTS config
-                do {
-                    let config = FTS5Config()
-                        .column(IntervalExpression.from, [.unindexed])
-                        .column(IntervalExpression.to, [.unindexed])
-                        .column(IntervalExpression.episodeStart, [.unindexed])
-                        .column(IntervalExpression.document)
-                        .tokenizer(Tokenizer.Porter) // @todo remove this for non-english languages
-                    
-                    try intervalDb!.run(intervalTable.create(.FTS5(config), ifNotExists: true))
-                }
-                // Insert old data
-                for interval in intervals {
-                    log.info("Migrate \(interval.from.formatted())")
-                    insert(interval: interval)
-                }
-                
-                intervalDb!.userVersion = 1
-                log.info("Migration 0 -> 1 Complete")
-            } catch {
-                log.error("Migration 0 -> 1 Failed")
+    func encryption(enabled: Bool) {
+        let keychain = KeychainSwift()
+        if enabled {
+            let encryptionKey = RNCryptor.randomData(ofLength: RNCryptor.FormatV3.keySize)
+            let hmacKey = RNCryptor.randomData(ofLength: RNCryptor.FormatV3.keySize)
+            
+            keychain.set(encryptionKey, forKey: "CYTE_ENCRYPTION_KEY")
+            keychain.set(hmacKey, forKey: "CYTE_ENCRYPTION_HMAC_KEY")
+            
+            let episodes = try! CyteEpisode.list()
+            for episode in episodes {
+                let location = urlForEpisode(start: episode.start, title: episode.title)
+                let message = try! Data(contentsOf: location)
+                let ciphertext: Data = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey).encrypt(data: message)
+                try! ciphertext.write(to: location.appendingPathExtension("enc"))
+                try! FileManager.default.removeItem(at: location)
             }
+            
+            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3.enc")
+            try! intervalDb!.sqlcipher_export(.uri(url.absoluteString), key: encryptionKey.base64EncodedString())
+            intervalDb = try! Connection(url.path(percentEncoded: false))
+            try! intervalDb!.key(encryptionKey.base64EncodedString())
+            intervalDb!.userVersion = Memory.DB_VERSION
+            try! FileManager.default.removeItem(at: url.deletingPathExtension())
+        } else {
+            let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+            let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
+            
+            let episodes = try! CyteEpisode.list()
+            for episode in episodes {
+                let location = urlForEpisode(start: episode.start, title: episode.title)
+                let ciphertext = try! Data(contentsOf: location)
+                let plaintext: Data = try! RNCryptor.DecryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey).decrypt(data: ciphertext)
+                try! plaintext.write(to: location.deletingPathExtension())
+                try! FileManager.default.removeItem(at: location)
+            }
+            
+            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+            try! intervalDb!.sqlcipher_export(.uri(url.absoluteString), key: "")
+            intervalDb = try! Connection(url.path(percentEncoded: false))
+            intervalDb!.userVersion = Memory.DB_VERSION
+            try! FileManager.default.removeItem(at: url.appendingPathExtension("enc"))
+            
+            keychain.delete("CYTE_ENCRYPTION_KEY")
+            keychain.delete("CYTE_ENCRYPTION_HMAC_KEY")
         }
     }
+    
 #if os(macOS)
     ///
     /// Enumerates target directories and filters by last edit time.
@@ -223,17 +222,8 @@ class Memory {
         }
         if currentUrlContext != nil && url != currentUrlContext && episode != nil {
             // create document
-            let doc = Document(context: PersistenceController.shared.container.viewContext)
-            doc.path = currentUrlContext
-            doc.episode = episode
-            doc.start = currentUrlTime
-            doc.end = Date()
-            do {
-                try PersistenceController.shared.container.viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            let doc = CyteDocument(start: currentUrlTime!, end: Date(), episode: episode!, path: currentUrlContext!)
+            let _ = try! doc.insert()
         }
         if currentUrlContext != url {
             // only update the url time when it changes
@@ -324,41 +314,23 @@ class Memory {
         assetWriter!.startWriting() // Doesn't matter this is on the main thread since the UI isn't open when it's called
         assetWriter!.startSession(atSourceTime: CMTime.zero)
         
-        episode = Episode(context: PersistenceController.shared.container.viewContext)
-        episode!.start = currentStart
-        episode!.bundle = currentContext
-        episode!.title = full_title
-        episode!.end = currentStart
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-        }
+        episode = CyteEpisode(id: 0, start: currentStart, end: currentStart, title: full_title, bundle: currentContext, save: false)
+        let _ = try! episode!.insert()
     }
 #if os(macOS)
     ///
     /// Saves all files edited within the episodes interval (as per last edit time)
     /// to the index for querying
     ///
-    func trackFileChanges(ep: Episode) {
+    func trackFileChanges(ep: CyteEpisode) {
         // There is currently no UI setting for this, must be set in plist
         if defaults.bool(forKey: "CYTE_TRACK_FILES") {
             // Make this follow a user preference, since it chews cpu
-            let files = Memory.getRecentFiles(earliest: ep.start!, latest: ep.end!)
+            let files = Memory.getRecentFiles(earliest: ep.start, latest: ep.end)
             for fileAndModified: (URL, Date) in files! {
-                let doc = Document(context: PersistenceController.shared.container.viewContext)
-                doc.path = fileAndModified.0
-                doc.episode = ep
-                doc.start = ep.start
-                doc.end = fileAndModified.1
-                do {
-                    try PersistenceController.shared.container.viewContext.save()
-                } catch {
-                    let nsError = error as NSError
-                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                }
-                Agent.shared.index(path: doc.path!)
+                let doc = CyteDocument(start: ep.start, end: fileAndModified.1, episode: ep, path: fileAndModified.0)
+                let _ = try! doc.insert()
+                Agent.shared.index(path: doc.path)
             }
         }
     }
@@ -394,6 +366,20 @@ class Memory {
             let frame_count = self.frameCount
             assetWriter!.finishWriting {
                 log.info("Finished writing episode")
+                let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+                if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                    // Encrypt the file and remove
+                    // @todo use writer delegate to encrypt in memory
+                    // https://developer.apple.com/documentation/avfoundation/avassetwriter/3546585-delegate
+                    let url = urlForEpisode(start: ep.start, title: ep.title)
+                    let keychain = KeychainSwift()
+                    let encryptionKey = keychain.getData("CYTE_ENCRYPTION_KEY")!
+                    let hmacKey = keychain.getData("CYTE_ENCRYPTION_HMAC_KEY")!
+                    let message = try! Data(contentsOf: url)
+                    let ciphertext: Data = RNCryptor.EncryptorV3(encryptionKey: encryptionKey, hmacKey: hmacKey).encrypt(data: message)
+                    try! FileManager.default.removeItem(at: url)
+                    try! ciphertext.write(to: url)
+                }
 #if os(macOS)
                 if (frame_count * Memory.secondsBetweenFrames) > 30 {
                     log.info("Tracking file changes...")
@@ -403,12 +389,7 @@ class Memory {
 #endif
             }
             
-            do {
-                try PersistenceController.shared.container.viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            try! self.episode!.update()
         }
         self.runRetention()
         self.reset()
@@ -428,10 +409,8 @@ class Memory {
         }
         let cutoff = Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .day, value: -(retention), to: Date())!
         log.info("Culling memories older than \(cutoff.formatted())")
-        let episodeFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-        episodeFetch.predicate = NSPredicate(format: "start < %@", cutoff as CVarArg)
         do {
-            let episodes = try PersistenceController.shared.container.viewContext.fetch(episodeFetch)
+            let episodes = try CyteEpisode.list(predicate: "start < \(cutoff.timeIntervalSinceReferenceDate)")
             for episode in episodes {
                 delete(delete_episode: episode)
             }
@@ -472,10 +451,8 @@ class Memory {
         var _episode = episode
         if _episode == nil {
             log.info("Found nil episode, recall from DB for straggling observation")
-            let episodeFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-            episodeFetch.sortDescriptors = [NSSortDescriptor(key:"start", ascending: false)]
-            episodeFetch.fetchLimit = 1
-            let episodes = try! PersistenceController.shared.container.viewContext.fetch(episodeFetch)
+            
+            let episodes = try! CyteEpisode.list(predicate: nil, limit: 1)
             _episode = episodes.first
             if( _episode == nil ) {
                 // most likely the episode was cleaned up for being too short
@@ -515,43 +492,25 @@ class Memory {
             from: at,
             to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,
             episode: _episode!, document: added)
-        insert(interval: newItem)
+        let _ = try! newItem.insert()
         lastObservation = what
     }
 
     ///
     /// Deletes the provided episode including the underlying video file, and indexed interval data
     ///
-    func delete(delete_episode: Episode) {
+    func delete(delete_episode: CyteEpisode) {
         if delete_episode.save {
             log.info("Saved episode from deletion")
             return
         }
-        let docFetch : NSFetchRequest<Document> = Document.fetchRequest()
-        docFetch.predicate = NSPredicate(format: "episode == %@", delete_episode)
-        if let result = try? PersistenceController.shared.container.viewContext.fetch(docFetch) {
-            for object in result {
-                PersistenceController.shared.container.viewContext.delete(object)
-            }
-        }
-        let intervals = intervalTable.filter(IntervalExpression.episodeStart == delete_episode.start!.timeIntervalSinceReferenceDate)
         do {
             let url = urlForEpisode(start: delete_episode.start, title: delete_episode.title)
             try FileManager.default.removeItem(at: url)
         } catch {
             log.error(error)
         }
-        do {
-            try intervalDb!.run(intervals.delete())
-        } catch {
-            log.error(error)
-        }
-        PersistenceController.shared.container.viewContext.delete(delete_episode)
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            log.error(error)
-        }
+        try! delete_episode.delete()
     }
     
     ///
@@ -621,12 +580,9 @@ class Memory {
         
             while let interval = try stmt.failableNext() {
                 let epStart: Date = Date(timeIntervalSinceReferenceDate: interval[2] as! Double)
-                
-                let epFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
-                epFetch.predicate = NSPredicate(format: "start == %@", epStart as CVarArg)
-                var ep: Episode? = nil
+                var ep: CyteEpisode? = nil
                 do {
-                    let fetched = try PersistenceController.shared.container.viewContext.fetch(epFetch)
+                    let fetched = try CyteEpisode.list(predicate: "start == \(epStart.timeIntervalSinceReferenceDate)", limit: 1)
                     if fetched.count > 0 {
                         ep = fetched.first!
                     }
@@ -648,40 +604,26 @@ class Memory {
         return result
     }
     
-    func insert(interval: CyteInterval) {
-        do {
-            let _ = try intervalDb!.run(intervalTable.insert(IntervalExpression.from <- interval.from.timeIntervalSinceReferenceDate,
-                                                                 IntervalExpression.to <- interval.to.timeIntervalSinceReferenceDate,
-                                                                 IntervalExpression.episodeStart <- interval.episode.start!.timeIntervalSinceReferenceDate,
-                                                                 IntervalExpression.document <- interval.document
-                                                                ))
-        } catch {
-            fatalError("insertion failed: \(error)")
-        }
-    }
-    
     ///
     /// Returns the BundleExclusion associated with the given bundle name
     /// If unknown, it is created with default values
     ///
-    func getOrCreateBundleExclusion(name: String, excluded: Bool = false) -> BundleExclusion {
-        let bundleFetch : NSFetchRequest<BundleExclusion> = BundleExclusion.fetchRequest()
-        bundleFetch.predicate = NSPredicate(format: "bundle == %@", name)
+    func getOrCreateBundleExclusion(name: String, excluded: Bool = false) -> CyteBundleExclusion {
         do {
-            let fetched = try PersistenceController.shared.container.viewContext.fetch(bundleFetch)
-            if fetched.count > 0 {
-                return fetched.first!
+            let bundles = try CyteBundleExclusion.list(predicate: "bundle == \"\(name)\"")
+            if bundles.count > 0 {
+                return bundles.first!
             }
         } catch {
             //failed, fallback to create
         }
-        let bundle = BundleExclusion(context: PersistenceController.shared.container.viewContext)
-        bundle.bundle = name
-        bundle.excluded = excluded
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-        }
+        let bundle = CyteBundleExclusion(bundle: name, excluded: excluded)
+        let _ = try! bundle.insert(db: intervalDb!, table: bundleExclusionTable)
         return bundle
+    }
+    
+    func runQuery(query: String) throws -> Statement {
+        let stmt = try intervalDb!.prepare(query)
+        return stmt
     }
 }

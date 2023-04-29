@@ -14,7 +14,7 @@ import Photos
 /// Scale based on requested length, optionally apply watermark, and trigger export
 /// The exporter is returned to the caller so it can track progress and cancel if needed
 ///
-func makeTimelapse(episodes: [Episode], timelapse_len_seconds: Int = 60, reveal: Bool = true) async -> AVAssetExportSession {
+func makeTimelapse(episodes: [CyteEpisode], timelapse_len_seconds: Int = 60, reveal: Bool = true) async -> AVAssetExportSession {
     let movie = AVMutableComposition()
     let videoTrack = movie.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)
 //    let audioTrack = movie.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
@@ -23,7 +23,7 @@ func makeTimelapse(episodes: [Episode], timelapse_len_seconds: Int = 60, reveal:
     var sum_seconds: Double = 0.0
     for episode in episodes {
         let url = urlForEpisode(start: episode.start, title: episode.title)
-        export_title += episode.title ?? ""
+        export_title += episode.title
         
         let asset = AVURLAsset(url: url)
         do {

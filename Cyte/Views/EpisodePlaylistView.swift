@@ -11,7 +11,6 @@ import Charts
 import AVKit
 import Combine
 import Vision
-import CoreData
 #if os(macOS)
     import AppKit
 #else
@@ -25,6 +24,7 @@ struct EpisodePlaylistView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State var player: AVPlayer?
+    @State var url: URL
     @State private var thumbnailImages: [CGImage?] = []
 #if os(macOS)
     @State static var windowLengthInSeconds: Int = 60 * 2
@@ -43,11 +43,14 @@ struct EpisodePlaylistView: View {
     
     private let timelineSize: CGFloat = 16
     
-    @State var documents: [Document] = []
+    @State var documents: [CyteDocument] = []
     @State var clearMode: Bool = false
     @State var magScale: CGFloat = 1
     @State var progressingScale: CGFloat = 1
     @State var magnifyFrom: CGPoint?
+    private let assetDelegate = DecryptedAVAssetLoaderDelegate()
+    @State var asset: AVURLAsset?
+    private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     
     var magnification: some Gesture {
         MagnificationGesture()
@@ -68,18 +71,16 @@ struct EpisodePlaylistView: View {
         documents = []
         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
         if active_interval.0 == nil { return }
-        let docFetch : NSFetchRequest<Document> = Document.fetchRequest()
         let offset = active_interval.1 - secondsOffsetFromLastEpisode
-        let pin = active_interval.0!.episode.start!.addingTimeInterval(offset)
-        docFetch.predicate = NSPredicate(format: "start <= %@ AND end >= %@", pin as CVarArg, pin as CVarArg)
+        let pin = active_interval.0!.episode.start.addingTimeInterval(offset)
         do {
-            let docs = try PersistenceController.shared.container.viewContext.fetch(docFetch)
+            let docs = try CyteDocument.list(predicate: "start <= \(pin.timeIntervalSinceReferenceDate) AND end >= \(pin.timeIntervalSinceReferenceDate)")
             var paths = Set<URL>()
             // @todo sort and pick closest doc by [(pin-end) < 0][0]
             for doc in docs {
-                if !paths.contains(doc.path!) {
+                if !paths.contains(doc.path) {
                     documents.append(doc)
-                    paths.insert(doc.path!)
+                    paths.insert(doc.path)
                 }
             }
         } catch {
@@ -88,7 +89,7 @@ struct EpisodePlaylistView: View {
     }
     
     func generateThumbnails(numThumbs: Int = 1) async {
-        if episodeModel.appIntervals.count == 0 { return }
+        if episodeModel.appIntervals.count == 0 || defaults.bool(forKey: "CYTE_ENCRYPTION") { return }
         highlight.removeAll()
         let start: Double = secondsOffsetFromLastEpisode
         let end: Double = secondsOffsetFromLastEpisode + Double(EpisodePlaylistView.windowLengthInSeconds)
@@ -98,13 +99,11 @@ struct EpisodePlaylistView: View {
         for time in times {
             // get the AppInterval at this time, load the asset and find offset
             let active_interval = episodeModel.activeInterval(at: time)
-            if active_interval.0 == nil || active_interval.0!.episode.title!.count == 0 {
+            if active_interval.0 == nil || active_interval.0!.episode.title.count == 0 {
                 // placeholder thumb
                 thumbnailImages.append(nil)
             } else {
-                let asset = AVAsset(url: urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title))
-                
-                let generator = AVAssetImageGenerator(asset: asset)
+                let generator = AVAssetImageGenerator(asset: asset!)
                 generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
                 generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 1);
                 do {
@@ -184,14 +183,22 @@ struct EpisodePlaylistView: View {
             } catch { }
         }
         
-        if active_interval.0 == nil || active_interval.0!.episode.title!.count == 0 || player == nil {
+        if active_interval.0 == nil || active_interval.0!.episode.title.count == 0 || player == nil {
             return
         }
         // reset the AVPlayer to the new asset
         let current_url = urlOfCurrentlyPlayingInPlayer(player: player!)
         let new_url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title)
         if current_url != new_url {
-            player?.replaceCurrentItem(with: AVPlayerItem(url: new_url))
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                asset = AVURLAsset(url: URL(string:"decrypt://")!)
+                assetDelegate.update(encryptedURL: new_url)
+                asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+                player = AVPlayer(playerItem: AVPlayerItem(asset: asset!))
+            } else {
+                player?.replaceCurrentItem(with: AVPlayerItem(url: new_url))
+            }
         }
         // seek to correct offset
         let progress = (active_interval.1) - secondsOffsetFromLastEpisode
@@ -221,7 +228,7 @@ struct EpisodePlaylistView: View {
         if active_interval.0 == nil || player == nil {
             return Date().formatted()
         }
-        return Date(timeIntervalSinceReferenceDate: active_interval.0!.episode.start!.timeIntervalSinceReferenceDate + player!.currentTime().seconds).formatted()
+        return Date(timeIntervalSinceReferenceDate: active_interval.0!.episode.start.timeIntervalSinceReferenceDate + player!.currentTime().seconds).formatted()
     }
     
     ///
@@ -235,7 +242,7 @@ struct EpisodePlaylistView: View {
         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
         
         let progress = active_interval.1 - secondsOffsetFromLastEpisode
-        let anchor = Date().timeIntervalSinceReferenceDate - ((active_interval.0 ?? episodeModel.appIntervals.last)!.episode.end!.timeIntervalSinceReferenceDate)
+        let anchor = Date().timeIntervalSinceReferenceDate - ((active_interval.0 ?? episodeModel.appIntervals.last)!.episode.end.timeIntervalSinceReferenceDate)
         let seconds = max(1, anchor - progress)
         return "\(secondsToReadable(seconds: seconds)) ago"
     }
@@ -265,7 +272,7 @@ struct EpisodePlaylistView: View {
                     y: .value("?", 0),
                     height: MarkDimension(floatLiteral: timelineSize * 2)
                 )
-                .foregroundStyle(bundleCache.getColor(bundleID: interval.episode.bundle!) ?? Color.gray)
+                .foregroundStyle(bundleCache.getColor(bundleID: interval.episode.bundle) ?? Color.gray)
                 .cornerRadius(40.0)
             }
         }
@@ -340,7 +347,7 @@ struct EpisodePlaylistView: View {
                 .contextMenu {
                     Button {
                         let active_interval = episodeModel.activeInterval(at: secondsOffsetFromLastEpisode)
-                        let url = urlForEpisode(start: active_interval.0?.episode.start!, title: active_interval.0?.episode.title!).deletingLastPathComponent()
+                        let url = urlForEpisode(start: active_interval.0!.episode.start, title: active_interval.0!.episode.title).deletingLastPathComponent()
                         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url.path(percentEncoded: false))
                     } label: {
                         Label("Reveal in Finder", systemImage: "questionmark.folder")
@@ -364,7 +371,7 @@ struct EpisodePlaylistView: View {
                                 return startTimeForEpisode(interval: interval) <= Double(EpisodePlaylistView.windowLengthInSeconds) &&
                                 endTimeForEpisode(interval: interval) >= 0
                             }) { interval in
-                                PortableImage(uiImage: bundleCache.getIcon(bundleID: interval.episode.bundle!))
+                                PortableImage(uiImage: bundleCache.getIcon(bundleID: interval.episode.bundle))
                                     .frame(width: timelineSize * 2, height: timelineSize * 2)
                                     .id(interval.episode.start)
                                     .offset(CGSize(width: (windowOffsetToCenter(of:interval) * metrics.size.width) - timelineSize, height: 0))
@@ -429,7 +436,7 @@ struct EpisodePlaylistView: View {
                 if documents.count > 0 {
                     ToolbarItem {
                         Button(action: {
-                            openFile(path: documents.first!.path!)
+                            openFile(path: documents.first!.path)
                         }) {
                             Image(systemName: "arrow.up.forward")
                         }
@@ -445,6 +452,14 @@ struct EpisodePlaylistView: View {
                 }
 #endif
             }
+        }
+        .onAppear {
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : self.url)
+            assetDelegate.update(encryptedURL: self.url)
+            asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+            let playerItem = AVPlayerItem(asset: asset!)
+            player = AVPlayer(playerItem: playerItem)
         }
         .id(episodeModel.dataID)
     }

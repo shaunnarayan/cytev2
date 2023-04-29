@@ -53,34 +53,6 @@ struct CyteAppContext {
 }
 
 ///
-/// CoreData style wrapper for Intervals so it is observable in the UI
-///
-class CyteInterval: ObservableObject, Identifiable, Equatable, Hashable {
-    static func == (lhs: CyteInterval, rhs: CyteInterval) -> Bool {
-        return (lhs.from == rhs.from) && (lhs.to == rhs.to)
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-    @Published var from: Date
-    @Published var to: Date
-    @Published var episode: Episode
-    @Published var document: String
-    @Published var snippet: String?
-    
-    init(from: Date, to: Date, episode: Episode, document: String, snippet: String? = nil) {
-        self.from = from
-        self.to = to
-        self.episode = episode
-        self.document = document
-        self.snippet = snippet
-    }
-    
-    var id: String { "\(self.from.timeIntervalSinceReferenceDate)" }
-}
-
-///
 /// All stored data will be rooted to this location. It defaults to application support for the bundle,
 /// and defers to a user preference if set
 ///
@@ -111,19 +83,13 @@ func urlForEpisode(start: Date?, title: String?) -> URL {
     url = url.appendingPathComponent("\(components.month ?? 0)")
     url = url.appendingPathComponent("\(components.day ?? 0)")
     url = url.appendingPathComponent("\(title!).mov")
+    
+    let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+    if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+        url = url.appendingPathExtension("enc")
+    }
+    
     return url
-}
-
-///
-/// Helper struct for accessing Interval fields from result sets
-///
-struct IntervalExpression {
-    public static let id = Expression<Int64>("id")
-    public static let from = Expression<Double>("from")
-    public static let to = Expression<Double>("to")
-    public static let episodeStart = Expression<Double>("episode_start")
-    public static let document = Expression<String>("document")
-    public static let snippet = Expression<String>(literal: "snippet(Interval, -1, '', '', '', 5)")
 }
 
 struct PersistenceController {

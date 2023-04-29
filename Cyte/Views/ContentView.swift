@@ -9,7 +9,6 @@
 //
 
 import SwiftUI
-import CoreData
 import Foundation
 import AVKit
 
@@ -42,11 +41,10 @@ struct ContentView: View {
         GridItem(.fixed(360), spacing: 50)
     ]
 
-    func offsetForEpisode(episode: Episode) -> Double {
+    func offsetForEpisode(episode: CyteEpisode) -> Double {
         var offset_sum = 0.0
         let _: AppInterval? = episodeModel.appIntervals.first { interval in
-            if interval.episode.start == nil || interval.episode.end == nil { return false }
-            offset_sum = offset_sum + (interval.episode.end!.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate)
+            offset_sum = offset_sum + (interval.episode.end.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate)
             return episode.start == interval.episode.start
         }
         return offset_sum
@@ -59,9 +57,9 @@ struct ContentView: View {
                     LazyVGrid(columns: (metrics.size.width > 1500 && utsname.isAppleSilicon) ? feedColumnLayoutLarge : (metrics.size.width > 1200 ? feedColumnLayout : feedColumnLayoutSmall), spacing: 20) {
                         if episodeModel.intervals.count == 0 {
                             ForEach(episodeModel.episodes.filter { ep in
-                                return (ep.title ?? "").count > 0 && (ep.start != ep.end)
+                                return ep.title.count > 0 && (ep.start != ep.end)
                             }) { episode in
-                                EpisodeView(player: AVPlayer(url: urlForEpisode(start: episode.start, title: episode.title)), episode: episode, filter: episodeModel.filter, selected: false)
+                                EpisodeView(url: urlForEpisode(start: episode.start, title: episode.title), episode: episode, filter: episodeModel.filter, selected: false)
 #if os(macOS)
                                     .frame(height: 285)
 #endif
@@ -85,9 +83,9 @@ struct ContentView: View {
                         }
                         else {
                             ForEach(episodeModel.intervals.filter { (interval: CyteInterval) in
-                                return (interval.episode.title ?? "").count > 0
+                                return interval.episode.title.count > 0
                             }) { (interval : CyteInterval) in
-                                StaticEpisodeView(asset: AVAsset(url: urlForEpisode(start: interval.episode.start, title: interval.episode.title)), episode: interval.episode, result: interval, filter: interval.snippet ?? episodeModel.filter, selected: false)
+                                StaticEpisodeView(url: urlForEpisode(start: interval.episode.start, title: interval.episode.title), episode: interval.episode, result: interval, filter: interval.snippet ?? episodeModel.filter, selected: false)
                                     .id(interval.from)
                             }
                         }
@@ -122,16 +120,16 @@ struct ContentView: View {
             VStack {
                 home
             }
-            .navigationDestination(for: Episode.self) { episode in
-                EpisodePlaylistView(player: AVPlayer(url:  urlForEpisode(start: episode.start, title: episode.title)), secondsOffsetFromLastEpisode: offsetForEpisode(episode: episode), filter: episodeModel.filter
+            .navigationDestination(for: CyteEpisode.self) { episode in
+                EpisodePlaylistView(url: urlForEpisode(start: episode.start, title: episode.title), secondsOffsetFromLastEpisode: offsetForEpisode(episode: episode), filter: episodeModel.filter
                 )
             }
             .navigationDestination(for: CyteInterval.self) { interval in
-                EpisodePlaylistView(player: AVPlayer(url:  urlForEpisode(start: interval.episode.start, title: interval.episode.title)), secondsOffsetFromLastEpisode: offsetForEpisode(episode: interval.episode) - (interval.from.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate), filter: episodeModel.filter
+                EpisodePlaylistView(url: urlForEpisode(start: interval.episode.start, title: interval.episode.title), secondsOffsetFromLastEpisode: offsetForEpisode(episode: interval.episode) - (interval.from.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate), filter: episodeModel.filter
                 )
             }
             .navigationDestination(for: Int.self) { path in
-                Settings()
+                Settings(bundles: try! CyteBundleExclusion.list())
             }
         }
         

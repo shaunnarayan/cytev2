@@ -17,8 +17,9 @@ struct StaticEpisodeView: View {
     @EnvironmentObject var bundleCache: BundleCache
     @EnvironmentObject var episodeModel: EpisodeModel
     
-    @State var asset: AVAsset
-    @ObservedObject var episode: Episode
+    @State var asset: AVURLAsset?
+    @State var url: URL
+    @ObservedObject var episode: CyteEpisode
     
     @State var selection: Int = 0
     @ObservedObject var result: CyteInterval
@@ -30,11 +31,18 @@ struct StaticEpisodeView: View {
     @State private var isHoveringExpand: Bool = false
     @State private var isHoveringNext: Bool = false
     @State var selected: Bool
+    @State var player: AVPlayer?
     
     @State private var genTask: Task<(), Never>?
+    private let assetDelegate = DecryptedAVAssetLoaderDelegate()
+    private let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
     
     func generateThumbnail(offset: Double) async {
-        let generator = AVAssetImageGenerator(asset: asset)
+        if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+            await player?.seek(to: CMTime(seconds: offset, preferredTimescale: 1))
+            return
+        }
+        let generator = AVAssetImageGenerator(asset: asset!)
         generator.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 1);
         generator.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 1);
         do {
@@ -79,8 +87,8 @@ struct StaticEpisodeView: View {
     func offsetForEpisode(episode: Episode) -> Double {
         var offset_sum = 0.0
         let active_interval: AppInterval? = episodeModel.appIntervals.first { interval in
-            offset_sum = offset_sum + (interval.episode.end!.timeIntervalSinceReferenceDate - interval.episode.start!.timeIntervalSinceReferenceDate)
-            return episode.start == interval.episode.start!
+            offset_sum = offset_sum + (interval.episode.end.timeIntervalSinceReferenceDate - interval.episode.start.timeIntervalSinceReferenceDate)
+            return episode.start == interval.episode.start
         }
         return offset_sum + (active_interval?.length ?? 0.0)
     }
@@ -88,16 +96,26 @@ struct StaticEpisodeView: View {
     var playerView: some View {
         VStack {
             ZStack {
-                if thumbnail != nil {
-                    Image(thumbnail!, scale: 1.0, label: Text(""))
-                        .resizable()
-#if os(macOS)
-                        .frame(width: 360, height: 203)
-#else
-                        .frame(width: 360, height: 720)
+                if defaults.bool(forKey: "CYTE_ENCRYPTION") {
+                    VideoPlayer(player: player)
+                        .padding(0)
+#if !os(macOS)
+                        .aspectRatio(19.5/9.0, contentMode: .fill)
+                        .frame(height: 600)
 #endif
                 } else {
-                    Spacer().frame(width: 360, height: 203)
+                    if thumbnail != nil {
+                        Image(thumbnail!, scale: 1.0, label: Text(""))
+                            .resizable()
+#if os(macOS)
+                            .frame(width: 360, height: 203)
+#else
+                            .frame(width: 360, height: 720)
+#endif
+                    }
+                    else {
+                        Spacer().frame(width: 360, height: 203)
+                    }
                 }
                 
                 GeometryReader { metrics in
@@ -128,17 +146,17 @@ struct StaticEpisodeView: View {
             HStack {
                 VStack {
 #if os(macOS)
-                    Text((episode.title ?? "")!.split(separator: " ").dropLast(6).joined(separator: " "))
+                    Text(episode.title.split(separator: " ").dropLast(6).joined(separator: " "))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
 #else
-                    Text(bundleCache.getName(bundleID: episode.bundle ?? ""))
+                    Text(bundleCache.getName(bundleID: episode.bundle))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fontWeight(selected ? .bold : .regular)
                         .lineLimit(1)
 #endif
-                    Text((result.from ).formatted(date: .abbreviated, time: .standard) )
+                    Text(result.from.formatted(date: .abbreviated, time: .standard) )
                         .font(SwiftUI.Font.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(0.8)
@@ -209,7 +227,7 @@ struct StaticEpisodeView: View {
                             }
                         })
 #endif
-                    PortableImage(uiImage: bundleCache.getIcon(bundleID: (episode.bundle ?? Bundle.main.bundleIdentifier)!))
+                    PortableImage(uiImage: bundleCache.getIcon(bundleID: episode.bundle))
                         .frame(width: 32, height: 32)
                         .id(bundleCache.id)
                 }
@@ -220,9 +238,14 @@ struct StaticEpisodeView: View {
         .frame(height: 260)
 #endif
         .onAppear {
+            let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+            asset = AVURLAsset(url: defaults.bool(forKey: "CYTE_ENCRYPTION") ? URL(string:"decrypt://")! : self.url)
+            assetDelegate.update(encryptedURL: self.url)
+            asset!.resourceLoader.setDelegate(assetDelegate, queue: DispatchQueue.main)
+            player = AVPlayer(playerItem: AVPlayerItem(asset: asset!))
             if genTask == nil {
                 genTask = Task {
-                    await generateThumbnail(offset: ((result.from.timeIntervalSinceReferenceDate) - (episode.start ?? Date()).timeIntervalSinceReferenceDate))
+                    await generateThumbnail(offset: ((result.from.timeIntervalSinceReferenceDate) - episode.start.timeIntervalSinceReferenceDate))
                 }
             }
         }

@@ -24,9 +24,14 @@ A lot of research involves collating information from multiple sources; internal
 > - Set applications that are not to be recorded (while taking keystrokes)
 > - Chat your data; ask questions about work you've done
 
-## Development
+## Contributing
 
-Happy to accept PRs related to any of the following
+* Generally, try to follow the surrounding style, but it's fine if you don't, linters can fix that stuff
+* Fork this repository, make any changes, and when you're happy, submit a PR and we can review it together
+* I prefer to keep documentation in the code (that's the most likely place it won't go too stale IMO). If something needs more documentation to be easily understandable, raise an issue and I'll revise it. I'll also write some technical deep dives on architectural stuff post 1.0
+* Everything in the pipeline is tracked in the Issues tab. Unless assigned to someone, feel free to pick any issue up. Just drop a note in the Issue so no one else takes a run at the same time
+* If you have a feature suggestion, please submit it in the issues tab for discussion. Let's make the app better for everyone
+* mainline is latest - if you want a 'stable' (as stable as pre-release can be) branch use a tag
 
 ### Issues
 
@@ -53,3 +58,5 @@ Thanks to these great open source projects:
 - [XCGLogger](https://github.com/DaveWoodCom/XCGLogger): Used to save debug logs to disk
 - [llama.cpp](https://github.com/ggerganov/llama.cpp): Used to load and run LLMs for chat when a local model is provided
 - [MacPaw OpenAI](https://github.com/MacPaw/OpenAI): Used to run LLMs for chat when OpenAI API enabled
+- [RNCryptor](https://github.com/RNCryptor/RNCryptor): Used to encrypt video files on disk
+- [sqlcipher](https://www.zetetic.net/sqlcipher/): Used to encrypt database on disk
