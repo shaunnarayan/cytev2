@@ -50,7 +50,8 @@ A lot of research involves collating information from multiple sources; internal
 
 Thanks to these great open source projects:
 
-- [SwiftDiff](https://github.com/turbolent/SwiftDiff): Used to differentiate unchanged and changed text from OCR
+- [DiffMatchPatch](https://github.com/google/diff-match-patch): Used to differentiate unchanged and changed text from OCR (macOS)
+- [SwiftDiff](https://github.com/turbolent/SwiftDiff): Used to differentiate unchanged and changed text from OCR (iOS)
 - [AXSwift](https://github.com/tmandry/AXSwift): Used for browser context awareness
 - [KeychainSwift](https://github.com/evgenyneu/keychain-swift): Used to securely store API keys in the Apple Keychain Manager
 - [SQLite.swift](https://github.com/stephencelis/SQLite.swift): Used for the text search functionality

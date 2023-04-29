@@ -282,59 +282,6 @@ struct Settings: View {
                         .lineLimit(10)
                         .font(.caption)
                         .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
-                    
-                    HStack {
-                        let binding = Binding<Bool>(get: {
-                            return encrypting
-                        }, set: {
-                            Memory.shared.encryption(enabled: $0)
-                            defaults.set($0, forKey: "CYTE_ENCRYPTION")
-                            encrypting = $0
-                            episodeModel.dataID = UUID()
-                        })
-                        Text("Encrypt recording data (Reduces performance, but offers some protection against malware)")
-                            .lineLimit(10)
-                            .font(.title2)
-                            .onAppear {
-                                encrypting = defaults.bool(forKey: "CYTE_ENCRYPTION")
-                            }
-#if os(macOS)
-                            .frame(width: 1000, height: 50, alignment: .leading)
-#endif
-                        Toggle(isOn: binding) {
-                            
-                        }
-                        .toggleStyle(SwitchToggleStyle())
-                        .accessibilityLabel("Checkbox to enable data encryption")
-                    }
-                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
-                    Text("This may take some time to complete - please do not exit Cyte while in progress or you may lose data")
-                        .lineLimit(10)
-                        .font(.caption)
-                        .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
-                    HStack {
-                        let binding = Binding<Bool>(get: {
-                            return lowCpuMode
-                        }, set: {
-                            defaults.set($0, forKey: "CYTE_LOW_CPU")
-                            lowCpuMode = $0
-                        })
-                        Text("Reduced CPU usage (uses more storage space and may impact search quality)")
-                            .lineLimit(10)
-                            .font(.title2)
-                            .onAppear {
-                                lowCpuMode = defaults.bool(forKey: "CYTE_LOW_CPU")
-                            }
-#if os(macOS)
-                            .frame(width: 1000, height: 50, alignment: .leading)
-#endif
-                        Toggle(isOn: binding) {
-                            
-                        }
-                        .toggleStyle(SwitchToggleStyle())
-                        .accessibilityLabel("Checkbox to enable reduced CPU")
-                    }
-                    .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 0.0, trailing: 0.0))
 #endif
                 }
                 VStack(alignment: .leading) {

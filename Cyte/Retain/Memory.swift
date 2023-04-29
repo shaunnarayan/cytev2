@@ -11,7 +11,9 @@ import OSLog
 import Combine
 import SQLite
 import NaturalLanguage
+#if !os(macOS)
 import SwiftDiff
+#endif
 import RNCryptor
 import KeychainSwift
 
@@ -56,6 +58,7 @@ class Memory {
     /// Intel fallbacks - due to lack of hardware acelleration for video encoding and frame analysis, tradeoffs must be made
 #if os(macOS)
     static let secondsBetweenFrames : Int = utsname.isAppleSilicon ? 2 : 4
+    private var differ = DiffMatchPatch()
 #else
     static let secondsBetweenFrames : Int = 2
 #endif
@@ -292,8 +295,7 @@ class Memory {
             abort()
         }
         //generate 1080p settings
-        let preferH264 = defaults.bool(forKey: "CYTE_LOW_CPU")
-        let useHevc = !preferH264 && AVAssetExportSession.allExportPresets().contains(AVAssetExportPresetHEVCHighestQuality)
+        let useHevc = AVAssetExportSession.allExportPresets().contains(AVAssetExportPresetHEVCHighestQuality)
         let preset: AVOutputSettingsPreset = useHevc ? .hevc1920x1080 : .preset1920x1080
         let codec: CMFormatDescription.MediaSubType = useHevc ? .hevc : .h264
         let settingsAssistant = AVOutputSettingsAssistant(preset: preset)!
@@ -458,6 +460,18 @@ class Memory {
                 return
             }
         }
+#if os(macOS)
+        let result: NSMutableArray = differ.diff_main(ofOldString: lastObservation, andNewString: what)!
+        differ.diff_cleanupSemantic(result)
+        var added: String = ""
+        for res in result {
+            let edit: (Int, String) = (Int((res as! Diff).operation.rawValue) - 2,
+                                       ((res as! Diff).text ?? ""))
+            if edit.0 == 0 {
+                added += edit.1
+            }
+        }
+#else
         let result = cleanupSemantic(diffs: diff(text1: lastObservation, text2: what))
         
         var added: String = ""
@@ -473,7 +487,7 @@ class Memory {
                 break
             }
         }
-
+#endif
         let newItem = CyteInterval(
             from: at,
             to: Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .second, value: Memory.secondsBetweenFrames, to: at)!,

@@ -54,7 +54,7 @@ func makeTimelapse(episodes: [CyteEpisode], timelapse_len_seconds: Int = 60, rev
     } catch { log.error("Failed to create export dir") }
     
     let exporter = AVAssetExportSession(asset: movie,
-                                   presetName: AVAssetExportPresetHighestQuality)
+                                   presetName: AVAssetExportPresetHEVC1920x1080)
     //configure exporter
     exporter?.outputURL = outputMovieURL
     exporter?.outputFileType = .mov
