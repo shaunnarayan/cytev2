@@ -24,9 +24,13 @@ A lot of research involves collating information from multiple sources; internal
 > - Set applications that are not to be recorded (while taking keystrokes)
 > - Chat your data; ask questions about work you've done
 
-## Development
+## Development/Contributing
 
-Happy to accept PRs related to any of the following
+* Generally, try to follow the surrounding style, but it's fine if you don't, linters can fix that stuff
+* Fork this repository, make any changes, and when you're happy, submit a PR
+* I prefer to keep documentation in the code (that's the most likely place it won't go too stale IMO)
+* If you have a feature suggestion, please submit it through the website and I'll triage it and add it to the planned features below (which is also a rough roadmap)
+* mainline is latest - if you want a 'stable' (as stable as pre-release can be) branch use a tag
 
 ### Issues
 
@@ -39,7 +43,46 @@ Happy to accept PRs related to any of the following
 - Sync between Cytes
 - Chat this episode
 - Split episodes
-- iPad support
+- Incomplete features from the table below, or ports for Android or Linux
+
+### Feature parity/Roadmap
+
+In general, features further down the table are planned for future releases, in priority order. To bump a feature, put in a request through the website.
+
+| Feature                          | macOS         | iOS           | Windows |
+| -------------------------------- | ------------- | ------------- | ------- |
+| Automatic recording              | ✅             | ❌<sup>1</sup> | ✅       |
+| Full text search                 | ✅             | ✅             | ✅       |
+| Rolling deletion                 | ✅             | ✅             | ✅       |
+| Favorites                        | ✅             | ✅             | ✅       |
+| Display source icons             | ✅             | ✅             | ✅       |
+| Date range filter                | ✅             | ✅             | ✅       |
+| Application filter               | ✅             | ✅             | ✅       |
+| Select save location             | ✅             | ✅             | ✅       |
+| Block selected applications      | ✅             | ✅             | ✅       |
+| OpenAI Chat                      | ✅             | ✅             | ✅       |
+| Batch delete                     | ✅             | ✅             | ✅       |
+| Single delete                    | ✅             | ✅             | ✅       |
+| Highlight search text in preview | ✅             | ✅             | ❌       |
+| Timelapse                        | ✅             | ✅             | ❌       |
+| Semantic search                  | ✅             | ✅             | ❌       |
+| Menu bar shortcuts               | ✅             | ✅             | ❌       |
+| LLaMa Chat                       | ✅             | ✅             | ❌       |
+| Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌       |
+| File tracking                    | ✅<sup>3</sup> | ❌             | ❌       |
+| URL tracking                     | ✅             | ❌             | ❌       |
+| Block selected websites          | ✅             | ❌             | ❌       |
+| Display Recompisition            | ✅             | ❌             | ❌       |
+| Reporting                        | ❌             | ❌             | ❌       |
+| Sync                             | ❌             | ❌             | ❌       |
+| Export                           | ❌             | ❌             | ❌       |
+| Object Recognition               | ❌             | ❌             | ❌       |
+
+<sup>1</sup> There is currently no API on iOS that allows this (except when jailbroken)
+
+<sup>2</sup> When using the encryption branch
+
+<sup>3</sup> When enabled via plist
 
 ## Credits
 
@@ -52,4 +95,7 @@ Thanks to these great open source projects:
 - [SQLite.swift](https://github.com/stephencelis/SQLite.swift): Used for the text search functionality
 - [XCGLogger](https://github.com/DaveWoodCom/XCGLogger): Used to save debug logs to disk
 - [llama.cpp](https://github.com/ggerganov/llama.cpp): Used to load and run LLMs for chat when a local model is provided
-- [MacPaw OpenAI](https://github.com/MacPaw/OpenAI): Used to run LLMs for chat when OpenAI API enabled
+- [MacPaw OpenAI](https://github.com/MacPaw/OpenAI): Used to run LLMs for chat when OpenAI API enabled (macOS/iOS)
+- [SimpleRecorder](https://github.com/robmikh/SimpleRecorder): Used as a seed for the windows version
+- [OpenAI-API-dotnet](https://github.com/OkGoDoIt/OpenAI-API-dotnet): Used to run LLMs for chat when OpenAI API enabled (windows)
+- [Diff.Match.Patch](https://github.com/pocketberserker/Diff.Match.Patch): Used to differentiate unchanged and changed text from OCR (windows)
