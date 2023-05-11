@@ -1,0 +1,160 @@
+﻿<Page
+    x:Class="Cyte.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Cyte"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    Background="{ThemeResource brush}"
+    >
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="cvsEpisodes"/>
+        <CollectionViewSource x:Name="cvsBundles"/>
+    </Page.Resources>
+
+    <Grid Margin="20,0,20,15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="800" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+            <TextBox x:Name="searchTextBox" Foreground="#c0c0c0" HorizontalAlignment="Left" Margin="10,0,0,0" Text="{Binding filter, Mode=TwoWay}" VerticalAlignment="Center" Height="40" Width="600" FontSize="18" PlaceholderText="Search your history" KeyDown="searchTextBox_KeyDown" BorderThickness="0" CornerRadius="5" />
+            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="Search" BorderThickness="0">
+                <Button.Content>
+                    <Image Source="/Assets/paper-plane-tilt.png" Stretch="Uniform"/>
+                </Button.Content>
+            </Button>
+            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="ToggleAdvanced" BorderThickness="0">
+                <Button.Content>
+                    <Image Source="/Assets/list.png" Stretch="Uniform"/>
+                </Button.Content>
+            </Button>
+            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="ToggleFaves" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+                <Button.Resources>
+                    <local:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="/Assets/star.png" TrueValue="/Assets/star-fill.png" />
+                </Button.Resources>
+                <Button.Content>
+                    <Image Source="{Binding showFaves, Converter={StaticResource BoolToStringConverter}}" Stretch="Uniform"/>
+                </Button.Content>
+            </Button>
+            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="OpenSettings" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+                <Button.Content>
+                    <Image Source="/Assets/gear.png" Stretch="Uniform"/>
+                </Button.Content>
+            </Button>
+            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="Refresh" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+                <Button.Content>
+                    <Image Source="/Assets/arrow-counter-clockwise.png" Stretch="Uniform"/>
+                </Button.Content>
+            </Button>
+            <Button Visibility="{Binding showTimelapse, Mode=OneWay}" Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="Button_Click_1" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+                <Button.Content>
+                    <Image Source="/Assets/clock-countdown.png" Stretch="Uniform"/>
+                </Button.Content>
+            </Button>
+            <ProgressBar x:Name="progressBar" Maximum="100" Height="32" Width="100" Margin="10,0,0,0" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding showAdvanced, Mode=OneWay}" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32" />
+                <RowDefinition Height="42" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <DatePicker Grid.Row="0" Grid.Column="0" x:Name="startDatePicker"  SelectedDate="{Binding start}" DateChanged="StartDate_DateChanged" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text=" - " />
+                <DatePicker Grid.Row="0" Grid.Column="2" x:Name="endDatePicker" SelectedDate="{Binding end}" DateChanged="EndDate_DateChanged" />
+
+                <TextBlock Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Text="{Binding totalTimeShown}" />
+                <Button Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" Background="Transparent" Height="37" Width="37" Click="Button_Click" BorderThickness="0">
+                    <Button.Content>
+                        <Image Source="/Assets/x.png" Stretch="Uniform"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <GridView Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" SelectionMode="None" IsItemClickEnabled="False" Height="42" ItemsSource="{Binding Source={StaticResource cvsBundles}}">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding bundle}" IsTapEnabled="True" Tapped="StackPanel_Tapped">
+                            <Image Source="{Binding thumbnail}" Height="24" Width="24" />
+                            <TextBlock Margin="10,5,5,5" Text="{Binding bundleDisplayName}" Width="150" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </Grid>
+
+        <GridView MaxWidth="1080" HorizontalAlignment="Center" SelectionMode="None" IsItemClickEnabled="False" Height="800" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Source={StaticResource cvsEpisodes}}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="200" />
+                            <RowDefinition Height="52" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+
+                        <MediaPlayerElement Grid.Row="0" Grid.Column="0" Source="{Binding media}" Width="320" AutoPlay="False" AreTransportControlsEnabled="True">
+                            <MediaPlayerElement.TransportControls>
+                                <MediaTransportControls IsCompact="True"/>
+                            </MediaPlayerElement.TransportControls>
+                        </MediaPlayerElement>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                                <StackPanel.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Delete" Tag="{Binding start}" Click="MenuFlyoutItem_Click" />
+                                        <MenuFlyoutItem Text="Show File" Tag="{Binding start}" Click="MenuFlyoutItem_Click_1" />
+                                    </MenuFlyout>
+                                </StackPanel.ContextFlyout>
+                                <TextBlock Text="{Binding title}" TextWrapping="NoWrap" Width="240" />
+                                <TextBlock Text="{Binding start}" TextWrapping="NoWrap" FontSize="12" />
+                            </StackPanel>
+
+                            <Button Tag="{Binding start}" Background="Transparent" Height="37" Width="37" Click="StarEpisode" BorderThickness="0">
+                                <Button.Resources>
+                                    <local:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="/Assets/star.png" TrueValue="/Assets/star-fill.png" />
+                                </Button.Resources>
+                                <Button.Content>
+                                    <Image Source="{Binding save, Converter={StaticResource BoolToStringConverter}}" Stretch="Uniform"/>
+                                </Button.Content>
+                            </Button>
+                            <Button Tag="{Binding start}" Background="Transparent" Height="37" Width="37" Click="OpenEpisode" BorderThickness="0">
+                                <Button.Content>
+                                    <Image Source="/Assets/arrows-out-simple.png" Stretch="Uniform"/>
+                                </Button.Content>
+                            </Button>
+                            <Image Source="{Binding bundleThumbnail}" Width="16" Height="16" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+
+        </GridView>
+
+
+    </Grid>
+</Page>
