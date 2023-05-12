@@ -2,7 +2,7 @@
 
 🚧 Work in progress - this is beta software, use with care
 
-A background screen recorder for easy history search. 
+A background screen recorder for easy history search.
 If you choose to supply an OpenAI key, or a local language model like LLaMA, it can act as a knowledge base. Be aware that transcriptions will be sent to OpenAI when you chat if you provide an OpenAI API key.
 
 ![Cyte Screenshot](assets/images/cyte.gif)
@@ -26,11 +26,11 @@ A lot of research involves collating information from multiple sources; internal
 
 ## Development/Contributing
 
-* Generally, try to follow the surrounding style, but it's fine if you don't, linters can fix that stuff
-* Fork this repository, make any changes, and when you're happy, submit a PR
-* I prefer to keep documentation in the code (that's the most likely place it won't go too stale IMO)
-* If you have a feature suggestion, please submit it through the website and I'll triage it and add it to the planned features below (which is also a rough roadmap)
-* mainline is latest - if you want a 'stable' (as stable as pre-release can be) branch use a tag
+- Generally, try to follow the surrounding style, but it's fine if you don't, linters can fix that stuff
+- Fork this repository, make any changes, and when you're happy, submit a PR
+- I prefer to keep documentation in the code (that's the most likely place it won't go too stale IMO)
+- If you have a feature suggestion, please submit it through the website and I'll triage it and add it to the planned features below (which is also a rough roadmap)
+- mainline is latest - if you want a 'stable' (as stable as pre-release can be) branch use a tag
 
 ### Issues
 
@@ -63,11 +63,11 @@ In general, features further down the table are planned for future releases, in 
 | OpenAI Chat                      | ✅             | ✅             | ✅       |
 | Batch delete                     | ✅             | ✅             | ✅       |
 | Single delete                    | ✅             | ✅             | ✅       |
+| Timelapse                        | ✅             | ✅             | ✅       |
 | Highlight search text in preview | ✅             | ✅             | ❌       |
-| Timelapse                        | ✅             | ✅             | ❌       |
+| LLaMa Chat                       | ✅             | ✅             | ❌       |
 | Semantic search                  | ✅             | ✅             | ❌       |
 | Menu bar shortcuts               | ✅             | ✅             | ❌       |
-| LLaMa Chat                       | ✅             | ✅             | ❌       |
 | Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌       |
 | File tracking                    | ✅<sup>3</sup> | ❌             | ❌       |
 | URL tracking                     | ✅             | ❌             | ❌       |

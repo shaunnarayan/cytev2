@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Cyte (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Cyte (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
