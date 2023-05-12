@@ -221,7 +221,7 @@ class Agent : ObservableObject, EventSourceDelegate {
     
     ///
     /// Given a user question, apply a prompt template and optionally stuff with context before
-    /// initiating  a request and holding the supplied context for display purposes
+    /// initiating a request
     ///
     func query(request: String, over: [CyteInterval]) async {
         var _cleanRequest = request

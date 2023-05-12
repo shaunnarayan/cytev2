@@ -607,7 +607,7 @@ class Memory {
     }
     
     ///
-    /// Peforms a full text search using FTSv4, with a hard limit of 64 most recent results
+    /// Peforms a full text search using FTSv5, with a hard limit of 64 most recent results
     ///
     func search(term: String, expand_by: Int = 0) -> [CyteInterval] {
         var result: [CyteInterval] = []

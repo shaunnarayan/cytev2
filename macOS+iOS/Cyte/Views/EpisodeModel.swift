@@ -29,7 +29,7 @@ class EpisodeModel: ObservableObject {
     @Published var highlightedBundle = ""
     @Published var showFaves = false
     
-    @Published var startDate = Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .day, value: -30, to: Date())!
+    @Published var startDate = Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .day, value: -7, to: Date())!
     @Published var endDate = Date()
     
     @Published var appIntervals : [AppInterval] = []
@@ -77,8 +77,6 @@ class EpisodeModel: ObservableObject {
     
     ///
     /// Runs queries according to updated UI selections
-    /// This is only because I'm not familiar with how Inverse relations work in CoreData,
-    /// otherwise FetchRequest would automatically update the view. Please update if you can
     ///
     @MainActor func performRefreshData() {
         dataID = UUID()
@@ -99,6 +97,7 @@ class EpisodeModel: ObservableObject {
                 pred += String("AND save == true")
             }
             episodeFetch.predicate = NSPredicate(format: pred, argumentArray: args)
+            episodeFetch.fetchLimit = 128
             do {
                 _episodes = try viewContext.fetch(episodeFetch)
                 intervals.removeAll()
@@ -139,7 +138,6 @@ class EpisodeModel: ObservableObject {
             episodes = _episodes
         }
         // now that we have episodes, if a bundle is highlighted get the documents too
-        // @todo break this out into its own component and use FetchRequest
         documentsForBundle.removeAll()
         if highlightedBundle.count != 0 {
             let docFetch : NSFetchRequest<Document> = Document.fetchRequest()
@@ -166,7 +164,7 @@ class EpisodeModel: ObservableObject {
         highlightedBundle = ""
         showFaves = false
         
-        startDate = Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .day, value: -30, to: Date())!
+        startDate = Calendar(identifier: Calendar.Identifier.iso8601).date(byAdding: .day, value: -7, to: Date())!
         endDate = Date()
     }
     

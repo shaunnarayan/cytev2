@@ -72,7 +72,7 @@ In general, features further down the table are planned for future releases, in 
 | File tracking                    | ✅<sup>3</sup> | ❌             | ❌       |
 | URL tracking                     | ✅             | ❌             | ❌       |
 | Block selected websites          | ✅             | ❌             | ❌       |
-| Display Recompisition            | ✅             | ❌             | ❌       |
+| Display Recomposition            | ✅             | ❌             | ❌       |
 | Reporting                        | ❌             | ❌             | ❌       |
 | Sync                             | ❌             | ❌             | ❌       |
 | Export                           | ❌             | ❌             | ❌       |
