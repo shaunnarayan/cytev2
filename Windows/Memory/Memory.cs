@@ -508,8 +508,7 @@ namespace CyteEncoder
                     await _encoder.EncodeAsync(
                         stream,
                         width, height, 1600000,
-                        0.5,
-                        true);
+                        0.5);
                     Debug.WriteLine("StopEnc");
                 }
             }

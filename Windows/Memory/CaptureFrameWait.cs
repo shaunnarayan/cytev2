@@ -24,8 +24,7 @@ namespace CyteEncoder
     {
         public CaptureFrameWait(
             GraphicsCaptureItem item,
-            SizeInt32 size,
-            bool includeCursor)
+            SizeInt32 size)
         {
             _device = new CanvasDevice();
             _item = item;
@@ -33,10 +32,10 @@ namespace CyteEncoder
             _closedEvent = new ManualResetEvent(false);
             _events = new[] { _closedEvent, _frameEvent };
 
-            InitializeCapture(size, includeCursor);
+            InitializeCapture(size);
         }
 
-        private void InitializeCapture(SizeInt32 size, bool includeCursor)
+        private void InitializeCapture(SizeInt32 size)
         {
             _item.Closed += OnClosed;
             _framePool = Direct3D11CaptureFramePool.CreateFreeThreaded(
@@ -46,10 +45,6 @@ namespace CyteEncoder
                 size);
             _framePool.FrameArrived += OnFrameArrived;
             _session = _framePool.CreateCaptureSession(_item);
-            if (!includeCursor)
-            {
-                _session.IsCursorCaptureEnabled = includeCursor;
-            }
             _session.StartCapture();
         }
 
