@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Cyte (Package)": {
-      "commandName": "MsixPackage"
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
     },
     "Cyte (Unpackaged)": {
       "commandName": "Project"

@@ -48,6 +48,7 @@ namespace CyteEncoder
                     encodingProfile.Video.Height = height;
                     encodingProfile.Video.FrameRate.Numerator = 1;
                     encodingProfile.Video.FrameRate.Denominator = 2;
+                    encodingProfile.Audio = null;
                     var transcode = await _transcoder.PrepareMediaStreamSourceTranscodeAsync(_mediaStreamSource, stream, encodingProfile);
 
                     await transcode.TranscodeAsync();
@@ -76,6 +77,7 @@ namespace CyteEncoder
             if(_frameGenerator != null) {
                 _frameGenerator.Dispose();
             }
+            _frameGenerator = null;
         }
 
         private void CreateMediaObjects()
@@ -87,7 +89,6 @@ namespace CyteEncoder
             // Describe our input: uncompressed BGRA8 buffers
             var videoProperties = VideoEncodingProperties.CreateUncompressed(MediaEncodingSubtypes.Bgra8, (uint)width, (uint)height);
             _videoDescriptor = new VideoStreamDescriptor(videoProperties);
-
             // Create our MediaStreamSource
             _mediaStreamSource = new MediaStreamSource(_videoDescriptor);
             _mediaStreamSource.BufferTime = TimeSpan.FromSeconds(0);
@@ -120,7 +121,7 @@ namespace CyteEncoder
                         if ((DateTime.Now - lastFrameTime).TotalSeconds > 2.0)
                         {
                             _surface = sample.Direct3D11Surface;
-                            Memory.Instance.OnFrame(_surface);
+                            Task.Run(async () => await Memory.Instance.OnFrame(_surface)).Wait();
                             lastFrameTime = DateTime.Now;
                         }
                         args.Request.Sample = sample;
