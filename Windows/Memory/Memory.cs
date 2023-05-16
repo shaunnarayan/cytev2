@@ -391,7 +391,7 @@ namespace CyteEncoder
             while(Memory.Instance.isRunning)
             {
                 var start = DateTime.Now;
-                Memory.Instance.UpdateActiveContext();
+                Task.Run(async () => await Memory.Instance.UpdateActiveContext()).Wait();
                 var end = DateTime.Now;
                 var elapased = end - start;
                 Thread.Sleep((int)Math.Max(0, update_ms - elapased.TotalMilliseconds));
@@ -426,7 +426,7 @@ namespace CyteEncoder
             return path;
         }
 
-        async void UpdateActiveContext()
+        async Task<bool> UpdateActiveContext()
         {
             IntPtr hWnd = GetForegroundWindow();
             uint processId;
@@ -486,6 +486,7 @@ namespace CyteEncoder
                     }
                 }
             }
+            return true;
         }
 
         private async void OpenEpisode(string title)
@@ -540,7 +541,7 @@ namespace CyteEncoder
             episode.Insert();
             if (frameCount <= 0)
             {
-                episode.Delete();
+                Delete(episode);
             }
             isEncoding = false;
         }
@@ -656,7 +657,7 @@ namespace CyteEncoder
             return results.ToArray();
         }
 
-        public async void Delete(Episode episode)
+        public async Task<bool> Delete(Episode episode)
         {
             // get intervals and delete
             foreach(var interval in Interval.GetList(episode))
@@ -667,6 +668,7 @@ namespace CyteEncoder
             var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
             await file.DeleteAsync();
             episode.Delete();
+            return true;
         }
 
         private void TryCreateBundle(string name)

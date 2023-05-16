@@ -319,7 +319,7 @@ namespace Cyte
             Frame.Navigate(typeof(Timeline), args);
         }
 
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        private async void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             // delete
             var epStart = (DateTime)((MenuFlyoutItem)sender).Tag;
@@ -329,7 +329,7 @@ namespace Cyte
             });
             if (find.Count() > 0)
             {
-                Memory.Instance.Delete(find.First());
+                await Memory.Instance.Delete(find.First());
             }
             RefreshData();
         }
