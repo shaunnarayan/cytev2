@@ -385,13 +385,13 @@ namespace CyteEncoder
             Debug.WriteLine("Init memory");
         }
 
-        public static void TimerProc()
+        public async static void TimerProc()
         {
             long update_ms = 1000;
             while(Memory.Instance.isRunning)
             {
                 var start = DateTime.Now;
-                Task.Run(async () => await Memory.Instance.UpdateActiveContext()).Wait();
+                await Memory.Instance.UpdateActiveContext();
                 var end = DateTime.Now;
                 var elapased = end - start;
                 Thread.Sleep((int)Math.Max(0, update_ms - elapased.TotalMilliseconds));
@@ -489,7 +489,7 @@ namespace CyteEncoder
             return true;
         }
 
-        private async void OpenEpisode(string title)
+        private async Task<bool> OpenEpisode(string title)
         {
             Debug.WriteLine($"Opening {title}");
             // Encoders generally like even numbers
@@ -541,9 +541,10 @@ namespace CyteEncoder
             episode.Insert();
             if (frameCount <= 0)
             {
-                Delete(episode);
+                await Delete(episode);
             }
             isEncoding = false;
+            return true;
         }
 
         public void CloseEpisode()
@@ -664,9 +665,13 @@ namespace CyteEncoder
             {
                 interval.Delete();
             }
-            var filepath = System.IO.Path.Combine(Memory.PathForEpisode(episode.start), $"{episode.title}.mov");
-            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
-            await file.DeleteAsync();
+            try
+            {
+                var filepath = System.IO.Path.Combine(Memory.PathForEpisode(episode.start), $"{episode.title}.mov");
+                var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
+                await file.DeleteAsync();
+            }
+            catch { }
             episode.Delete();
             return true;
         }

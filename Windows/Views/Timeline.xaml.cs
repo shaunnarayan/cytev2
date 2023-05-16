@@ -233,8 +233,12 @@ namespace Cyte
             {
                 var filepath = $"{Memory.PathForEpisode(active.Item1.episode.start)}\\{active.Item1.title}.mov";
                 //Debug.WriteLine(filepath);
-                var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
-                mediaPlayer.MediaPlayer.SetFileSource(file);
+                try
+                {
+                    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
+                    mediaPlayer.MediaPlayer.SetFileSource(file);
+                }
+                catch { }
                 currentStart = active.Item1.episode.start;
             }
             //Debug.WriteLine(secondsOffsetFromLastEpisode);
