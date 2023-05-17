@@ -318,7 +318,7 @@ struct EpisodePlaylistView: View {
                         })
                         .frame(width: width, height: height)
 #if os(macOS)
-                        .disabled(true)
+                        .disabled((self.magScale * progressingScale) > 1.0)
                         .onContinuousHover(perform: { phase in
                             switch phase {
                             case .active(let location):
