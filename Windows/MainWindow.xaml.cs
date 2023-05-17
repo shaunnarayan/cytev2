@@ -58,7 +58,7 @@ namespace Cyte
 
         public Button BackButton => AppTitleBarBackButton;
 
-        private async void OnClosing(object sender, AppWindowClosingEventArgs e)
+        private void OnClosing(object sender, AppWindowClosingEventArgs e)
         {
             Memory.Instance.Teardown();
         }

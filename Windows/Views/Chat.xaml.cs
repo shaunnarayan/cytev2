@@ -134,7 +134,7 @@ namespace Cyte
             chatLog.Clear();
         }
 
-        public async void Query(string query, [ReadOnlyArray()] Interval[] over)
+        public void Query(string query, [ReadOnlyArray()] Interval[] over)
         {
             string cleanQuery = query;
             bool forceChat = false;
@@ -183,7 +183,7 @@ namespace Cyte
             }
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             options = (ChatArgs)e.Parameter;
             Setup();
