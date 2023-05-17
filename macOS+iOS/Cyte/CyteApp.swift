@@ -18,6 +18,7 @@ struct CyteApp: App {
     let persistenceController = PersistenceController.shared
     let bundleCache = BundleCache()
     let episodeModel = EpisodeModel()
+    let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
 #if os(macOS)
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @StateObject var screenRecorder = ScreenRecorder.shared
@@ -32,7 +33,7 @@ struct CyteApp: App {
     /// On every run, starts the recorder and sets up hotkey listeners
     ///
     func setup() {
-        let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
+        
         appDelegate.mainApp = self
 #if os(macOS)
         if defaults.bool(forKey: "CYTE_HIDE_DOCK") {
@@ -122,13 +123,10 @@ struct CyteApp: App {
                             .keyboardShortcut("R")
                         }
                         Button("Open") {
-                            if NSApplication.shared.windows.count > 2 {
-                                // this check assumes the user cannot dismiss the NSStatusBarWindow,
-                                // NSMenuWindowManagerWindow instances, and can only edit the AppKitWindow
-                                NSApplication.shared.activate(ignoringOtherApps: true)
-                            } else {
+                            if NSApplication.shared.windows.count <= 3 {
                                 openWindow(id: "cyte-app")
                             }
+                            NSApplication.shared.activate(ignoringOtherApps: true)
                         }
                             .keyboardShortcut("O")
                         Divider()
