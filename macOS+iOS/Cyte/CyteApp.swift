@@ -91,9 +91,6 @@ struct CyteApp: App {
                 .onAppear {
                     self.setup()
                 }
-                .onDisappear {
-                    self.teardown()
-                }
         }
         .commands {
             CommandGroup(replacing: .printItem) { }
