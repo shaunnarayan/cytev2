@@ -49,34 +49,35 @@ A lot of research involves collating information from multiple sources; internal
 
 In general, features further down the table are planned for future releases, in priority order. To bump a feature, put in a request through the website.
 
-| Feature                          | macOS         | iOS           | Windows |
-| -------------------------------- | ------------- | ------------- | ------- |
-| Automatic recording              | ✅             | ❌<sup>1</sup> | ✅       |
-| Full text search                 | ✅             | ✅             | ✅       |
-| Rolling deletion                 | ✅             | ✅             | ✅       |
-| Favorites                        | ✅             | ✅             | ✅       |
-| Display source icons             | ✅             | ✅             | ✅       |
-| Date range filter                | ✅             | ✅             | ✅       |
-| Application filter               | ✅             | ✅             | ✅       |
-| Select save location             | ✅             | ✅             | ✅       |
-| Block selected applications      | ✅             | ✅             | ✅       |
-| OpenAI Chat                      | ✅             | ✅             | ✅       |
-| Batch delete                     | ✅             | ✅             | ✅       |
-| Single delete                    | ✅             | ✅             | ✅       |
-| Timelapse                        | ✅             | ✅             | ✅       |
-| Highlight search text in preview | ✅             | ✅             | ❌       |
-| LLaMa Chat                       | ✅             | ✅             | ❌       |
-| Semantic search                  | ✅             | ✅             | ❌       |
-| Menu bar shortcuts               | ✅             | ✅             | ❌       |
-| Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌       |
-| File tracking                    | ✅<sup>3</sup> | ❌             | ❌       |
-| URL tracking                     | ✅             | ❌             | ❌       |
-| Block selected websites          | ✅             | ❌             | ❌       |
-| Display Recomposition            | ✅             | ❌             | ❌       |
-| Reporting                        | ❌             | ❌             | ❌       |
-| Sync                             | ❌             | ❌             | ❌       |
-| Export                           | ❌             | ❌             | ❌       |
-| Object Recognition               | ❌             | ❌             | ❌       |
+| Feature                          | macOS          | iOS            | Windows |
+| -------------------------------- | -------------- | -------------- | ------- |
+| Automatic recording              | ✅             | ❌<sup>1</sup> | ✅      |
+| Full text search                 | ✅             | ✅             | ✅      |
+| Rolling deletion                 | ✅             | ✅             | ✅      |
+| Favorites                        | ✅             | ✅             | ✅      |
+| Display source icons             | ✅             | ✅             | ✅      |
+| Date range filter                | ✅             | ✅             | ✅      |
+| Application filter               | ✅             | ✅             | ✅      |
+| Select save location             | ✅             | ✅             | ✅      |
+| Block selected applications      | ✅             | ✅             | ✅      |
+| OpenAI Chat                      | ✅             | ✅             | ✅      |
+| Batch delete                     | ✅             | ✅             | ✅      |
+| Single delete                    | ✅             | ✅             | ✅      |
+| Timelapse                        | ✅             | ✅             | ✅      |
+| HEVC compression                 | ✅             | ✅             | ✅      |
+| Highlight search text in preview | ✅             | ✅             | ❌      |
+| LLaMa Chat                       | ✅             | ✅             | ❌      |
+| Semantic search                  | ✅             | ✅             | ❌      |
+| Menu bar shortcuts               | ✅             | ✅             | ❌      |
+| Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌      |
+| File tracking                    | ✅<sup>3</sup> | ❌             | ❌      |
+| URL tracking                     | ✅             | ❌             | ❌      |
+| Block selected websites          | ✅             | ❌             | ❌      |
+| Display Recomposition            | ✅             | ❌             | ❌      |
+| Reporting                        | ❌             | ❌             | ❌      |
+| Sync                             | ❌             | ❌             | ❌      |
+| Export                           | ❌             | ❌             | ❌      |
+| Object Recognition               | ❌             | ❌             | ❌      |
 
 <sup>1</sup> There is currently no API on iOS that allows this (except when jailbroken)
 

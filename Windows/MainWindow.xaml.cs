@@ -58,9 +58,9 @@ namespace Cyte
 
         public Button BackButton => AppTitleBarBackButton;
 
-        private async void OnClosing(object sender, AppWindowClosingEventArgs e)
+        private void OnClosing(object sender, AppWindowClosingEventArgs e)
         {
-            Memory.Instance.CloseEpisode();
+            Memory.Instance.Teardown();
         }
 
         private void AppTitleBar_Loaded(object sender, RoutedEventArgs e)
@@ -127,11 +127,10 @@ namespace Cyte
 
         private void Window_Activated(object sender, WindowActivatedEventArgs args)
         {
-            if (args.WindowActivationState != WindowActivationState.PointerActivated) { return; }
-            // @todo refresh the feed
+
             Debug.WriteLine("Activated");
             if (MainPage.self != null) {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 MainPage.self.RefreshData();
             }
         }

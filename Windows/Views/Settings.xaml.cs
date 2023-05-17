@@ -100,7 +100,7 @@ namespace Cyte
             }
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // update state from prefs
             bundleExclusions = BundleExclusion.GetList();

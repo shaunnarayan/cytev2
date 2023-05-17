@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Graphics.Capture;
@@ -21,12 +22,12 @@ namespace CyteEncoder
             CreateMediaObjects();
         }
 
-        public IAsyncAction EncodeAsync(IRandomAccessStream stream, uint width, uint height, uint bitrateInBps, double frameRate, bool includeCursor)
+        public IAsyncAction EncodeAsync(IRandomAccessStream stream, uint width, uint height, uint bitrateInBps, double frameRate)
         {
-            return EncodeInternalAsync(stream, width, height, bitrateInBps, frameRate, includeCursor).AsAsyncAction();
+            return EncodeInternalAsync(stream, width, height, bitrateInBps, frameRate).AsAsyncAction();
         }
 
-        private async Task EncodeInternalAsync(IRandomAccessStream stream, uint width, uint height, uint bitrateInBps, double frameRate, bool includeCursor)
+        private async Task EncodeInternalAsync(IRandomAccessStream stream, uint width, uint height, uint bitrateInBps, double frameRate)
         {
             if (!_isRecording)
             {
@@ -34,22 +35,20 @@ namespace CyteEncoder
 
                 _frameGenerator = new CaptureFrameWait(
                     _captureItem,
-                    _captureItem.Size,
-                    includeCursor);
+                    _captureItem.Size);
 
                 using (_frameGenerator)
                 {
-                    var encodingProfile = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.HD1080p);
-                    //var encodingProfile = MediaEncodingProfile.CreateHevc(VideoEncodingQuality.HD1080p);
-                    //encodingProfile.Container.Subtype = "MPEG4";
-                    //encodingProfile.Video.Subtype = "H264";
+                    CodecQuery codecQuery = new CodecQuery();
+                    bool haveEncoder = (await codecQuery.FindAllAsync(CodecKind.Video, CodecCategory.Encoder, "hevc")).Any();
+                    bool haveDecoder = (await codecQuery.FindAllAsync(CodecKind.Video, CodecCategory.Decoder, "hevc")).Any();
+                    bool useHEVC = haveEncoder && haveDecoder;
+                    var encodingProfile = useHEVC ? MediaEncodingProfile.CreateHevc(VideoEncodingQuality.HD1080p) : MediaEncodingProfile.CreateMp4(VideoEncodingQuality.HD1080p);
                     encodingProfile.Video.Width = width;
                     encodingProfile.Video.Height = height;
-                    //encodingProfile.Video.Bitrate = bitrateInBps;
                     encodingProfile.Video.FrameRate.Numerator = 1;
                     encodingProfile.Video.FrameRate.Denominator = 2;
-                    //encodingProfile.Video.PixelAspectRatio.Numerator = 1;
-                    //encodingProfile.Video.PixelAspectRatio.Denominator = 1;
+                    encodingProfile.Audio = null;
                     var transcode = await _transcoder.PrepareMediaStreamSourceTranscodeAsync(_mediaStreamSource, stream, encodingProfile);
 
                     await transcode.TranscodeAsync();
@@ -78,6 +77,7 @@ namespace CyteEncoder
             if(_frameGenerator != null) {
                 _frameGenerator.Dispose();
             }
+            _frameGenerator = null;
         }
 
         private void CreateMediaObjects()
@@ -89,7 +89,6 @@ namespace CyteEncoder
             // Describe our input: uncompressed BGRA8 buffers
             var videoProperties = VideoEncodingProperties.CreateUncompressed(MediaEncodingSubtypes.Bgra8, (uint)width, (uint)height);
             _videoDescriptor = new VideoStreamDescriptor(videoProperties);
-
             // Create our MediaStreamSource
             _mediaStreamSource = new MediaStreamSource(_videoDescriptor);
             _mediaStreamSource.BufferTime = TimeSpan.FromSeconds(0);
@@ -122,7 +121,7 @@ namespace CyteEncoder
                         if ((DateTime.Now - lastFrameTime).TotalSeconds > 2.0)
                         {
                             _surface = sample.Direct3D11Surface;
-                            Memory.Instance.OnFrame(_surface);
+                            Task.Run(async () => await Memory.Instance.OnFrame(_surface)).Wait();
                             lastFrameTime = DateTime.Now;
                         }
                         args.Request.Sample = sample;

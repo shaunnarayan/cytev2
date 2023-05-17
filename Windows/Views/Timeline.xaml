@@ -26,7 +26,7 @@
             <MediaPlayerElement x:Name="mediaPlayer" AutoPlay="False" AreTransportControlsEnabled="False" Width="600" />
         </StackPanel>
 
-        <Canvas Margin="0,20,0,0" HorizontalAlignment="Left" x:Name="slider" Grid.Row="2" Grid.Column="0" PointerPressed="StackPanel_PointerEntered" PointerReleased="StackPanel_PointerExited" PointerMoved="StackPanel_PointerMoved" PointerCanceled="StackPanel_PointerExited" PointerCaptureLost="StackPanel_PointerExited" PointerExited="StackPanel_PointerExited" >
+        <Canvas Margin="0,20,0,0" HorizontalAlignment="Left" x:Name="slider" Grid.Row="2" Grid.Column="0" PointerPressed="StackPanel_PointerEntered" PointerReleased="StackPanel_PointerExited" PointerMoved="StackPanel_PointerMoved" PointerCanceled="StackPanel_PointerExited" PointerCaptureLost="StackPanel_PointerExited" >
             <Rectangle Height="32" Width="500" Margin="0,0,0,0" Fill="Gray" RadiusX="5" RadiusY="5" />
         </Canvas>
         

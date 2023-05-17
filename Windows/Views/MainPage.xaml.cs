@@ -167,7 +167,7 @@ namespace Cyte
             return res;
         }
 
-        private async void RefreshDataAsync()
+        private async Task<bool> RefreshDataAsync()
         {
             episodes = new List<AppInterval>();
             var offset = 0.0;
@@ -184,8 +184,6 @@ namespace Cyte
             episodesLengthSum = offset;
             showTimelapse = episodesLengthSum < (60 * 60 * 10) ? Visibility.Visible : Visibility.Collapsed;
             totalTimeShown = SecondsToReadable(episodesLengthSum);
-            PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
-            PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
             cvsEpisodes.Source = episodes;
 
             bundleExclusions = BundleExclusion.GetList();
@@ -197,6 +195,12 @@ namespace Cyte
                 exclusions.Add(ex);
             }
             cvsBundles.Source = exclusions;
+
+            PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
+            PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
+            PropertyChanged(this, new PropertyChangedEventArgs("cvsEpisodes"));
+            PropertyChanged(this, new PropertyChangedEventArgs("cvsBundles"));
+            return true;
         }
 
         private async Task InitializeAsync()
@@ -315,7 +319,7 @@ namespace Cyte
             Frame.Navigate(typeof(Timeline), args);
         }
 
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        private async void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             // delete
             var epStart = (DateTime)((MenuFlyoutItem)sender).Tag;
@@ -325,7 +329,7 @@ namespace Cyte
             });
             if (find.Count() > 0)
             {
-                Memory.Instance.Delete(find.First());
+                await Memory.Instance.Delete(find.First());
             }
             RefreshData();
         }

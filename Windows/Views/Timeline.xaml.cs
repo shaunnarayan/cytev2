@@ -232,12 +232,16 @@ namespace Cyte
             if (currentStart != active.Item1.episode.start)
             {
                 var filepath = $"{Memory.PathForEpisode(active.Item1.episode.start)}\\{active.Item1.title}.mov";
-                Debug.WriteLine(filepath);
-                var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
-                mediaPlayer.MediaPlayer.SetFileSource(file);
+                //Debug.WriteLine(filepath);
+                try
+                {
+                    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
+                    mediaPlayer.MediaPlayer.SetFileSource(file);
+                }
+                catch { }
                 currentStart = active.Item1.episode.start;
             }
-            Debug.WriteLine(secondsOffsetFromLastEpisode);
+            //Debug.WriteLine(secondsOffsetFromLastEpisode);
 
             mediaPlayer.MediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(active.Item2 - secondsOffsetFromLastEpisode);
             mediaPlayer.Width = MainWindow.WindowSize.Width - 340;
@@ -251,7 +255,7 @@ namespace Cyte
                 var end = endTimeForEpisode(interval);
                 if( start <= Timeline.windowLengthInSeconds && end >= 0)
                 {
-                    Debug.WriteLine($"Timeline: {start} - {end}");
+                    //Debug.WriteLine($"Timeline: {start} - {end}");
 
                     var rect = new Rectangle
                     {
@@ -282,7 +286,7 @@ namespace Cyte
             var anchor = DateTime.Now.ToFileTimeUtc() - active.Item1.end.ToFileTimeUtc();
             double seconds = Math.Max(1.0, anchor -  progress) * 0.0000001;
             readableOffset = $"{MainPage.SecondsToReadable(seconds)} ago";
-            Debug.WriteLine(currentTime);
+            //Debug.WriteLine(currentTime);
             //active.Item1.UpdateThumb(progress, options.filter);
         }
 
@@ -291,7 +295,7 @@ namespace Cyte
             if( isDragging)
             {
                 var pos = e.GetCurrentPoint((Microsoft.UI.Xaml.UIElement)sender).Position;
-                Debug.WriteLine(pos.ToString());
+                //Debug.WriteLine(pos.ToString());
 
                 double delta = (pos.X - lastX) * 0.5;
                 lastX = pos.X;
