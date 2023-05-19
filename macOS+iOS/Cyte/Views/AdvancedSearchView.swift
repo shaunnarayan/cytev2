@@ -125,29 +125,32 @@ struct AdvancedSearchView: View {
             }
             .frame(height: 50)
 #if os(macOS)
-            HStack {
-                LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
-                    ForEach(episodeModel.documentsForBundle) { doc in
-                        HStack {
-                            let url = doc.path ?? URL(fileURLWithPath: "/")
-                            Image(nsImage: NSWorkspace.shared.icon(forFile: String(url.absoluteString.starts(with: "http") ? url.absoluteString : String(url.absoluteString.dropFirst(7)))))
-                            Text(url.lastPathComponent)
-                                .foregroundColor(.black)
-                        }
-                        .onHover(perform: { hovering in
-                            self.isHoveringFilter = hovering
-                            if hovering {
-                                NSCursor.pointingHand.set()
-                            } else {
-                                NSCursor.arrow.set()
+            if( episodeModel.documentsForBundle.count > 0 ) {
+                ScrollView {
+                    LazyVGrid(columns: documentsColumnLayout, spacing: 20) {
+                        ForEach(episodeModel.documentsForBundle) { doc in
+                            HStack {
+                                let url = doc.path ?? URL(fileURLWithPath: "/")
+                                Image(nsImage: NSWorkspace.shared.icon(forFile: String(url.absoluteString.starts(with: "http") ? url.absoluteString : String(url.absoluteString.dropFirst(7)))))
+                                Text(url.lastPathComponent)
+                                    .foregroundColor(.black)
                             }
-                        })
-                        .onTapGesture { gesture in
-                            // @todo should maybe open with currently highlighted bundle?
-                            NSWorkspace.shared.open(doc.path ?? URL(fileURLWithPath: "/"))
+                            .onHover(perform: { hovering in
+                                self.isHoveringFilter = hovering
+                                if hovering {
+                                    NSCursor.pointingHand.set()
+                                } else {
+                                    NSCursor.arrow.set()
+                                }
+                            })
+                            .onTapGesture { gesture in
+                                // @todo should maybe open with currently highlighted bundle?
+                                NSWorkspace.shared.open(doc.path ?? URL(fileURLWithPath: "/"))
+                            }
                         }
                     }
                 }
+                .frame(height: 50)
             }
 #endif
         }
