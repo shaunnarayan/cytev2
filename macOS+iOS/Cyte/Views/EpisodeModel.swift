@@ -22,6 +22,7 @@ class EpisodeModel: ObservableObject {
     @Published var episodes: [Episode] = []
     @Published var intervals: [CyteInterval] = []
     @Published var documentsForBundle: [Document] = []
+    @Published var bundleExclusions: [BundleExclusion] = []
     @Published var episodesLengthSum: Double = 0.0
     
     // The search terms currently active
@@ -82,6 +83,7 @@ class EpisodeModel: ObservableObject {
         dataID = UUID()
         episodes.removeAll()
         intervals.removeAll()
+        bundleExclusions.removeAll()
         var _episodes: [Episode] = []
         
         if self.filter.count < 3 {
@@ -157,6 +159,9 @@ class EpisodeModel: ObservableObject {
                 
             }
         }
+        
+        let bundleExclusionFetch : NSFetchRequest<BundleExclusion> = BundleExclusion.fetchRequest()
+        bundleExclusions = try! viewContext.fetch(bundleExclusionFetch)
     }
     
     func resetFilters() {

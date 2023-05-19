@@ -126,24 +126,35 @@ struct IntervalExpression {
     public static let snippet = Expression<String>(literal: "snippet(Interval, -1, '', '', '', 5)")
 }
 
-struct PersistenceController {
+class PersistenceController {
     static let shared = PersistenceController()
 
-    let container: NSPersistentContainer
+    var container: NSPersistentContainer
 
-    init(inMemory: Bool = false) {
+    init() {
         container = NSPersistentContainer(name: "Cyte")
+    }
+    
+    func reload() {
         let storeDirectory = homeDirectory()
-
         let url = storeDirectory.appendingPathComponent("Cyte.sqlite")
         let description = NSPersistentStoreDescription(url: url)
         description.shouldInferMappingModelAutomatically = true
         description.shouldMigrateStoreAutomatically = true
-        container.persistentStoreDescriptions = [description]
 
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        // Clean up existing stores
+        let coordinator = container.persistentStoreCoordinator
+        let stores = coordinator.persistentStores
+        for store in stores {
+            do {
+                try coordinator.remove(store)
+            } catch {
+                fatalError("Failed to remove store: \(error)")
+            }
         }
+
+        // Load persistent stores in the new location
+        container.persistentStoreDescriptions = [description]
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")

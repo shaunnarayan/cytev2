@@ -76,20 +76,7 @@ class Memory {
         let unclosedFetch : NSFetchRequest<Episode> = Episode.fetchRequest()
         unclosedFetch.predicate = NSPredicate(format: "start == end")
         do {
-            let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
-            intervalDb = try Connection(url.path(percentEncoded: false))
-
-            do {
-                let config = FTS4Config()
-                    .column(IntervalExpression.from, [.unindexed])
-                    .column(IntervalExpression.to, [.unindexed])
-                    .column(IntervalExpression.episodeStart, [.unindexed])
-                    .column(IntervalExpression.document)
-                    .languageId("lid")
-                    .order(.desc)
-
-                try intervalDb!.run(intervalTable.create(.FTS4(config), ifNotExists: true))
-            }
+            try! reload()
             
             let fetched = try PersistenceController.shared.container.viewContext.fetch(unclosedFetch)
             for unclosed in fetched {
@@ -101,6 +88,22 @@ class Memory {
         } catch {
             
         }
+    }
+    
+    func reload() throws {
+        let url: URL = homeDirectory().appendingPathComponent("CyteMemory.sqlite3")
+        intervalDb = try Connection(url.path(percentEncoded: false))
+        do {
+            let config = FTS5Config()
+                .column(IntervalExpression.from, [.unindexed])
+                .column(IntervalExpression.to, [.unindexed])
+                .column(IntervalExpression.episodeStart, [.unindexed])
+                .column(IntervalExpression.document)
+                .tokenizer(Tokenizer.Porter) // @todo remove this for non-english languages
+            
+            try intervalDb!.run(intervalTable.create(.FTS5(config), ifNotExists: true))
+        }
+        PersistenceController.shared.reload()
     }
     
     func migrate() {

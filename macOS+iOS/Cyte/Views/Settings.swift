@@ -70,10 +70,6 @@ struct BundleView: View {
 }
 
 struct Settings: View {
-    @FetchRequest(
-            sortDescriptors: [NSSortDescriptor(keyPath: \BundleExclusion.bundle, ascending: true)],
-            animation: .default)
-    private var bundles: FetchedResults<BundleExclusion>
     @State var isShowing = false
     @State var isShowingHomeSelection = false
     @State var apiDetails: String = ""
@@ -83,9 +79,9 @@ struct Settings: View {
     @State var currentRetention: Int = 0
     @State var browserAware: Bool = false
     @State var hideDock: Bool = false
-    @State var lowCpuMode: Bool = false
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var episodeModel: EpisodeModel
     
 #if os(macOS)
     let bundlesColumnLayout = [
@@ -124,6 +120,12 @@ struct Settings: View {
                         case .success(let Fileurl):
                             let defaults = UserDefaults(suiteName: "group.io.cyte.ios")!
                             defaults.set(Fileurl.path(percentEncoded: false), forKey: "CYTE_HOME")
+                            episodeModel.bundleExclusions.removeAll()
+                            episodeModel.dataID = UUID()
+                            Task {
+                                try! Memory.shared.reload()
+                                episodeModel.refreshData()
+                            }
                             break
                         case .failure(let error):
                             log.error(error)
@@ -338,7 +340,7 @@ struct Settings: View {
                 .padding()
             
                 LazyVGrid(columns: bundlesColumnLayout, alignment: .leading) {
-                    ForEach(bundles.filter{ bundle in bundleFilter.count == 0 || bundle.bundle!.contains(bundleFilter) }) { bundle in
+                    ForEach(episodeModel.bundleExclusions.filter{ bundle in bundleFilter.count == 0 || bundle.bundle!.contains(bundleFilter) }) { bundle in
                         if bundle.bundle != Bundle.main.bundleIdentifier {
                             BundleView(bundle: bundle, isExcluded: bundle.excluded)
                         }
