@@ -437,12 +437,15 @@ namespace Cyte
 
             foreach (var episode in _episodes)
             {
-                var _filepath = $"{Memory.PathForEpisode(episode.start)}\\{episode.title}.mov";
-                Debug.WriteLine(_filepath);
-                var _file = await Windows.Storage.StorageFile.GetFileFromPathAsync(_filepath);
-                var videoFile = await MediaClip.CreateFromFileAsync(_file);
-                //videoFile.VideoEffectDefinitions.Add(timelapseEffect);
-                mediaComposition.Clips.Add(videoFile);
+                try
+                {
+                    var _filepath = $"{Memory.PathForEpisode(episode.start)}\\{episode.title}.mov";
+                    Debug.WriteLine(_filepath);
+                    var _file = await Windows.Storage.StorageFile.GetFileFromPathAsync(_filepath);
+                    var videoFile = await MediaClip.CreateFromFileAsync(_file);
+                    //videoFile.VideoEffectDefinitions.Add(timelapseEffect);
+                    mediaComposition.Clips.Add(videoFile);
+                } catch { }
             }
 
             var filepath = System.IO.Path.Combine(Memory.HomeDirectory(), "Exports");
@@ -450,7 +453,9 @@ namespace Cyte
             var folder = await Windows.Storage.StorageFolder.GetFolderFromPathAsync(filepath);
             var file = await folder.CreateFileAsync($"{DateTime.Now.ToFileTimeUtc()}.mov");
             var profile = mediaComposition.CreateDefaultEncodingProfile();
-            var trimming = MediaTrimmingPreference.Fast;
+            profile.Video.Height = 1080;
+            profile.Video.Width = 1920;
+            var trimming = MediaTrimmingPreference.Precise;
             var renderop = mediaComposition.RenderToFileAsync(file, trimming, profile);
             
             renderop.Progress = new AsyncOperationProgressHandler<TranscodeFailureReason, double>((info, progress) =>
@@ -482,7 +487,7 @@ namespace Cyte
                     {
                         // Update UI whether the operation succeeded or not
                         Debug.WriteLine(file.Path);
-                        Process.Start("explorer.exe", $"/select, \"{folder.Path}\"");
+                        Process.Start("explorer.exe", $"/select, \"{file.Path}\"");
                         showTimelapse = Visibility.Visible;
                         progressBar.Visibility = Visibility.Collapsed;
                         PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
