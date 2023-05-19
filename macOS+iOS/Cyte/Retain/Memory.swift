@@ -244,7 +244,7 @@ class Memory {
         }
         currentUrlContext = url
         
-        let isPrivate = isPrivateContext(context:context)
+        let isPrivate = isPrivateContext(context:front.bundleIdentifier!)
         if !isPrivate && currentContextIsPrivate {
             skipNextNFrames = 1
         }
