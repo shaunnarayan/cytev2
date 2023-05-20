@@ -65,14 +65,14 @@ In general, features further down the table are planned for future releases, in 
 | Single delete                    | ✅             | ✅             | ✅      |
 | Timelapse                        | ✅             | ✅             | ✅      |
 | HEVC compression                 | ✅             | ✅             | ✅      |
+| LLaMa Chat                       | ✅             | ✅             | ✅      |
 | Highlight search text in preview | ✅             | ✅             | ❌      |
-| LLaMa Chat                       | ✅             | ✅             | ❌      |
+| URL tracking                     | ✅             | ❌             | ❌      |
+| Block selected websites          | ✅             | ❌             | ❌      |
 | Semantic search                  | ✅             | ✅             | ❌      |
 | Menu bar shortcuts               | ✅             | ✅             | ❌      |
 | Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌      |
 | File tracking                    | ✅<sup>3</sup> | ❌             | ❌      |
-| URL tracking                     | ✅             | ❌             | ❌      |
-| Block selected websites          | ✅             | ❌             | ❌      |
 | Display Recomposition            | ✅             | ❌             | ❌      |
 | Reporting                        | ❌             | ❌             | ❌      |
 | Sync                             | ❌             | ❌             | ❌      |
