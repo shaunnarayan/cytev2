@@ -99,6 +99,10 @@ namespace Cyte
 
         public void RefreshData()
         {
+            if(filter.EndsWith("?"))
+            {   //Don't update for chat
+                return;
+            }
             if (filter.Length < 3)
             {
                 string predicate = $" WHERE start >= {start.DateTime.ToFileTimeUtc()} AND end <= {end.DateTime.ToFileTimeUtc()}";

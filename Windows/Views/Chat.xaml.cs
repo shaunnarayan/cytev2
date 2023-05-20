@@ -15,6 +15,11 @@ using System.Diagnostics;
 using Windows.System;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml;
+using System.Runtime.InteropServices;
+using Windows.Storage.Streams;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using System.Threading;
+using System.Collections;
 
 namespace Cyte
 {
@@ -43,6 +48,8 @@ namespace Cyte
             this.fromUser = fromUser;
         }
     }
+
+    
 
     public sealed partial class Chat : Page, INotifyPropertyChanged
     {
@@ -73,6 +80,8 @@ namespace Cyte
         private OpenAIAPI openAI = null;
         public List<ChatItem> chatLog { get; set; } = new List<ChatItem>();
         public string filter { get; set; } = "";
+        private LLama.Native.SafeLLamaContextHandle llama = null;
+
 
         public Chat()
         {
@@ -85,8 +94,63 @@ namespace Cyte
             return result.Results[0].Flagged;
         }
 
+        private List<LLamaTokenData> LlamaVocab()
+        {
+            var n_vocab = NativeApi.llama_n_vocab(llama);
+            Span<float> logits = SamplingApi.llama_get_logits(llama, n_vocab);
+            var candidates = new List<LLamaTokenData>();
+            candidates.Capacity = n_vocab;
+            for (Int32 token_id = 0; token_id < n_vocab; token_id++)
+            {
+                candidates.Add(new LLamaTokenData(token_id, logits[token_id], 0.0f));
+            }
+            //candidates.Add(new LLamaTokenData(NativeApi.llama_token_eos(), 0.0f, 0.0f));
+            return candidates;
+        }
+
+        private void CompleteLlama(string query)
+        {
+            float temperature = 1.0f;
+            int threads = Environment.ProcessorCount - 1;
+            int topK = 40;
+            float topP = 1.0f;
+
+            List<Int32> tokens = SamplingApi.llama_tokenize(llama, query, true, "UTF-8");
+            NativeApi.llama_eval(llama, tokens.ToArray(), tokens.Count, 0, threads);
+
+            int contextLength = NativeApi.llama_n_ctx(llama);
+            while ((tokens.Count < contextLength) && chatLog.Count > 0)
+            {
+                var candidates = LlamaVocab();
+                LLamaTokenDataArray candidates_p = new LLamaTokenDataArray(candidates.ToArray(), (ulong)candidates.Count, false);
+
+                SamplingApi.llama_sample_top_k(llama, candidates_p, topK, 1);
+                SamplingApi.llama_sample_top_p(llama, candidates_p, topP, 1);
+                SamplingApi.llama_sample_temperature(llama, candidates_p, temperature);
+                var token = SamplingApi.llama_sample_token(llama, candidates_p);
+                if (token == NativeApi.llama_token_eos())
+                {
+                    break;
+                }
+
+                string text = Marshal.PtrToStringUTF8(NativeApi.llama_token_to_str(llama, token));
+
+                chatLog[chatLog.Count - 1].message = chatLog[chatLog.Count - 1].message + text;
+                cvsChat.Source = chatLog;
+                PropertyChanged(this, new PropertyChangedEventArgs("cvsChat"));
+
+                tokens.Add(token);
+                NativeApi.llama_eval(llama, tokens.TakeLast(1).ToArray(), 1, tokens.Count, threads);
+            }
+        }
+
         public async void Complete(string query)
         {
+            if( llama != null )
+            {
+                CompleteLlama(query);
+                return;
+            }
             if (await IsFlagged(query))
             {
                 return;
@@ -107,7 +171,7 @@ namespace Cyte
             });
         }
 
-        public void Setup()
+        public async Task<bool> Setup()
         {
             if (!isSetup)
             {
@@ -118,14 +182,28 @@ namespace Cyte
                     var key = keys.First();
                     key.RetrievePassword();
                     var apiKey = key.Password;
-                    openAI = new OpenAIAPI(apiKey);
+                    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(apiKey);
+                    if (file != null)
+                    {
+                        //llama = new LLamaModel(new LLamaParams(model: apiKey, n_ctx: 512, repeat_penalty: 1.0f));
+                        llama = new LLama.Native.SafeLLamaContextHandle( NativeApi.llama_init_from_file(apiKey, NativeApi.llama_context_default_params()) );
+                    }
+                    else
+                    {
+                        openAI = new OpenAIAPI(apiKey);
+                    }
+                    Reset();
                 }
+                return true;
             }
+            return false;
         }
 
         public void Teardown()
         {
             openAI = null;
+            llama.Dispose();
+            llama = null;
             isSetup = false;
         }
 
@@ -147,9 +225,10 @@ namespace Cyte
             chatLog.Add(new ChatItem(new BitmapImage(new Uri(this.BaseUri, "/Assets/user-circle-thin.png")), cleanQuery));
             chatLog.Add(new ChatItem(new BitmapImage(new Uri(this.BaseUri, "/Assets/Square44x44Logo.targetsize-48.png")), "", false));
             cvsChat.Source = chatLog;
+            //PropertyChanged(this, new PropertyChangedEventArgs("cvsChat"));
 
             string context = "";
-            int contextWindowLength = 8000;
+            int contextWindowLength = llama != null ? 500 : 8000;
             int maxContextLength = contextWindowLength * 3 - promptTemplate.Length;
             Interval[] intervals = (over != null && over.Length > 0) ? over : Memory.Instance.Search("");
             if ( intervals.Length > 0 && !forceChat ) 
@@ -183,10 +262,10 @@ namespace Cyte
             }
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             options = (ChatArgs)e.Parameter;
-            Setup();
+            await Setup();
             Query(options.filter, options.intervals);
             MainWindow.self.BackButton.Visibility = Visibility.Visible;
             base.OnNavigatedTo(e);

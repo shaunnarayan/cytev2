@@ -100,3 +100,4 @@ Thanks to these great open source projects:
 - [SimpleRecorder](https://github.com/robmikh/SimpleRecorder): Used as a seed for the windows version
 - [OpenAI-API-dotnet](https://github.com/OkGoDoIt/OpenAI-API-dotnet): Used to run LLMs for chat when OpenAI API enabled (windows)
 - [Diff.Match.Patch](https://github.com/pocketberserker/Diff.Match.Patch): Used to differentiate unchanged and changed text from OCR (windows)
+- [LLamaSharp](https://github.com/SciSharp/LLamaSharp): Used to load and run LLMs for chat when a local model is provided (windows)
