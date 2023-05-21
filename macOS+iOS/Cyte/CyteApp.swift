@@ -145,6 +145,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mainApp: CyteApp?
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        let bundleID = Bundle.main.bundleIdentifier!
+        if NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).count > 1 {
+            NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)[0].activate(options: NSApplication.ActivationOptions.activateIgnoringOtherApps)
+            NSApp.terminate(nil)
+        }
+        
         if UserDefaults(suiteName: "group.io.cyte.ios")!.bool(forKey: "CYTE_BROWSER") {
             checkIsProcessTrusted(prompt: true)
         }
