@@ -103,6 +103,13 @@ namespace Cyte
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // update state from prefs
+            ReloadBundles();
+            MainWindow.self.BackButton.Visibility = Visibility.Visible;
+            base.OnNavigatedTo(e);
+        }
+
+        private void ReloadBundles()
+        {
             bundleExclusions = BundleExclusion.GetList();
             var exclusions = new List<CyteBundleExclusion>();
             foreach (var exclusion in bundleExclusions)
@@ -112,8 +119,6 @@ namespace Cyte
                 exclusions.Add(ex);
             }
             cvsBundles.Source = exclusions;
-            MainWindow.self.BackButton.Visibility = Visibility.Visible;
-            base.OnNavigatedTo(e);
         }
 
         private void CheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -151,9 +156,11 @@ namespace Cyte
                     vault.Remove(item);
                 }
                 apiKeyTextBox.Text = "";
-                apiKeyTextBox.PlaceholderText = "";
+                apiKeyTextBox.PlaceholderText = "API Key or llama.cpp model path";
                 apiKeyTextBox.IsEnabled = true;
                 apiKeyTextBox.Background = new SolidColorBrush(Colors.White);
+                saveApiButton.Source = new BitmapImage(new Uri(this.BaseUri, "/Assets/cloud-check.png"));
+                PropertyChanged(this, new PropertyChangedEventArgs("saveApiButton"));
                 PropertyChanged(this, new PropertyChangedEventArgs("apiKeyTextBox"));
             }
             else
@@ -164,6 +171,8 @@ namespace Cyte
                 apiKeyTextBox.PlaceholderText = "Knowledge base enabled";
                 apiKeyTextBox.IsEnabled = false;
                 apiKeyTextBox.Background = new SolidColorBrush(Color.FromArgb(0xff, 0xA0, 0xA0, 0xff));
+                saveApiButton.Source = new BitmapImage(new Uri(this.BaseUri, "/Assets/x.png"));
+                PropertyChanged(this, new PropertyChangedEventArgs("saveApiButton"));
                 PropertyChanged(this, new PropertyChangedEventArgs("apiKeyTextBox"));
             }
         }
@@ -210,13 +219,16 @@ namespace Cyte
             WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, hwnd);
 
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
-            var localSettings = ApplicationData.Current.LocalSettings;
-            localSettings.Values["CYTE_HOME"] = folder.Path;
-            homeDirectory = folder.Path;
-            PropertyChanged(this, new PropertyChangedEventArgs("homeDirectory"));
+            if (folder != null)
+            {
+                var localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values["CYTE_HOME"] = folder.Path;
+                homeDirectory = folder.Path;
+                PropertyChanged(this, new PropertyChangedEventArgs("homeDirectory"));
 
-            saveApiButton.Source = new BitmapImage(new Uri(this.BaseUri, "/Assets/x.png"));
-            PropertyChanged(this, new PropertyChangedEventArgs("saveApiButton"));
+                Memory.Instance.Reload();
+                ReloadBundles();
+            }
         }
     }
 }

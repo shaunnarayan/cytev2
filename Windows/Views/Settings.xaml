@@ -47,11 +47,11 @@
             <Button x:Name="retain3" Margin="10" Content="90 Days" Width="250" Click="retain3_Click" />
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical">
-            <TextBlock Text="To enable knowledge base features enter your GPT4 API key" FontSize="14" />
-            <TextBlock Text="Privacy note: This feature will make requests to the OpenAI servers" FontSize="10" />
+            <TextBlock Text="To enable knowledge base features enter your GPT4 API key, or a path to a llama.cpp compatible model file" FontSize="14" />
+            <TextBlock Text="Privacy note: This feature will make requests to the OpenAI servers if you supply an API key" FontSize="10" />
         </StackPanel>
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal">
-            <TextBox x:Name="apiKeyTextBox" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding apiKey, Mode=TwoWay}" Height="32" Width="778" FontSize="14" PlaceholderText="API Key" BorderThickness="0" />
+            <TextBox x:Name="apiKeyTextBox" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding apiKey, Mode=TwoWay}" Height="32" Width="778" FontSize="14" PlaceholderText="API Key or llama.cpp model path" BorderThickness="0" />
             <Button Margin="0,0,0,0" Background="Transparent" Height="37" Width="37" Click="Button_Click" BorderThickness="0" >
                 <Button.Content>
                     <Image x:Name="saveApiButton" Source="/Assets/cloud-check.png" Stretch="Uniform" />

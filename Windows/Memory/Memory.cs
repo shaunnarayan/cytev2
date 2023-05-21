@@ -431,7 +431,6 @@ namespace CyteEncoder
             IntPtr hWnd = GetForegroundWindow();
             uint processId;
             GetWindowThreadProcessId(hWnd, out processId);
-            // @todo fixme this can throw an exception sometimes failing to list the processes
             Process proc = null;
             var newContext = "";
             try
@@ -472,11 +471,11 @@ namespace CyteEncoder
                 CloseEpisode();
                 Debug.WriteLine("Closed episode");
                 currentContext = newContext;
-                if (proc != null)
+                if (proc != null && currentContext != "" && proc.Id != Process.GetCurrentProcess().Id)
                 {
                     TryCreateBundle(currentContext);
                     BundleExclusion exclusion = BundleExclusion.Fetch(newContext);
-                    if (proc.Id != Process.GetCurrentProcess().Id && exclusion.exclude == false)
+                    if (exclusion.exclude == false)
                     {
                         OpenEpisode(proc.MainWindowTitle);
                     }
@@ -692,6 +691,11 @@ namespace CyteEncoder
                 }
                 catch { }// is fine
             }
+        }
+
+        public void Reload()
+        {
+            migrate();
         }
 
         private void migrate()

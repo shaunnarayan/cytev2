@@ -65,15 +65,15 @@ In general, features further down the table are planned for future releases, in 
 | Single delete                    | ✅             | ✅             | ✅       |
 | Timelapse                        | ✅             | ✅             | ✅       |
 | HEVC compression                 | ✅             | ✅             | ✅       |
+| LLaMa Chat                       | ✅             | ✅             | ✅       |
 | Highlight search text in preview | ✅             | ✅             | ❌       |
-| LLaMa Chat                       | ✅             | ✅             | ❌       |
-| Semantic search                  | ✅             | ✅             | ❌       |
-| Menu bar shortcuts               | ✅             | ✅             | ❌       |
 | Recording status indicator       | ❌             | ❌             | ❌       |
-| Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌       |
-| File tracking                    | ✅<sup>3</sup> | ❌             | ❌       |
 | URL tracking                     | ✅             | ❌             | ❌       |
 | Block selected websites          | ✅             | ❌             | ❌       |
+| Semantic search                  | ✅             | ✅             | ❌       |
+| Menu bar shortcuts               | ✅             | ✅             | ❌       |
+| Encryption                       | ✅<sup>2</sup> | ✅<sup>2</sup> | ❌       |
+| File tracking                    | ✅<sup>3</sup> | ❌             | ❌       |
 | Display Recomposition            | ✅             | ❌             | ❌       |
 | Reporting                        | ❌             | ❌             | ❌       |
 | Sync                             | ❌             | ❌             | ❌       |
@@ -101,3 +101,4 @@ Thanks to these great open source projects:
 - [SimpleRecorder](https://github.com/robmikh/SimpleRecorder): Used as a seed for the windows version
 - [OpenAI-API-dotnet](https://github.com/OkGoDoIt/OpenAI-API-dotnet): Used to run LLMs for chat when OpenAI API enabled (windows)
 - [Diff.Match.Patch](https://github.com/pocketberserker/Diff.Match.Patch): Used to differentiate unchanged and changed text from OCR (windows)
+- [LLamaSharp](https://github.com/SciSharp/LLamaSharp): Used to load and run LLMs for chat when a local model is provided (windows)
