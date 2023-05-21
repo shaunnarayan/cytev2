@@ -157,14 +157,24 @@ class Agent : ObservableObject, EventSourceDelegate {
                 llama_eval(llama, bufferPointer.baseAddress, Int32(promptTokens.count), 0, nThreads)
             }
             tokens.insert(contentsOf: promptTokens, at: 0)
-
+            
             let contextLength = llama_n_ctx(llama)
             while (tokens.count < contextLength) && chatLog.count > 0 {
-
-                let bufferPointer: UnsafeBufferPointer<llama_token> = tokens.withUnsafeBufferPointer { bufferPointer in
-                    return bufferPointer
+                let n_vocab: Int32 = llama_n_vocab(llama)
+                let logits = llama_get_logits(llama)
+                var candidates: Array<llama_token_data> = []
+                for i in 0..<n_vocab {
+                    candidates.append(llama_token_data(id: i, logit: logits![Int(i)], p: 0.0))
                 }
-                var token = llama_sample_top_p_top_k(llama, bufferPointer.baseAddress, Int32(tokens.count), topK, topP, temperature, 1)
+                let candidatePointer: UnsafeMutableBufferPointer<llama_token_data> = candidates.withUnsafeMutableBufferPointer { bp in
+                    return bp
+                }
+                var tokenData: llama_token_data_array = llama_token_data_array(data: candidatePointer.baseAddress, size: Int(n_vocab), sorted: false)
+                
+                llama_sample_top_k(llama, &tokenData, topK, 1);
+                llama_sample_top_p(llama, &tokenData, topP, 1);
+                llama_sample_temperature(llama, &tokenData, temperature);
+                var token = llama_sample_token(llama, &tokenData);
                 if token == llama_token_eos() {
                     break
                 }
