@@ -14,7 +14,7 @@ import XCGLogger
 import llama
 import SwiftUI
 
-class Agent : ObservableObject, EventSourceDelegate {
+class Agent : ObservableObject {
     static let shared : Agent = Agent()
     
     private var openAIClient: OpenAI?
@@ -55,33 +55,68 @@ class Agent : ObservableObject, EventSourceDelegate {
     
     @Published public var chatLog : [(String, String, String)] = []
     private var llama: OpaquePointer?
+    private var openAiModel: Model = .gpt3_5Turbo
     
     init() {
-        setup()
+        Task {
+            let _ = await setup()
+        }
     }
     
     ///
     /// Creates a openai api wrapper client with the given key, updating
     /// a user preference at the same time
     ///
-    func setup(key: String? = nil) {
+    func setup(key: String? = nil) async -> Bool {
         if key != nil {
             keychain.set(key!, forKey: "CYTE_LLM_KEY")
         }
+        var did_setup = false
         let apiKey = key != nil ? key : keychain.get("CYTE_LLM_KEY")
         if apiKey != nil {
             if FileManager.default.fileExists(atPath: apiKey!) {
                 llama = llama_init_from_file(apiKey, llama_context_default_params())
-                isSetup = true
-                log.info("Setup llama")
+                if llama != nil {
+                    did_setup = true
+                    DispatchQueue.main.async {
+                        self.isSetup = true
+                    }
+                    log.info("Setup llama")
+                }
+                else
+                {
+                    log.error("Failed to load supplied llama path - is the format correct?")
+                    keychain.delete("CYTE_LLM_KEY")//not a valid cred
+                }
             } else {
-                openAIClient = OpenAI(apiToken: apiKey!, callback: self)
-                isSetup = true
-                log.info("Setup OpenAI")
+                openAIClient = OpenAI(apiToken: apiKey!)
+                do {
+                    let result = try await openAIClient!.models()
+                    for res in result.data {
+                        if res.id == .gpt4_32k {
+                            self.openAiModel = .gpt4_32k
+                            log.info("Using GPT4-32")
+                        }
+                        if self.openAiModel != .gpt4_32k && res.id == .gpt4 {
+                            self.openAiModel = .gpt4
+                            log.info("Using GPT4-8")
+                        }
+                    }
+                    did_setup = true
+                    DispatchQueue.main.async {
+                        self.isSetup = true
+                    }
+                    log.info("Setup OpenAI \(self.openAiModel)")
+                } catch {
+                    log.error("Couldn't list models with API key - is it valid?")
+                    self.keychain.delete("CYTE_LLM_KEY")// not a valid cred
+                }
+                
             }
         } else {
             teardown()
         }
+        return did_setup
     }
     
     func teardown() {
@@ -92,7 +127,9 @@ class Agent : ObservableObject, EventSourceDelegate {
         } else {
             openAIClient = nil
         }
-        isSetup = false
+        DispatchQueue.main.async {
+            self.isSetup = false
+        }
     }
     
     ///
@@ -103,35 +140,12 @@ class Agent : ObservableObject, EventSourceDelegate {
         if llama != nil {
             return false
         }
-        let query = OpenAI.ModerationQuery(input: input, model: .textModerationLatest)
+        let query = ModerationsQuery(input: input, model: .textModerationLatest)
         var response: Bool = false
         do {
             let result = try await openAIClient!.moderations(query: query)
             response = result.results[0].flagged
         } catch {}
-        return response
-    }
-    
-    ///
-    /// Embeds the given string
-    ///
-    func embed(input: String) async -> [Double]? {
-        if await isFlagged(input: input) { return nil }
-        var response: [Double]? = nil
-        if llama != nil {
-            response = []
-            await query(input: input)
-            let raw = llama_get_embeddings(llama)
-            for i in 0..<Int(llama_n_embd(llama)) {
-                response!.append(Double(raw![i]))
-            }
-        } else {
-            let query = OpenAI.EmbeddingsQuery(model: .textEmbeddingAda, input: input)
-            do {
-                let result = try await openAIClient!.embeddings(query: query)
-                response = result.data[0].embedding
-            } catch {}
-        }
         return response
     }
     
@@ -189,8 +203,19 @@ class Agent : ObservableObject, EventSourceDelegate {
                 tokens.append(token)
             }
         } else {
-            let query = OpenAI.ChatQuery(model: .gpt4, messages: [.init(role: "user", content: input)], stream: true)
-            openAIClient!.chats(query: query)
+            let query = ChatQuery(model: openAiModel, messages: [.init(role: .user, content: input)])
+            openAIClient!.chatsStream(query: query) { partialResult in
+                switch partialResult {
+                case .success(let result):
+                    if result.choices.count > 0 && result.choices[0].delta.content != nil {
+                        self.onNewToken(token: result.choices[0].delta.content!)
+                    }
+                case .failure(let error):
+                    log.error(error)
+                }
+            } completion: { error in
+                //Handle streaming error here
+            }
         }
     }
     
@@ -221,11 +246,10 @@ class Agent : ObservableObject, EventSourceDelegate {
     /// Stop any pending requests and clear state
     ///
     func reset() {
-        if openAIClient != nil {
-            openAIClient!.stop()
-        }
-        withAnimation(.easeInOut(duration: 0.3)) {
-            chatLog.removeAll()
+        DispatchQueue.main.async {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                self.chatLog.removeAll()
+            }
         }
     }
     

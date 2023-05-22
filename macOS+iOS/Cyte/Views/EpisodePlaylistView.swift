@@ -435,15 +435,6 @@ struct EpisodePlaylistView: View {
                         }
                     }
                 }
-#if os(macOS)
-                ToolbarItem {
-                    Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                    }
-                }
-#endif
             }
         }
         .id(episodeModel.dataID)

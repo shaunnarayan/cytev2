@@ -50,12 +50,13 @@ struct CyteApp: App {
         // Prefetch icons
         Task {
             // offset from other startup work
-            try await Task.sleep(nanoseconds: 8_000_000_000)
+            try await Task.sleep(nanoseconds: 2_000_000_000)
             let bundleFetch : NSFetchRequest<BundleExclusion> = BundleExclusion.fetchRequest()
             do {
                 let fetched = try PersistenceController.shared.container.viewContext.fetch(bundleFetch)
                 for bundle in fetched {
                     let _ = bundleCache.getIcon(bundleID: bundle.bundle!)
+                    try await Task.sleep(nanoseconds: 10_000_000)
                 }
             } catch { }
         }

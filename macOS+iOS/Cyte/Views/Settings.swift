@@ -79,6 +79,8 @@ struct Settings: View {
     @State var currentRetention: Int = 0
     @State var browserAware: Bool = false
     @State var hideDock: Bool = false
+    @State var failedToSetup: Bool = false
+    @State private var setupTask: Task<(), Never>?
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var episodeModel: EpisodeModel
@@ -93,6 +95,17 @@ struct Settings: View {
         GridItem(.flexible(), spacing: 30, alignment: .topLeading)
     ]
 #endif
+    
+    func performSetup() {
+        self.setupTask = Task {
+            let is_setup = await Agent.shared.setup(key: apiDetails)
+            DispatchQueue.main.async {
+                failedToSetup = !is_setup
+                apiDetails = ""
+                setupTask = nil
+            }
+        }
+    }
     
     var body: some View {
         ScrollView {
@@ -215,18 +228,24 @@ struct Settings: View {
                             .textFieldStyle(.plain)
                             .background(.white)
                             .font(.title)
+                            .disabled(self.setupTask != nil)
 #if os(macOS)
                             .frame(width: 1000)
 #endif
                             .onSubmit {
-                                Agent.shared.setup(key: apiDetails)
-                                apiDetails = ""
+                                self.performSetup()
                             }
+                            
                             Button(action: {
-                                Agent.shared.setup(key: apiDetails)
-                                apiDetails = ""
+                                self.performSetup()
                             }) {
                                 Image(systemName: "checkmark.message")
+                            }
+                            .disabled(self.setupTask != nil)
+                            .alert("Language model could not be loaded - is the API key or path valid, and is it a supported model?", isPresented: $failedToSetup) {
+                                Button("OK", role: .cancel) {
+                                    failedToSetup = false
+                                }
                             }
                         }
                     }
@@ -350,16 +369,5 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
             }
         }
-#if os(macOS)
-        .toolbar {
-            ToolbarItem {
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                }
-            }
-        }
-#endif
     }
 }
