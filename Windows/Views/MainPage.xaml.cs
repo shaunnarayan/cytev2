@@ -387,25 +387,16 @@ namespace Cyte
         {
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog("Delete all currently displayed recordings? This action cannot be undone.");
-
             var hwnd = GetForegroundWindow();
             WinRT.Interop.InitializeWithWindow.Initialize(messageDialog, hwnd);
-
-            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
             messageDialog.Commands.Add(new UICommand(
                 "Delete",
                 new UICommandInvokedHandler(this.CommandInvokedHandler)));
             messageDialog.Commands.Add(new UICommand(
                 "Cancel",
                 new UICommandInvokedHandler(this.CommandInvokedHandler)));
-
-            // Set the command that will be invoked by default
             messageDialog.DefaultCommandIndex = 0;
-
-            // Set the command to be invoked when escape is pressed
             messageDialog.CancelCommandIndex = 1;
-
-            // Show the message dialog
             var ignored = messageDialog.ShowAsync();
         }
 

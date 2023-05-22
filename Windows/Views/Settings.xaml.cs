@@ -14,6 +14,8 @@ using Microsoft.UI;
 using System.Drawing;
 using Color = Windows.UI.Color;
 using Microsoft.UI.Xaml;
+using Windows.UI.Popups;
+using System.Diagnostics;
 
 namespace Cyte
 {
@@ -144,7 +146,12 @@ namespace Cyte
             }
         }
 
-        private void Button_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        private void CommandInvokedHandler(IUICommand command)
+        {
+            //
+        }
+
+        private async void Button_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             // save the API key to vault and setup agent
             var vault = new Windows.Security.Credentials.PasswordVault();
@@ -162,10 +169,30 @@ namespace Cyte
                 saveApiButton.Source = new BitmapImage(new Uri(this.BaseUri, "/Assets/cloud-check.png"));
                 PropertyChanged(this, new PropertyChangedEventArgs("saveApiButton"));
                 PropertyChanged(this, new PropertyChangedEventArgs("apiKeyTextBox"));
+                Agent.Instance.Teardown();
             }
             else
             {
-                vault.Add(new Windows.Security.Credentials.PasswordCredential("Cyte", "OpenAI", apiKey));
+                apiKeyTextBox.IsEnabled = false;
+                saveApiButton.IsTapEnabled = false;
+                var key = new Windows.Security.Credentials.PasswordCredential("Cyte", "OpenAI", apiKey);
+                vault.Add(key);
+                bool is_setup = await Agent.Instance.Setup();
+                if (!is_setup)
+                {
+                    var messageDialog = new MessageDialog("Language model could not be loaded - is the API key or path valid, and is it a supported model?");
+                    var hwnd = GetForegroundWindow();
+                    WinRT.Interop.InitializeWithWindow.Initialize(messageDialog, hwnd);
+                    messageDialog.Commands.Add(new UICommand(
+                        "OK",
+                        new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                    messageDialog.DefaultCommandIndex = 0;
+                    messageDialog.CancelCommandIndex = 0;
+                    var ignored = messageDialog.ShowAsync();
+                    apiKeyTextBox.IsEnabled = true;
+                    saveApiButton.IsTapEnabled = true;
+                    return;
+                }
                 apiKey = "";
                 apiKeyTextBox.Text = "";
                 apiKeyTextBox.PlaceholderText = "Knowledge base enabled";

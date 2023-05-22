@@ -34,7 +34,7 @@
             </ItemsControl>
         </ScrollViewer>
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="60" Width="600" Grid.Row="1" Grid.Column="0" Margin="10">
-            <TextBox HorizontalAlignment="Center" Foreground="#c0c0c0" Margin="0,0,0,0" Text="{Binding filter}" VerticalAlignment="Center" Height="40" Width="560" FontSize="18" PlaceholderText="Chat your history" KeyDown="TextBox_KeyDown" />
+            <TextBox x:Name="filterTextBox" HorizontalAlignment="Center" Foreground="#c0c0c0" Margin="0,0,0,0" Text="{Binding filter, Mode=TwoWay}" VerticalAlignment="Center" Height="40" Width="560" FontSize="18" PlaceholderText="Chat your history" KeyDown="TextBox_KeyDown" />
             <Button Margin="0,0,0,0" Background="Transparent" Height="37" Width="37" Click="Button_Click"  BorderThickness="0">
                 <Button.Content>
                     <Image Source="/Assets/paper-plane-tilt.png" Stretch="Uniform" />
