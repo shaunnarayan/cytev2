@@ -33,16 +33,16 @@
       "location" : "https://github.com/ggerganov/llama.cpp",
       "state" : {
         "branch" : "master",
-        "revision" : "cc9cee8e9e7598bd280295f6264f36d3a9224006"
+        "revision" : "fab49c685e09d95942de34e3eadd72f880de21d5"
       }
     },
     {
       "identity" : "openai",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/shaunnarayan/OpenAI",
+      "location" : "https://github.com/MacPaw/OpenAI",
       "state" : {
-        "branch" : "main",
-        "revision" : "806ad7c4cd56cb3d9ab404b91bf08be7d8d520f2"
+        "revision" : "4da423fe637a628ebee8f214217a9e96060a5222",
+        "version" : "0.2.1"
       }
     },
     {

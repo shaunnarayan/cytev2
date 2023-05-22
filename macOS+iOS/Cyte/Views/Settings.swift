@@ -193,7 +193,7 @@ struct Settings: View {
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))
                 
                 VStack(alignment: .leading) {
-                    Text("To enable Knowledge base features enter your GPT4 API key, or a path to a llama.cpp compatible model file")
+                    Text("To enable Knowledge base features enter your OpenAI API key, or a path to a llama.cpp compatible model file")
                         .lineLimit(10)
                         .font(.title2)
                         .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 5.0, trailing: 0.0))

@@ -361,8 +361,10 @@ struct EpisodePlaylistView: View {
                         chart
                         Group {
                             ForEach(episodeModel.appIntervals.filter { interval in
-                                return startTimeForEpisode(interval: interval) <= Double(EpisodePlaylistView.windowLengthInSeconds) &&
-                                endTimeForEpisode(interval: interval) >= 0
+                                let start = startTimeForEpisode(interval: interval)
+                                let end = endTimeForEpisode(interval: interval)
+                                let delta = end - start
+                                return (delta > 3) && (start <= Double(EpisodePlaylistView.windowLengthInSeconds) && end >= 0)
                             }) { interval in
                                 PortableImage(uiImage: bundleCache.getIcon(bundleID: interval.episode.bundle!))
                                     .frame(width: timelineSize * 2, height: timelineSize * 2)
