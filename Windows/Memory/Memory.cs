@@ -351,7 +351,7 @@ namespace CyteEncoder
 
         public static string HomeDirectory()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var folder = Environment.SpecialFolder.MyDocuments;
             var home = System.IO.Path.Combine(Environment.GetFolderPath(folder), "Cyte");
             var localSettings = ApplicationData.Current.LocalSettings;
 
