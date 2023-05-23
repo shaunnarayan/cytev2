@@ -51,7 +51,11 @@ namespace CyteEncoder
                     encodingProfile.Audio = null;
                     var transcode = await _transcoder.PrepareMediaStreamSourceTranscodeAsync(_mediaStreamSource, stream, encodingProfile);
 
-                    await transcode.TranscodeAsync();
+                    try
+                    {
+                        await transcode.TranscodeAsync();
+                    }
+                    catch { }
                 }
             }
         }

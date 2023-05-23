@@ -13,6 +13,10 @@ using System.Collections.Generic;
 using System.Threading;
 using Windows.Storage.Streams;
 using System.Threading.Tasks;
+using Windows.Graphics.Display;
+using Windows.Security.Authorization.AppCapabilityAccess;
+using Windows.System;
+using System.Linq;
 
 namespace CyteEncoder
 {
@@ -329,7 +333,7 @@ namespace CyteEncoder
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         private GraphicsCaptureItem _item;
-        private Encoder _encoder;
+        private Encoder _encoder = null;
         private Thread timer;
         private bool isRunning = false;
 
@@ -398,16 +402,30 @@ namespace CyteEncoder
             }
         }
 
-        public void Setup(GraphicsCaptureItem item)
+        public async void Setup()
         {
-            var dir = Directory.CreateDirectory(Memory.HomeDirectory());
-            Debug.WriteLine(dir.CreationTime);
-            migrate();
+            var accessResult = await GraphicsCaptureAccess.RequestAccessAsync(GraphicsCaptureAccessKind.Programmatic);
+            if (accessResult == AppCapabilityAccessStatus.Allowed)
+            {
+                var ignoredResult = await GraphicsCaptureAccess.RequestAccessAsync(GraphicsCaptureAccessKind.Borderless);
+                DiagnosticAccessStatus diagnosticAccessStatus = await AppDiagnosticInfo.RequestAccessAsync();
 
-            _item = item;
-            isRunning = true;
-            timer = new Thread(new ThreadStart(TimerProc));
-            timer.Start();
+                var displays = DisplayServices.FindAll();
+                var item = GraphicsCaptureItem.TryCreateFromDisplayId(displays.First());
+
+                var dir = Directory.CreateDirectory(Memory.HomeDirectory());
+                Debug.WriteLine(dir.CreationTime);
+                migrate();
+
+                _item = item;
+                isRunning = true;
+                timer = new Thread(new ThreadStart(TimerProc));
+                timer.Start();
+            }
+            else
+            {
+                //@todo handle error
+            }
         }
 
         public void Teardown()

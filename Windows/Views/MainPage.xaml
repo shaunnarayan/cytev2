@@ -27,17 +27,17 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
             <TextBox x:Name="searchTextBox" Foreground="#c0c0c0" HorizontalAlignment="Left" Margin="10,0,0,0" Text="{Binding filter, Mode=TwoWay}" VerticalAlignment="Center" Height="40" Width="600" FontSize="18" PlaceholderText="Search your history" KeyDown="searchTextBox_KeyDown" BorderThickness="0" CornerRadius="5" />
-            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="Search" BorderThickness="0">
+            <Button Margin="7,0,0,0" Background="Transparent" Height="37" Width="37" Click="Search" BorderThickness="0">
                 <Button.Content>
                     <Image Source="/Assets/paper-plane-tilt.png" Stretch="Uniform"/>
                 </Button.Content>
             </Button>
-            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="ToggleAdvanced" BorderThickness="0">
+            <Button Margin="7,0,0,0" Background="Transparent" Height="37" Width="37" Click="ToggleAdvanced" BorderThickness="0">
                 <Button.Content>
                     <Image Source="/Assets/list.png" Stretch="Uniform"/>
                 </Button.Content>
             </Button>
-            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="ToggleFaves" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+            <Button Margin="7,0,0,0" Background="Transparent" Height="37" Width="37" Click="ToggleFaves" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
                 <Button.Resources>
                     <local:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="/Assets/star.png" TrueValue="/Assets/star-fill.png" />
                 </Button.Resources>
@@ -45,17 +45,17 @@
                     <Image Source="{Binding showFaves, Converter={StaticResource BoolToStringConverter}}" Stretch="Uniform"/>
                 </Button.Content>
             </Button>
-            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="OpenSettings" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+            <Button Margin="7,0,0,0" Background="Transparent" Height="37" Width="37" Click="OpenSettings" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
                 <Button.Content>
                     <Image Source="/Assets/gear.png" Stretch="Uniform"/>
                 </Button.Content>
             </Button>
-            <Button Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="Refresh" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+            <Button Margin="7,0,0,0" Background="Transparent" Height="37" Width="37" Click="Refresh" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
                 <Button.Content>
                     <Image Source="/Assets/arrow-counter-clockwise.png" Stretch="Uniform"/>
                 </Button.Content>
             </Button>
-            <Button Visibility="{Binding showTimelapse, Mode=OneWay}" Margin="7,7,0,0" Background="Transparent" Height="37" Width="37" Click="Button_Click_1" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
+            <Button Visibility="{Binding showTimelapse, Mode=OneWay}" Margin="7,0,0,0" Background="Transparent" Height="37" Width="37" Click="Button_Click_1" RenderTransformOrigin="2.219,0.517" BorderThickness="0">
                 <Button.Content>
                     <Image Source="/Assets/clock-countdown.png" Stretch="Uniform"/>
                 </Button.Content>
@@ -134,7 +134,7 @@
                                         <MenuFlyoutItem Text="Show File" Tag="{Binding start}" Click="MenuFlyoutItem_Click_1" />
                                     </MenuFlyout>
                                 </StackPanel.ContextFlyout>
-                                <TextBlock Text="{Binding title}" TextWrapping="NoWrap" Width="240" />
+                                <TextBlock Text="{Binding displayTitle}" TextWrapping="NoWrap" Width="240" />
                                 <TextBlock Text="{Binding start}" TextWrapping="NoWrap" FontSize="12" />
                             </StackPanel>
 

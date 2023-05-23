@@ -48,7 +48,7 @@ namespace Cyte
         public static MainPage self { get; private set; }
 
         private Episode[] _episodes;
-        private List<AppInterval> episodes;
+        private List<AppInterval> episodes = new List<AppInterval>();
         public BundleExclusion[] bundleExclusions { get; set; }
         public Visibility showAdvanced { get; internal set; }
         public Visibility showTimelapse { get; internal set; } = Visibility.Collapsed;
@@ -94,7 +94,9 @@ namespace Cyte
                 isChatSetup = true;
             }
             progressBar.Visibility = Visibility.Collapsed;
-            InitializeAsync();
+            startDatePicker.Date = start;
+            endDatePicker.Date = end;
+            RefreshData();
         }
 
         public void RefreshData()
@@ -173,6 +175,10 @@ namespace Cyte
 
         private async Task<bool> RefreshDataAsync()
         {
+            foreach(var episode in episodes)
+            {
+                episode.Dispose();
+            }
             episodes = new List<AppInterval>();
             var offset = 0.0;
             foreach (var episode in _episodes)
@@ -200,32 +206,12 @@ namespace Cyte
             }
             cvsBundles.Source = exclusions;
 
+            
             PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
             PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
             PropertyChanged(this, new PropertyChangedEventArgs("cvsEpisodes"));
             PropertyChanged(this, new PropertyChangedEventArgs("cvsBundles"));
             return true;
-        }
-
-        private async Task InitializeAsync()
-        {
-            var accessResult = await GraphicsCaptureAccess.RequestAccessAsync(GraphicsCaptureAccessKind.Programmatic);
-            if (accessResult == AppCapabilityAccessStatus.Allowed)
-            {
-                var ignoredResult = await GraphicsCaptureAccess.RequestAccessAsync(GraphicsCaptureAccessKind.Borderless);
-                DiagnosticAccessStatus diagnosticAccessStatus = await AppDiagnosticInfo.RequestAccessAsync();
-
-                var displays = DisplayServices.FindAll();
-                var item = GraphicsCaptureItem.TryCreateFromDisplayId(displays.First());
-                Memory.Instance.Setup(item);
-            }
-            else
-            {
-                //@todo handle error
-            }
-            startDatePicker.Date = start;
-            endDatePicker.Date = end;
-            RefreshData();
         }
 
         private void ToggleAdvanced(object sender, RoutedEventArgs e)
@@ -318,7 +304,12 @@ namespace Cyte
             {
                 offset = offsetForEpisode(find.First());
             }
-
+            foreach (var episode in episodes)
+            {
+                episode.Dispose();
+            }
+            cvsEpisodes = new CollectionViewSource();
+            PropertyChanged(this, new PropertyChangedEventArgs("cvsEpisodes"));
             TimelineArgs args = new TimelineArgs(filter, episodes.ToArray(), offset);
             Frame.Navigate(typeof(Timeline), args);
         }
@@ -386,14 +377,14 @@ namespace Cyte
             var ignored = messageDialog.ShowAsync();
         }
 
-        private void CommandInvokedHandler(IUICommand command)
+        private async void CommandInvokedHandler(IUICommand command)
         {
             Debug.WriteLine(command.Id);
             if( command.Label == "Delete" )
             {
                 foreach(var item in _episodes)
                 {
-                    Memory.Instance.Delete(item);
+                    await Memory.Instance.Delete(item);
                 }
                 RefreshData();
             }

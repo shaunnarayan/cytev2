@@ -30,6 +30,7 @@ namespace Cyte
         public StorageFile file { get; internal set; }
         public MediaSource media { get; internal set; }
         public string title { get; internal set; }
+        public string displayTitle { get; internal set; }
         public string bundle { get; internal set; }
         public DateTime start { get; internal set; }
         public DateTime end { get; internal set; }
@@ -51,8 +52,15 @@ namespace Cyte
             end = DateTime.FromFileTime(_episode.end);
             save = _episode.save;
             bundle = _episode.bundle;
+            var components = title.Split(' ');
+            displayTitle = string.Join(" ", components.Take(components.Count() - 1));
 
             episode = _episode;
+        }
+
+        public void Dispose()
+        {
+            if(media != null) media.Dispose();
         }
 
         public async void UpdateThumb(double offset, string snippet)
@@ -237,6 +245,7 @@ namespace Cyte
                 {
                     var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
                     mediaPlayer.MediaPlayer.SetFileSource(file);
+                    //mediaPlayer.MediaPlayer.SetMediaSource(active.Item1.media.MediaStreamSource);
                 }
                 catch { }
                 currentStart = active.Item1.episode.start;
