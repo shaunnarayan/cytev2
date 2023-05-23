@@ -47,7 +47,7 @@
             <Button x:Name="retain3" Margin="10" Content="90 Days" Width="250" Click="retain3_Click" />
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical">
-            <TextBlock Text="To enable knowledge base features enter your GPT4 API key, or a path to a llama.cpp compatible model file" FontSize="14" />
+            <TextBlock Text="To enable knowledge base features enter your OpenAI API key, or a path to a llama.cpp compatible model file" FontSize="14" />
             <TextBlock Text="Privacy note: This feature will make requests to the OpenAI servers if you supply an API key" FontSize="10" />
         </StackPanel>
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal">
