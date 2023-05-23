@@ -253,6 +253,7 @@ namespace Cyte
             {
                 var start = startTimeForEpisode(interval);
                 var end = endTimeForEpisode(interval);
+                var delta = end - start;
                 if( start <= Timeline.windowLengthInSeconds && end >= 0)
                 {
                     //Debug.WriteLine($"Timeline: {start} - {end}");
@@ -270,14 +271,17 @@ namespace Cyte
                     Canvas.SetLeft(rect, start * pixelsPerSecond);
                     Canvas.SetZIndex(rect, 0);
                     slider.Children.Add(rect);
-                    Image img = new Image();
-                    img.Source = interval.bundleThumbnail;
-                    img.Width = 16;
-                    img.Height = 16;
-                    img.Margin = new Thickness(4);
-                    Canvas.SetLeft(img, (((end-start) * 0.5) + start) * pixelsPerSecond - 12);
-                    Canvas.SetZIndex(img, 20);
-                    slider.Children.Add(img);
+                    if (delta > 3.0)
+                    {
+                        Image img = new Image();
+                        img.Source = interval.bundleThumbnail;
+                        img.Width = 16;
+                        img.Height = 16;
+                        img.Margin = new Thickness(4);
+                        Canvas.SetLeft(img, (((end - start) * 0.5) + start) * pixelsPerSecond - 12);
+                        Canvas.SetZIndex(img, 20);
+                        slider.Children.Add(img);
+                    }
                 }
             }
 
