@@ -77,6 +77,13 @@ namespace Cyte
             {
                 localSettings.Values["CYTE_RETENTION"] = 30;
             }
+
+            Microsoft.UI.WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WindowHandle);
+            Microsoft.UI.Windowing.AppWindow appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+            if (appWindow != null)
+            {
+                appWindow.Title = "Cyte";
+            }
         }
 
         public void OnFileActivated(AppActivationArguments activatedEventArgs)
