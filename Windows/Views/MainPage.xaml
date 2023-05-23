@@ -86,7 +86,7 @@
                 <DatePicker Grid.Row="0" Grid.Column="2" x:Name="endDatePicker" SelectedDate="{Binding end}" DateChanged="EndDate_DateChanged" />
 
                 <TextBlock Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Text="{Binding totalTimeShown}" />
-                <Button Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" Background="Transparent" Height="37" Width="37" Click="Button_Click" BorderThickness="0">
+                <Button Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" Background="Transparent" Height="37" Width="37" Click="DeleteAll" BorderThickness="0">
                     <Button.Content>
                         <Image Source="/Assets/x.png" Stretch="Uniform"/>
                     </Button.Content>
@@ -95,10 +95,14 @@
             <GridView Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" SelectionMode="None" IsItemClickEnabled="False" Height="42" ItemsSource="{Binding Source={StaticResource cvsBundles}}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Tag="{Binding bundle}" IsTapEnabled="True" Tapped="StackPanel_Tapped">
-                            <Image Source="{Binding thumbnail}" Height="24" Width="24" />
-                            <TextBlock Margin="10,5,5,5" Text="{Binding bundleDisplayName}" Width="150" />
-                        </StackPanel>
+                        <Button  Background="Transparent" Click="BundleChanged" BorderThickness="0" Tag="{Binding bundle}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding thumbnail}" Height="24" Width="24" />
+                                    <TextBlock Margin="10,5,5,5" Text="{Binding bundleDisplayName}" Width="150" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>

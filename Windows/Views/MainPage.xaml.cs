@@ -355,20 +355,6 @@ namespace Cyte
             }
         }
 
-        private void StackPanel_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            string bundle = (string)((StackPanel)sender).Tag;
-            if (highlightedBundle.Length > 0)
-            {
-                highlightedBundle = "";
-            } 
-            else
-            {
-                highlightedBundle = bundle;
-            }
-            RefreshData();
-        }
-
         private void StartDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             start = e.NewDate;
@@ -383,7 +369,7 @@ namespace Cyte
             RefreshData();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void DeleteAll(object sender, RoutedEventArgs e)
         {
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog("Delete all currently displayed recordings? This action cannot be undone.");
@@ -491,8 +477,20 @@ namespace Cyte
 
                 }));
             });
+        }
 
-
+        private void BundleChanged(object sender, RoutedEventArgs e)
+        {
+            string bundle = (string)((Button)sender).Tag;
+            if (highlightedBundle.Length > 0)
+            {
+                highlightedBundle = "";
+            }
+            else
+            {
+                highlightedBundle = bundle;
+            }
+            RefreshData();
         }
     }
 }
