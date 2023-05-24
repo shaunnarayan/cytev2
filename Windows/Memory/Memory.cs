@@ -402,7 +402,7 @@ namespace CyteEncoder
             }
         }
 
-        public async void Setup()
+        public async Task Setup()
         {
             var accessResult = await GraphicsCaptureAccess.RequestAccessAsync(GraphicsCaptureAccessKind.Programmatic);
             if (accessResult == AppCapabilityAccessStatus.Allowed)

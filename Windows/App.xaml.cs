@@ -67,7 +67,7 @@ namespace Cyte
             {
                 OnFileActivated(activatedEventArgs);
             }
-            Memory.Instance.Setup();
+            
             Window = new MainWindow();
             Window.Activate();
             WindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(Window);

@@ -12,6 +12,8 @@ using System.Diagnostics;
 using Windows.Foundation;
 using WinRT.Interop;
 using System.Threading;
+using Microsoft.Win32;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,6 +31,7 @@ namespace Cyte
 
         public MainWindow()
         {
+            Task.Run(async () => await Memory.Instance.Setup()).Wait();
             this.InitializeComponent();
             self = this;
 
@@ -53,6 +56,23 @@ namespace Cyte
                 // supported only on Windows 11. In other cases, hide
                 // the custom title bar element.
                 //AppTitleBar.Visibility = Visibility.Collapsed;
+            }
+            
+            SystemEvents.PowerModeChanged += OnPowerChange;
+        }
+
+        private async void OnPowerChange(object s, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Resume:
+                    Debug.WriteLine("On wake");
+                    await Memory.Instance.Setup();
+                    break;
+                case PowerModes.Suspend:
+                    Debug.WriteLine("On sleep");
+                    Memory.Instance.Teardown();
+                    break;
             }
         }
 
@@ -127,10 +147,9 @@ namespace Cyte
 
         private void Window_Activated(object sender, WindowActivatedEventArgs args)
         {
-
             Debug.WriteLine("Activated");
             if (MainPage.self != null) {
-                Thread.Sleep(2000);
+                Thread.Sleep(1200);
                 MainPage.self.RefreshData();
             }
         }
