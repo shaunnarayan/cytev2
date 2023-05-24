@@ -61,7 +61,7 @@ namespace CyteEncoder
                     {
                         var title = reader.GetString(1);
                         var start = reader.GetInt64(2);
-                        var end = reader.GetInt64(3);  
+                        var end = reader.GetInt64(3);
                         var bundle = reader.GetString(4);
                         var save = reader.GetBoolean(5);
                         var episode = new Episode(title, start, end, save, bundle);
@@ -392,7 +392,7 @@ namespace CyteEncoder
         public async static void TimerProc()
         {
             long update_ms = 1000;
-            while(Memory.Instance.isRunning)
+            while (Memory.Instance.isRunning)
             {
                 var start = DateTime.Now;
                 await Memory.Instance.UpdateActiveContext();
@@ -454,7 +454,7 @@ namespace CyteEncoder
             try
             {
                 proc = System.Diagnostics.Process.GetProcessById((int)processId);
-                newContext = proc.MainModule.FileName;
+                newContext = proc.MainModule.FileName.ToLower();
                 var iconPath = proc.MainModule.FileName;
 
                 var filepath = System.IO.Path.Combine(Memory.HomeDirectory(), "Icons");
@@ -484,7 +484,8 @@ namespace CyteEncoder
             }
             catch { } //Most likely failed to access the process
 
-            if (currentContext != newContext) {
+            if (currentContext != newContext)
+            {
                 Debug.WriteLine("Closing episode");
                 CloseEpisode();
                 Debug.WriteLine("Closed episode");
@@ -566,7 +567,7 @@ namespace CyteEncoder
 
         public void CloseEpisode()
         {
-            if( _encoder == null ) { return; }
+            if (_encoder == null) { return; }
             _encoder?.Dispose();
             _encoder = null;
             while (isEncoding == true)
@@ -582,22 +583,22 @@ namespace CyteEncoder
         {
             var localSettings = ApplicationData.Current.LocalSettings;
             int retain = (int)localSettings.Values["CYTE_RETENTION"];
-            if(retain == 0)
+            if (retain == 0)
             {
                 return;
             }
             var cutoff = DateTime.Now.AddDays(-retain);
             Debug.WriteLine($"Culling memories before: {cutoff.ToString()}");
             Episode[] cull = Episode.GetList($" WHERE start < {cutoff.ToFileTimeUtc()}", "");
-            foreach ( var c in cull )
+            foreach (var c in cull)
             {
-                Delete( c );
+                Delete(c);
             }
         }
-        
+
         public async Task<bool> OnFrame(IDirect3DSurface sample)
         {
-            if (engine == null || sample == null || isProcessing )
+            if (engine == null || sample == null || isProcessing)
             {
                 dropouts++;
                 Debug.WriteLine($"Frame dropout, total {dropouts}");
@@ -627,7 +628,7 @@ namespace CyteEncoder
                 var interval = new Interval(start.ToFileTimeUtc(), start.AddSeconds(2).ToFileTimeUtc(), episode, added);
                 interval.Insert();
                 lastObservation = added;
-            } 
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
@@ -678,7 +679,7 @@ namespace CyteEncoder
         public async Task<bool> Delete(Episode episode)
         {
             // get intervals and delete
-            foreach(var interval in Interval.GetList(episode))
+            foreach (var interval in Interval.GetList(episode))
             {
                 interval.Delete();
             }
