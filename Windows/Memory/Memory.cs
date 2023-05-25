@@ -496,7 +496,12 @@ namespace CyteEncoder
                     BundleExclusion exclusion = BundleExclusion.Fetch(newContext);
                     if (exclusion.exclude == false)
                     {
-                        OpenEpisode(proc.MainWindowTitle);
+                        var title = proc.MainWindowTitle.Trim();
+                        if (title == null || title.Length == 0)
+                        {
+                            title = proc.ProcessName;
+                        }
+                        OpenEpisode(title);
                     }
                     else
                     {
