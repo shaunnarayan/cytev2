@@ -22,9 +22,8 @@ using Windows.Media.Ocr;
 
 namespace Cyte
 {
-    public sealed class AppInterval: INotifyPropertyChanged
+    public sealed class AppInterval
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         private static OcrEngine engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en"));
 
         public StorageFile file { get; internal set; }

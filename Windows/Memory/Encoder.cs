@@ -82,6 +82,8 @@ namespace CyteEncoder
                 _frameGenerator.Dispose();
             }
             _frameGenerator = null;
+            _transcoder = null;
+            _mediaStreamSource = null;
         }
 
         private void CreateMediaObjects()

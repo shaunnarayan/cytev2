@@ -18,6 +18,7 @@ using Windows.Media.Editing;
 using System.IO;
 using Windows.Foundation;
 using Windows.Media.Transcoding;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Cyte
 {
@@ -96,10 +97,9 @@ namespace Cyte
             progressBar.Visibility = Visibility.Collapsed;
             startDatePicker.Date = start;
             endDatePicker.Date = end;
-            RefreshData();
         }
 
-        public void RefreshData()
+        public async Task RefreshData()
         {
             if(filter.EndsWith("?"))
             {   //Don't update for chat
@@ -145,37 +145,7 @@ namespace Cyte
                 _episodes = eps.ToArray();
             }
 
-            RefreshDataAsync();
-        }
-
-        public static string SecondsToReadable(double seconds)
-        {
-            double hr = seconds / 3600;
-            int days = (int)(hr / 24);
-            hr -= days * 24;
-            int min = (int)(seconds / 60 % 60);
-            int sec = (int)(seconds % 60);
-
-            var res = "";
-            if (days > 0)
-            {
-                res += $"{days} days, ";
-            }
-            if (hr > 0)
-            {
-                res += $"{(int)hr} hours, ";
-            }
-            if (min > 0)
-            {
-                res += $"{min} minutes, ";
-            }
-            res += $"{sec} seconds";
-            return res;
-        }
-
-        private async Task<bool> RefreshDataAsync()
-        {
-            foreach(var episode in episodes)
+            foreach (var episode in episodes)
             {
                 episode.Dispose();
             }
@@ -206,12 +176,42 @@ namespace Cyte
             }
             cvsBundles.Source = exclusions;
 
-            
+
             PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
             PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
             PropertyChanged(this, new PropertyChangedEventArgs("cvsEpisodes"));
             PropertyChanged(this, new PropertyChangedEventArgs("cvsBundles"));
-            return true;
+        }
+
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            await RefreshData();
+            base.OnNavigatedTo(e);
+        }
+
+        public static string SecondsToReadable(double seconds)
+        {
+            double hr = seconds / 3600;
+            int days = (int)(hr / 24);
+            hr -= days * 24;
+            int min = (int)(seconds / 60 % 60);
+            int sec = (int)(seconds % 60);
+
+            var res = "";
+            if (days > 0)
+            {
+                res += $"{days} days, ";
+            }
+            if (hr > 0)
+            {
+                res += $"{(int)hr} hours, ";
+            }
+            if (min > 0)
+            {
+                res += $"{min} minutes, ";
+            }
+            res += $"{sec} seconds";
+            return res;
         }
 
         private void ToggleAdvanced(object sender, RoutedEventArgs e)
@@ -220,10 +220,10 @@ namespace Cyte
             PropertyChanged(this, new PropertyChangedEventArgs("showAdvanced"));
         }
 
-        private void ToggleFaves(object sender, RoutedEventArgs e)
+        private async void ToggleFaves(object sender, RoutedEventArgs e)
         {
             showFaves = !showFaves;
-            RefreshData();
+            await RefreshData();
             PropertyChanged(this, new PropertyChangedEventArgs("showFaves"));
         }
 
@@ -232,16 +232,16 @@ namespace Cyte
             Frame.Navigate(typeof(Settings));
         }
 
-        private void Refresh(object sender, RoutedEventArgs e)
+        private async void Refresh(object sender, RoutedEventArgs e)
         {
             end = DateTime.Now;
             endDatePicker.Date = end;
             showFaves = false;
             highlightedBundle = "";
-            RefreshData();
+            await RefreshData();
         }
 
-        private void Search(object sender, RoutedEventArgs e)
+        private async void Search(object sender, RoutedEventArgs e)
         {
             // run search with filter (or chat)
             filter = searchTextBox.Text;
@@ -256,11 +256,11 @@ namespace Cyte
             }
             else
             {
-                RefreshData();
+                await RefreshData();
             }
         }
 
-        private void StarEpisode(object sender, RoutedEventArgs e)
+        private async void StarEpisode(object sender, RoutedEventArgs e)
         {
             // Star the ep
             DateTime epStart = (DateTime) ((Button)sender).Tag;
@@ -274,7 +274,7 @@ namespace Cyte
                 ep.save = !ep.save;
                 ep.Save();
             }
-            RefreshData();
+            await RefreshData();
         }
 
         private double offsetForEpisode(AppInterval episode)
@@ -326,7 +326,7 @@ namespace Cyte
             {
                 await Memory.Instance.Delete(find.First());
             }
-            RefreshData();
+            await RefreshData();
         }
 
         private void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
@@ -346,18 +346,18 @@ namespace Cyte
             }
         }
 
-        private void StartDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        private async void StartDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             start = e.NewDate;
             startDatePicker.Date = start;
-            RefreshData();
+            await RefreshData();
         }
 
-        private void EndDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        private async void EndDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             end = e.NewDate;
             endDatePicker.Date = end;
-            RefreshData();
+            await RefreshData();
         }
 
         private void DeleteAll(object sender, RoutedEventArgs e)
@@ -386,7 +386,7 @@ namespace Cyte
                 {
                     await Memory.Instance.Delete(item);
                 }
-                RefreshData();
+                await RefreshData();
             }
         }
 
@@ -470,7 +470,7 @@ namespace Cyte
             });
         }
 
-        private void BundleChanged(object sender, RoutedEventArgs e)
+        private async void BundleChanged(object sender, RoutedEventArgs e)
         {
             string bundle = (string)((Button)sender).Tag;
             if (highlightedBundle.Length > 0)
@@ -481,7 +481,7 @@ namespace Cyte
             {
                 highlightedBundle = bundle;
             }
-            RefreshData();
+            await RefreshData();
         }
     }
 }

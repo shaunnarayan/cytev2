@@ -145,12 +145,12 @@ namespace Cyte
             }
         }
 
-        private void Window_Activated(object sender, WindowActivatedEventArgs args)
+        private async void Window_Activated(object sender, WindowActivatedEventArgs args)
         {
             Debug.WriteLine("Activated");
             if (MainPage.self != null) {
                 Thread.Sleep(1200);
-                MainPage.self.RefreshData();
+                await MainPage.self.RefreshData();
             }
         }
     }

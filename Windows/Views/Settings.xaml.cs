@@ -123,7 +123,7 @@ namespace Cyte
             cvsBundles.Source = exclusions;
         }
 
-        private void CheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        private async void CheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             var bundle = (string) ((CheckBox)sender).Tag;
             var find = bundleExclusions.Where(ep =>
@@ -139,7 +139,7 @@ namespace Cyte
                     var eps = Episode.GetList($" WHERE bundle == '{ex.bundle}'", "");
                     foreach (var item in eps)
                     {
-                        Memory.Instance.Delete(item);
+                        await Memory.Instance.Delete(item);
                     }
                 }
                 ex.Save();
