@@ -147,8 +147,8 @@ namespace Cyte
 
         private async void Window_Activated(object sender, WindowActivatedEventArgs args)
         {
-            Debug.WriteLine("Activated");
-            if (MainPage.self != null) {
+            if (MainPage.self != null && args.WindowActivationState != WindowActivationState.Deactivated) {
+                Debug.WriteLine("Activated");
                 Thread.Sleep(1200);
                 await MainPage.self.RefreshData();
             }

@@ -14,7 +14,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateThumbprint>55C4222D2A1AD59C4DAD2F7CB5B9476B7C5B4939</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>84B717233C42369B91009A8F47928F146B635466</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
@@ -23,6 +23,7 @@
     <AppInstallerUri>https://cdn.cyte.io/</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

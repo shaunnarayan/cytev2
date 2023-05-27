@@ -10,7 +10,7 @@
 
   <Identity
     Name="io.cyte.win"
-    Publisher="CN=Shaun Narayan"
+    Publisher="CN=Shoplex Ltd, O=Shoplex Ltd, L=Auckland, C=NZ"
     Version="0.9.5.0" />
 
   <Properties>
