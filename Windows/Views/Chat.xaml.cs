@@ -23,9 +23,8 @@ namespace Cyte
         }
     }
 
-    public sealed partial class Chat : Page, INotifyPropertyChanged
+    public sealed partial class Chat : Page
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public ChatArgs options { get; internal set; }
         public string filter { get; set; } = "";
 
@@ -38,7 +37,6 @@ namespace Cyte
         private void Update(List<ChatItem> log)
         {
             cvsChat.Source = log;
-            PropertyChanged(this, new PropertyChangedEventArgs("cvsChat"));
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
