@@ -95,7 +95,7 @@ namespace Cyte
         {
             try
             {
-                var filepath = $"{Memory.PathForEpisode(episode.start)}\\{title}.mov";
+                var filepath = System.IO.Path.Combine(Memory.PathForEpisode(episode.start), $"{title}.mov");
                 Debug.WriteLine(filepath);
                 file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
                 media = MediaSource.CreateFromStorageFile(file);
@@ -221,6 +221,7 @@ namespace Cyte
 
         private void StackPanel_PointerEntered(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
+            lastX = e.GetCurrentPoint((Microsoft.UI.Xaml.UIElement)sender).Position.X;
             isDragging = true;
         }
 
@@ -279,7 +280,7 @@ namespace Cyte
                     Canvas.SetLeft(rect, start * pixelsPerSecond);
                     Canvas.SetZIndex(rect, 0);
                     slider.Children.Add(rect);
-                    if (delta > 3.0)
+                    if (delta > 2.5)
                     {
                         Image img = new Image();
                         img.Source = interval.bundleThumbnail;
@@ -293,7 +294,7 @@ namespace Cyte
                 }
             }
 
-            currentTime = active.Item1.start.AddSeconds(active.Item2 - secondsOffsetFromLastEpisode).ToString("MM/dd/yyyy, HH:mm:ss");
+            currentTime = active.Item1.start.AddSeconds(active.Item2 - secondsOffsetFromLastEpisode).ToString("MM/dd/yyyy, h:mm tt");
             double progress = active.Item2 - secondsOffsetFromLastEpisode;
             var anchor = DateTime.Now.ToFileTimeUtc() - active.Item1.end.ToFileTimeUtc();
             double seconds = Math.Max(1.0, anchor -  progress) * 0.0000001;
@@ -321,7 +322,6 @@ namespace Cyte
                 PropertyChanged(this, new PropertyChangedEventArgs("mediaPlayer"));
                 PropertyChanged(this, new PropertyChangedEventArgs("currentTime"));
                 PropertyChanged(this, new PropertyChangedEventArgs("readableOffset"));
-                PropertyChanged(this, new PropertyChangedEventArgs("cvsIntervals"));
             }
         }
     }
