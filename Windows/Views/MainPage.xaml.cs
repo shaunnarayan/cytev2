@@ -164,7 +164,6 @@ namespace Cyte
             episodesLengthSum = offset;
             showTimelapse = episodesLengthSum < (60 * 60 * 10) ? Visibility.Visible : Visibility.Collapsed;
             totalTimeShown = SecondsToReadable(episodesLengthSum);
-            cvsEpisodes.Source = episodes;
 
             bundleExclusions = BundleExclusion.GetList();
             var exclusions = new List<CyteBundleExclusion>();
@@ -174,13 +173,15 @@ namespace Cyte
                 ex.Update();
                 exclusions.Add(ex);
             }
+
+            cvsEpisodes.Source = episodes;
             cvsBundles.Source = exclusions;
 
-
-            PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
-            PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
-            PropertyChanged(this, new PropertyChangedEventArgs("cvsEpisodes"));
-            PropertyChanged(this, new PropertyChangedEventArgs("cvsBundles"));
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
+                PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
+            }
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -202,7 +203,7 @@ namespace Cyte
             {
                 res += $"{days} days, ";
             }
-            if (hr > 0)
+            if ((int)hr > 0)
             {
                 res += $"{(int)hr} hours, ";
             }
@@ -309,7 +310,6 @@ namespace Cyte
                 episode.Dispose();
             }
             cvsEpisodes = new CollectionViewSource();
-            PropertyChanged(this, new PropertyChangedEventArgs("cvsEpisodes"));
             TimelineArgs args = new TimelineArgs(filter, episodes.ToArray(), offset);
             Frame.Navigate(typeof(Timeline), args);
         }
@@ -473,14 +473,7 @@ namespace Cyte
         private async void BundleChanged(object sender, RoutedEventArgs e)
         {
             string bundle = (string)((Button)sender).Tag;
-            if (highlightedBundle.Length > 0)
-            {
-                highlightedBundle = "";
-            }
-            else
-            {
-                highlightedBundle = bundle;
-            }
+            highlightedBundle = bundle;
             await RefreshData();
         }
     }
