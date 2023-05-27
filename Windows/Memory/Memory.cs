@@ -17,6 +17,7 @@ using Windows.Graphics.Display;
 using Windows.Security.Authorization.AppCapabilityAccess;
 using Windows.System;
 using System.Linq;
+using Windows.Foundation;
 
 namespace CyteEncoder
 {
@@ -345,7 +346,6 @@ namespace CyteEncoder
         private string currentContext = "Startup";
         private OcrEngine engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en"));
         private bool isProcessing = false;
-        private bool isEncoding = false;
         private uint dropouts = 0;
 
         public static Memory Instance
@@ -389,13 +389,13 @@ namespace CyteEncoder
             Debug.WriteLine("Init memory");
         }
 
-        public async static void TimerProc()
+        public static void TimerProc()
         {
             long update_ms = 1000;
             while (Memory.Instance.isRunning)
             {
                 var start = DateTime.Now;
-                await Memory.Instance.UpdateActiveContext();
+                Task.Run(async () => await Memory.Instance.UpdateActiveContext()).Wait();
                 var end = DateTime.Now;
                 var elapased = end - start;
                 Thread.Sleep((int)Math.Max(0, update_ms - elapased.TotalMilliseconds));
@@ -431,7 +431,7 @@ namespace CyteEncoder
         public void Teardown()
         {
             isRunning = false;
-            CloseEpisode();
+            Task.Run(async () => await CloseEpisode()).Wait();
             timer.Join();
         }
 
@@ -487,7 +487,7 @@ namespace CyteEncoder
             if (currentContext != newContext)
             {
                 Debug.WriteLine("Closing episode");
-                CloseEpisode();
+                await CloseEpisode();
                 Debug.WriteLine("Closed episode");
                 currentContext = newContext;
                 if (proc != null && currentContext != "" && proc.Id != Process.GetCurrentProcess().Id)
@@ -501,7 +501,7 @@ namespace CyteEncoder
                         {
                             title = proc.ProcessName;
                         }
-                        OpenEpisode(title);
+                        await OpenEpisode(title);
                     }
                     else
                     {
@@ -512,6 +512,7 @@ namespace CyteEncoder
             return true;
         }
 
+        private IAsyncAction encoding;
         private async Task<bool> OpenEpisode(string title)
         {
             Debug.WriteLine($"Opening {title}");
@@ -537,49 +538,52 @@ namespace CyteEncoder
             episode.save = false;
 
             // Kick off the encoding
-            isEncoding = true;
             var folder = await Windows.Storage.StorageFolder.GetFolderFromPathAsync(filepath);
             var file = await folder.CreateFileAsync($"{title}.mov");
             try
             {
-                using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                using (_encoder = new Encoder(_item))
-                {
-                    Debug.WriteLine("StartEnc");
-                    await _encoder.EncodeAsync(
-                        stream,
-                        width, height, 1600000,
-                        0.5);
-                    Debug.WriteLine("StopEnc");
-                }
+                var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                _encoder = new Encoder(_item);
+                Debug.WriteLine("StartEnc");
+                encoding = _encoder.EncodeAsync(
+                    stream,
+                    width, height, 1600000,
+                    0.5);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(ex);
             }
+
+            return true;
+        }
+
+        public async Task CloseEpisode()
+        {
+            if (_encoder == null) { return; }
+
             Debug.WriteLine("Switching context");
             // save episode into db
             episode.end = DateTime.Now.ToFileTimeUtc();
             episode.Insert();
-            if (frameCount <= 0)
+            if (frameCount <= 1)
             {
-                await Delete(episode);
+                Task.Run(async () => await Delete(episode)).Wait();
             }
-            isEncoding = false;
-            return true;
-        }
 
-        public void CloseEpisode()
-        {
-            if (_encoder == null) { return; }
             _encoder?.Dispose();
-            _encoder = null;
-            while (isEncoding == true)
+            //await encoding;
+            for (int i = 0; i < 10 && encoding.Status != AsyncStatus.Completed; i++)
             {
-                Debug.WriteLine("Waiting for encoder to finish...");
                 Thread.Sleep(100);
             }
+            if (encoding.Status != AsyncStatus.Completed)
+            {
+                Debug.WriteLine("Forcing cancel of encoder.");
+                encoding.Cancel();
+            }
+            _encoder = null;
             frameCount = 0;
             RunRetention();
         }
@@ -597,7 +601,7 @@ namespace CyteEncoder
             Episode[] cull = Episode.GetList($" WHERE start < {cutoff.ToFileTimeUtc()}", "");
             foreach (var c in cull)
             {
-                Delete(c);
+                Task.Run(async () => await Delete(c)).Wait();
             }
         }
 
