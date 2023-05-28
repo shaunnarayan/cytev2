@@ -171,7 +171,10 @@ namespace Cyte
             {
                 var ex = new CyteBundleExclusion(exclusion);
                 ex.Update();
-                exclusions.Add(ex);
+                if (highlightedBundle.Length == 0 || highlightedBundle == exclusion.bundle)
+                {
+                    exclusions.Add(ex);
+                }
             }
 
             cvsEpisodes.Source = episodes;
@@ -473,7 +476,14 @@ namespace Cyte
         private async void BundleChanged(object sender, RoutedEventArgs e)
         {
             string bundle = (string)((Button)sender).Tag;
-            highlightedBundle = bundle;
+            if (highlightedBundle.Length > 0)
+            {
+                highlightedBundle = "";
+            }
+            else
+            {
+                highlightedBundle = bundle;
+            }
             await RefreshData();
         }
     }
