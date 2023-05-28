@@ -519,6 +519,12 @@ namespace CyteEncoder
             // Encoders generally like even numbers
             var width = (uint)_item.Size.Width;
             var height = (uint)_item.Size.Height;
+            if (width == 0 || height == 0)
+            {
+                // reset the display item
+                var displays = DisplayServices.FindAll();
+                Memory.Instance._item = GraphicsCaptureItem.TryCreateFromDisplayId(displays.First());
+            }
 
             // Find a place to put our vidoe for now
             currentStart = DateTime.Now;
@@ -531,6 +537,7 @@ namespace CyteEncoder
             var filepath = Memory.PathForEpisode(currentStart.ToFileTimeUtc());
             Directory.CreateDirectory(filepath);
 
+            episode = new Episode();
             episode.title = title;
             episode.start = currentStart.ToFileTimeUtc();
             episode.end = currentStart.ToFileTimeUtc();
@@ -564,14 +571,6 @@ namespace CyteEncoder
             if (_encoder == null) { return; }
 
             Debug.WriteLine("Switching context");
-            // save episode into db
-            episode.end = DateTime.Now.ToFileTimeUtc();
-            episode.Insert();
-            if (frameCount <= 1)
-            {
-                Task.Run(async () => await Delete(episode)).Wait();
-            }
-
             _encoder?.Dispose();
             //await encoding;
             for (int i = 0; i < 10 && encoding.Status != AsyncStatus.Completed; i++)
@@ -584,6 +583,13 @@ namespace CyteEncoder
                 encoding.Cancel();
             }
             _encoder = null;
+            // save episode into db
+            episode.end = DateTime.Now.ToFileTimeUtc();
+            if (frameCount > 0)
+            {
+                episode.Insert();
+            }
+            episode = null;
             frameCount = 0;
             RunRetention();
         }
