@@ -73,12 +73,13 @@ namespace CyteEncoder
                 DisposeInternal();
             }
 
-            _isRecording = false;            
+            _isRecording = false;
         }
 
         private void DisposeInternal()
         {
-            if(_frameGenerator != null) {
+            if (_frameGenerator != null)
+            {
                 _frameGenerator.Dispose();
             }
             _frameGenerator = null;
@@ -114,7 +115,7 @@ namespace CyteEncoder
                 {
                     using (var frame = _frameGenerator.WaitForNewFrame())
                     {
-                        if (frame == null)
+                        if (frame == null || !_isRecording || _closed)
                         {
                             args.Request.Sample = null;
                             DisposeInternal();
@@ -153,7 +154,16 @@ namespace CyteEncoder
         {
             using (var frame = _frameGenerator.WaitForNewFrame())
             {
-                args.Request.SetActualStartPosition(frame.SystemRelativeTime);
+                if (frame == null)
+                {
+                    _isRecording = false;
+                    Dispose();
+                    return;
+                }
+                else
+                {
+                    args.Request.SetActualStartPosition(frame.SystemRelativeTime);
+                }
             }
         }
 
@@ -163,7 +173,7 @@ namespace CyteEncoder
         private CaptureFrameWait _frameGenerator;
 
         private VideoStreamDescriptor _videoDescriptor;
-        private MediaStreamSource _mediaStreamSource;
+        public MediaStreamSource _mediaStreamSource;
         private MediaTranscoder _transcoder;
         private bool _isRecording;
 
