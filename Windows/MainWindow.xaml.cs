@@ -31,7 +31,7 @@ namespace Cyte
 
         public MainWindow()
         {
-            Task.Run(async () => await Memory.Instance.Setup()).Wait();
+            
             this.InitializeComponent();
             self = this;
 
@@ -91,6 +91,7 @@ namespace Cyte
             {
                 SetDragRegionForCustomTitleBar(m_AppWindow);
             }
+            Task.Run(async () => await Memory.Instance.Setup()).Wait();
         }
 
         private void OnBackClicked(object sender, RoutedEventArgs e)
