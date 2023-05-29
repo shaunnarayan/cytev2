@@ -2,10 +2,7 @@ using CyteEncoder;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Windows.Graphics.Capture;
-using Windows.Graphics.Display;
-using Windows.Security.Authorization.AppCapabilityAccess;
 using Windows.UI.Popups;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -139,10 +136,7 @@ namespace Cyte
 
             foreach (var episode in episodes)
             {
-                DispatcherQueue.TryEnqueue(() =>
-                {
-                    episode.Dispose();
-                });
+                episode.Dispose();
             }
             episodes = new List<AppInterval>();
             var offset = 0.0;
@@ -195,20 +189,23 @@ namespace Cyte
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            
-            progressBar.Visibility = Visibility.Collapsed;
-            startDatePicker.Date = start;
-            endDatePicker.Date = end;
 
-            var vault = new Windows.Security.Credentials.PasswordVault();
-            var passwords = vault.RetrieveAll();
-            if (passwords.Count > 0)
+            DispatcherQueue.TryEnqueue(() =>
             {
-                searchTextBox.PlaceholderText = "Search or chat your history";
-                isChatSetup = true;
-            }
+                progressBar.Visibility = Visibility.Collapsed;
+                startDatePicker.Date = start;
+                endDatePicker.Date = end;
 
-            RefreshData();
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                var passwords = vault.RetrieveAll();
+                if (passwords.Count > 0)
+                {
+                    searchTextBox.PlaceholderText = "Search or chat your history";
+                    isChatSetup = true;
+                }
+
+                RefreshData();
+            });
         }
 
         public static string SecondsToReadable(double seconds)
@@ -262,47 +259,56 @@ namespace Cyte
 
         private void Refresh(object sender, RoutedEventArgs e)
         {
-            end = DateTime.Now;
-            endDatePicker.Date = end;
-            showFaves = false;
-            highlightedBundle = "";
-            RefreshData();
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                end = DateTime.Now;
+                endDatePicker.Date = end;
+                showFaves = false;
+                highlightedBundle = "";
+                RefreshData();
+            });
         }
 
         private void Search(object sender, RoutedEventArgs e)
         {
-            // run search with filter (or chat)
-            filter = searchTextBox.Text;
-            Debug.WriteLine(filter);
-            if (isChatSetup && filter.EndsWith("?")) 
-            { 
-                // run through agent
-                ChatArgs args = new ChatArgs(filter, _intervals);
-                Frame.Navigate(typeof(Chat), args);
-
-                filter = "";
-            }
-            else
+            DispatcherQueue.TryEnqueue(() =>
             {
-                RefreshData();
-            }
+                // run search with filter (or chat)
+                filter = searchTextBox.Text;
+                Debug.WriteLine(filter);
+                if (isChatSetup && filter.EndsWith("?"))
+                {
+                    // run through agent
+                    ChatArgs args = new ChatArgs(filter, _intervals);
+                    Frame.Navigate(typeof(Chat), args);
+
+                    filter = "";
+                }
+                else
+                {
+                    RefreshData();
+                }
+            });
         }
 
         private void StarEpisode(object sender, RoutedEventArgs e)
         {
             // Star the ep
-            DateTime epStart = (DateTime) ((Button)sender).Tag;
-            var find = _episodes.Where(ep =>
+            DispatcherQueue.TryEnqueue(() =>
             {
-                return ep.start == epStart.ToFileTimeUtc();
+                DateTime epStart = (DateTime)((Button)sender).Tag;
+                var find = _episodes.Where(ep =>
+                {
+                    return ep.start == epStart.ToFileTimeUtc();
+                });
+                if (find.Count() > 0)
+                {
+                    var ep = find.First();
+                    ep.save = !ep.save;
+                    ep.Save();
+                }
+                RefreshData();
             });
-            if( find.Count() > 0 )
-            {
-                var ep = find.First();
-                ep.save = !ep.save;
-                ep.Save();
-            }
-            RefreshData();
         }
 
         private double offsetForEpisode(AppInterval episode)
@@ -321,70 +327,85 @@ namespace Cyte
 
         private void OpenEpisode(object sender, RoutedEventArgs e)
         {
-            // Navigate to timeline centered at tag
-            var epStart = (DateTime) ((Button)sender).Tag;
-            var find = episodes.Where(ep =>
+            DispatcherQueue.TryEnqueue(() =>
             {
-                return ep.start.ToFileTimeUtc() == epStart.ToFileTimeUtc();
+                // Navigate to timeline centered at tag
+                var epStart = (DateTime)((Button)sender).Tag;
+                var find = episodes.Where(ep =>
+                {
+                    return ep.start.ToFileTimeUtc() == epStart.ToFileTimeUtc();
+                });
+                var offset = 0.0;
+                if (find.Count() > 0)
+                {
+                    offset = offsetForEpisode(find.First());
+                }
+                foreach (var episode in episodes)
+                {
+                    episode.Dispose();
+                }
+                cvsEpisodes = new CollectionViewSource();
+                TimelineArgs args = new TimelineArgs(filter, episodes.ToArray(), offset);
+                Frame.Navigate(typeof(Timeline), args);
             });
-            var offset = 0.0;
-            if (find.Count() > 0)
-            {
-                offset = offsetForEpisode(find.First());
-            }
-            foreach (var episode in episodes)
-            {
-                episode.Dispose();
-            }
-            cvsEpisodes = new CollectionViewSource();
-            TimelineArgs args = new TimelineArgs(filter, episodes.ToArray(), offset);
-            Frame.Navigate(typeof(Timeline), args);
         }
 
         private async void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             // delete
-            var epStart = (DateTime)((MenuFlyoutItem)sender).Tag;
-            var find = _episodes.Where(ep =>
+            DispatcherQueue.TryEnqueue(async () =>
             {
-                return ep.start == epStart.ToFileTimeUtc();
+                var epStart = (DateTime)((MenuFlyoutItem)sender).Tag;
+                var find = _episodes.Where(ep =>
+                {
+                    return ep.start == epStart.ToFileTimeUtc();
+                });
+                if (find.Count() > 0)
+                {
+                    await Memory.Instance.Delete(find.First());
+                }
+                RefreshData();
             });
-            if (find.Count() > 0)
-            {
-                await Memory.Instance.Delete(find.First());
-            }
-            RefreshData();
         }
 
         private void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
         {
             //reveal
-            var epStart = (DateTime)((MenuFlyoutItem)sender).Tag;
-            var find = episodes.Where(ep =>
+            DispatcherQueue.TryEnqueue(() =>
             {
-                return ep.start.ToFileTimeUtc() == epStart.ToFileTimeUtc();
+                var epStart = (DateTime)((MenuFlyoutItem)sender).Tag;
+                var find = episodes.Where(ep =>
+                {
+                    return ep.start.ToFileTimeUtc() == epStart.ToFileTimeUtc();
+                });
+                if (find.Count() > 0)
+                {
+                    AppInterval ep = find.First();
+                    string path = Memory.FilePathForEpisode(ep.start.ToFileTimeUtc(), ep.title);
+                    Debug.WriteLine($"explorer.exe /select, {path}");
+                    Process.Start("explorer.exe", $"/select, \"{path}\"");
+                }
             });
-            if (find.Count() > 0)
-            {
-                AppInterval ep = find.First();
-                string path = Memory.FilePathForEpisode(ep.start.ToFileTimeUtc(), ep.title);
-                Debug.WriteLine($"explorer.exe /select, {path}");
-                Process.Start("explorer.exe", $"/select, \"{path}\"");
-            }
         }
 
         private void StartDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            start = e.NewDate;
-            startDatePicker.Date = start;
-            RefreshData();
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                start = e.NewDate;
+                startDatePicker.Date = start;
+                RefreshData();
+            });
         }
 
         private void EndDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            end = e.NewDate;
-            endDatePicker.Date = end;
-            RefreshData();
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                end = e.NewDate;
+                endDatePicker.Date = end;
+                RefreshData();
+            });
         }
 
         private void DeleteAll(object sender, RoutedEventArgs e)
