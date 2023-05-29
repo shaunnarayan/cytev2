@@ -36,16 +36,19 @@ namespace Cyte
 
         private void Update(List<ChatItem> log)
         {
-            cvsChat.Source = log;
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                cvsChat.Source = log;
+            });
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            base.OnNavigatedTo(e);
             options = (ChatArgs)e.Parameter;
             var is_setup = await Agent.Instance.Setup();
             Agent.Instance.Query(this.Update, this.BaseUri, options.filter, options.intervals);
             MainWindow.self.BackButton.Visibility = Visibility.Visible;
-            base.OnNavigatedTo(e);
         }
 
         private void Button_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)

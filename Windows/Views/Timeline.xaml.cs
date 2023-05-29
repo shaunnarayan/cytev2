@@ -125,7 +125,9 @@ namespace Cyte
                 color = Color.FromArgb(255, averageRed, averageGreen, averageBlue);
 
             }
-            catch { }
+            catch(Exception error) {
+                Debug.WriteLine(error);
+            }
             return true;
         }
 
@@ -199,8 +201,9 @@ namespace Cyte
             return interval_center / Timeline.windowLengthInSeconds;
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            base.OnNavigatedTo(e);
             // get the selected episode, calculate offset..
             options = (TimelineArgs)e.Parameter;
             if (options.intervals.Length > 0 )
@@ -209,14 +212,19 @@ namespace Cyte
                 var interval = activeInterval(options.offset);
                 var filepath = $"{Memory.PathForEpisode(interval.Item1.episode.start)}\\{interval.Item1.title}.mov";
                 Debug.WriteLine(filepath);
-                var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
-                mediaPlayer.MediaPlayer.SetFileSource(file);
+                Task.Run(async () =>
+                {
+                    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
+                    mediaPlayer.MediaPlayer.SetFileSource(file);
+                });
                 currentStart = options.intervals[0].episode.start;
                 currentTime = options.intervals[0].start.ToString();
             }
-            UpdateData();
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                UpdateData();
+            });
             MainWindow.self.BackButton.Visibility = Visibility.Visible;
-            base.OnNavigatedTo(e);
         }
 
         private void StackPanel_PointerEntered(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -230,7 +238,7 @@ namespace Cyte
             isDragging = false;
         }
 
-        private async void UpdateData()
+        private void UpdateData()
         {
             var active = activeInterval(secondsOffsetFromLastEpisode);
             if (active.Item1 == null)
@@ -243,8 +251,11 @@ namespace Cyte
                 //Debug.WriteLine(filepath);
                 try
                 {
-                    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
-                    mediaPlayer.MediaPlayer.SetFileSource(file);
+                    DispatcherQueue.TryEnqueue(async () =>
+                    {
+                        var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(filepath);
+                        mediaPlayer.MediaPlayer.SetFileSource(file);
+                    });
                     //mediaPlayer.MediaPlayer.SetMediaSource(active.Item1.media.MediaStreamSource);
                 }
                 catch { }
@@ -318,10 +329,13 @@ namespace Cyte
                 {
                     secondsOffsetFromLastEpisode = newStart;
                 }
-                UpdateData();
-                PropertyChanged(this, new PropertyChangedEventArgs("mediaPlayer"));
-                PropertyChanged(this, new PropertyChangedEventArgs("currentTime"));
-                PropertyChanged(this, new PropertyChangedEventArgs("readableOffset"));
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    UpdateData();
+                    PropertyChanged(this, new PropertyChangedEventArgs("mediaPlayer"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("currentTime"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("readableOffset"));
+                });
             }
         }
     }

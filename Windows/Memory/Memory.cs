@@ -404,6 +404,7 @@ namespace CyteEncoder
 
         public async Task Setup()
         {
+            if (isRunning) return;
             var accessResult = await GraphicsCaptureAccess.RequestAccessAsync(GraphicsCaptureAccessKind.Programmatic);
             if (accessResult == AppCapabilityAccessStatus.Allowed)
             {
@@ -415,7 +416,6 @@ namespace CyteEncoder
 
                 var dir = Directory.CreateDirectory(Memory.HomeDirectory());
                 Debug.WriteLine(dir.CreationTime);
-                migrate();
 
                 _item = item;
                 isRunning = true;
@@ -732,7 +732,7 @@ namespace CyteEncoder
             migrate();
         }
 
-        private void migrate()
+        public void migrate()
         {
             using (var connection = new SqliteConnection($"Data Source={Memory.DatabasePath()}"))
             {

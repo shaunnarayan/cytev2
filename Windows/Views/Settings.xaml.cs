@@ -117,7 +117,10 @@ namespace Cyte
             foreach (var exclusion in bundleExclusions)
             {
                 var ex = new CyteBundleExclusion(exclusion);
-                ex.Update();
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    ex.Update();
+                });
                 exclusions.Add(ex);
             }
             cvsBundles.Source = exclusions;

@@ -56,6 +56,7 @@ namespace CyteEncoder
                         await transcode.TranscodeAsync();
                     }
                     catch { }
+                    stream.Dispose();
                 }
             }
         }

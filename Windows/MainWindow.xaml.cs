@@ -57,7 +57,7 @@ namespace Cyte
                 // the custom title bar element.
                 //AppTitleBar.Visibility = Visibility.Collapsed;
             }
-            
+            Memory.Instance.migrate();
             SystemEvents.PowerModeChanged += OnPowerChange;
         }
 
@@ -91,7 +91,11 @@ namespace Cyte
             {
                 SetDragRegionForCustomTitleBar(m_AppWindow);
             }
-            Task.Run(async () => await Memory.Instance.Setup()).Wait();
+
+            DispatcherQueue.TryEnqueue(async () =>
+            {
+                await Memory.Instance.Setup();
+            });
         }
 
         private void OnBackClicked(object sender, RoutedEventArgs e)
@@ -146,13 +150,17 @@ namespace Cyte
             }
         }
 
-        private async void Window_Activated(object sender, WindowActivatedEventArgs args)
+        private void Window_Activated(object sender, WindowActivatedEventArgs args)
         {
-            if (MainPage.self != null && args.WindowActivationState != WindowActivationState.Deactivated) {
-                Debug.WriteLine("Activated");
-                Thread.Sleep(1200);
-                await MainPage.self.RefreshData();
-            }
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (MainPage.self != null && args.WindowActivationState != WindowActivationState.Deactivated)
+                {
+                    Debug.WriteLine("Activated");
+                    Thread.Sleep(1200);
+                    MainPage.self.RefreshData();
+                }
+            });
         }
     }
 }

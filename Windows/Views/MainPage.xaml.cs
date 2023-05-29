@@ -67,7 +67,7 @@ namespace Cyte
         {
             showAdvanced = Visibility.Collapsed;
             showFaves = false;
-            InitializeComponent();
+            
             self = this;
 
                 /*
@@ -87,19 +87,11 @@ namespace Cyte
                 var ignored = dialog.ShowAsync();
                 return;
             }
-            var vault = new Windows.Security.Credentials.PasswordVault();
-            var passwords = vault.RetrieveAll();
-            if (passwords.Count > 0)
-            {
-                searchTextBox.PlaceholderText = "Search or chat your history";
-                isChatSetup = true;
-            }
-            progressBar.Visibility = Visibility.Collapsed;
-            startDatePicker.Date = start;
-            endDatePicker.Date = end;
+
+            InitializeComponent();
         }
 
-        public async Task RefreshData()
+        public void RefreshData()
         {
             if(filter.EndsWith("?"))
             {   //Don't update for chat
@@ -147,7 +139,10 @@ namespace Cyte
 
             foreach (var episode in episodes)
             {
-                episode.Dispose();
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    episode.Dispose();
+                });
             }
             episodes = new List<AppInterval>();
             var offset = 0.0;
@@ -157,40 +152,63 @@ namespace Cyte
                 var interval = new AppInterval(episode);
                 interval.offset = offset;
                 interval.length = length;
-                await interval.Update();
+                DispatcherQueue.TryEnqueue(async () =>
+                {
+                    await interval.Update();
+                });
                 episodes.Add(interval);
                 offset += length;
             }
-            episodesLengthSum = offset;
-            showTimelapse = episodesLengthSum < (60 * 60 * 10) ? Visibility.Visible : Visibility.Collapsed;
-            totalTimeShown = SecondsToReadable(episodesLengthSum);
 
             bundleExclusions = BundleExclusion.GetList();
             var exclusions = new List<CyteBundleExclusion>();
             foreach (var exclusion in bundleExclusions)
             {
                 var ex = new CyteBundleExclusion(exclusion);
-                ex.Update();
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    ex.Update();
+                });
                 if (highlightedBundle.Length == 0 || highlightedBundle == exclusion.bundle)
                 {
                     exclusions.Add(ex);
                 }
             }
 
-            cvsEpisodes.Source = episodes;
-            cvsBundles.Source = exclusions;
-
-            if (PropertyChanged != null)
+            DispatcherQueue.TryEnqueue(() =>
             {
-                PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
-                PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
-            }
+                episodesLengthSum = offset;
+                showTimelapse = episodesLengthSum < (60 * 60 * 10) ? Visibility.Visible : Visibility.Collapsed;
+                totalTimeShown = SecondsToReadable(episodesLengthSum);
+
+                cvsEpisodes.Source = episodes;
+                cvsBundles.Source = exclusions;
+
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs("showTimelapse"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("totalTimeShown"));
+                }
+            });
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            await RefreshData();
             base.OnNavigatedTo(e);
+            
+            progressBar.Visibility = Visibility.Collapsed;
+            startDatePicker.Date = start;
+            endDatePicker.Date = end;
+
+            var vault = new Windows.Security.Credentials.PasswordVault();
+            var passwords = vault.RetrieveAll();
+            if (passwords.Count > 0)
+            {
+                searchTextBox.PlaceholderText = "Search or chat your history";
+                isChatSetup = true;
+            }
+
+            RefreshData();
         }
 
         public static string SecondsToReadable(double seconds)
@@ -220,15 +238,21 @@ namespace Cyte
 
         private void ToggleAdvanced(object sender, RoutedEventArgs e)
         {
-            showAdvanced = (showAdvanced == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
-            PropertyChanged(this, new PropertyChangedEventArgs("showAdvanced"));
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                showAdvanced = (showAdvanced == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+                PropertyChanged(this, new PropertyChangedEventArgs("showAdvanced"));
+            });
         }
 
-        private async void ToggleFaves(object sender, RoutedEventArgs e)
+        private void ToggleFaves(object sender, RoutedEventArgs e)
         {
-            showFaves = !showFaves;
-            await RefreshData();
-            PropertyChanged(this, new PropertyChangedEventArgs("showFaves"));
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                showFaves = !showFaves;
+                RefreshData();
+                PropertyChanged(this, new PropertyChangedEventArgs("showFaves"));
+            });
         }
 
         private void OpenSettings(object sender, RoutedEventArgs e)
@@ -236,16 +260,16 @@ namespace Cyte
             Frame.Navigate(typeof(Settings));
         }
 
-        private async void Refresh(object sender, RoutedEventArgs e)
+        private void Refresh(object sender, RoutedEventArgs e)
         {
             end = DateTime.Now;
             endDatePicker.Date = end;
             showFaves = false;
             highlightedBundle = "";
-            await RefreshData();
+            RefreshData();
         }
 
-        private async void Search(object sender, RoutedEventArgs e)
+        private void Search(object sender, RoutedEventArgs e)
         {
             // run search with filter (or chat)
             filter = searchTextBox.Text;
@@ -260,11 +284,11 @@ namespace Cyte
             }
             else
             {
-                await RefreshData();
+                RefreshData();
             }
         }
 
-        private async void StarEpisode(object sender, RoutedEventArgs e)
+        private void StarEpisode(object sender, RoutedEventArgs e)
         {
             // Star the ep
             DateTime epStart = (DateTime) ((Button)sender).Tag;
@@ -278,7 +302,7 @@ namespace Cyte
                 ep.save = !ep.save;
                 ep.Save();
             }
-            await RefreshData();
+            RefreshData();
         }
 
         private double offsetForEpisode(AppInterval episode)
@@ -329,7 +353,7 @@ namespace Cyte
             {
                 await Memory.Instance.Delete(find.First());
             }
-            await RefreshData();
+            RefreshData();
         }
 
         private void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
@@ -349,18 +373,18 @@ namespace Cyte
             }
         }
 
-        private async void StartDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        private void StartDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             start = e.NewDate;
             startDatePicker.Date = start;
-            await RefreshData();
+            RefreshData();
         }
 
-        private async void EndDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        private void EndDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             end = e.NewDate;
             endDatePicker.Date = end;
-            await RefreshData();
+            RefreshData();
         }
 
         private void DeleteAll(object sender, RoutedEventArgs e)
@@ -389,7 +413,7 @@ namespace Cyte
                 {
                     await Memory.Instance.Delete(item);
                 }
-                await RefreshData();
+                RefreshData();
             }
         }
 
@@ -428,6 +452,7 @@ namespace Cyte
             var folder = await Windows.Storage.StorageFolder.GetFolderFromPathAsync(filepath);
             var file = await folder.CreateFileAsync($"{DateTime.Now.ToFileTimeUtc()}.mov");
             var profile = mediaComposition.CreateDefaultEncodingProfile();
+            profile.Video.Bitrate = 1600000;
             profile.Video.Height = 1080;
             profile.Video.Width = 1920;
             var trimming = MediaTrimmingPreference.Precise;
@@ -473,18 +498,21 @@ namespace Cyte
             });
         }
 
-        private async void BundleChanged(object sender, RoutedEventArgs e)
+        private void BundleChanged(object sender, RoutedEventArgs e)
         {
-            string bundle = (string)((Button)sender).Tag;
-            if (highlightedBundle.Length > 0)
+            DispatcherQueue.TryEnqueue(() =>
             {
-                highlightedBundle = "";
-            }
-            else
-            {
-                highlightedBundle = bundle;
-            }
-            await RefreshData();
+                string bundle = (string)((Button)sender).Tag;
+                if (highlightedBundle.Length > 0)
+                {
+                    highlightedBundle = "";
+                }
+                else
+                {
+                    highlightedBundle = bundle;
+                }
+                RefreshData();
+            });
         }
     }
 }
