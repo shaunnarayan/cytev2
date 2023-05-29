@@ -350,7 +350,7 @@ namespace Cyte
             });
         }
 
-        private async void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             // delete
             DispatcherQueue.TryEnqueue(async () =>

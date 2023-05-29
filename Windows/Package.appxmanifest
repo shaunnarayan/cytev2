@@ -11,7 +11,7 @@
   <Identity
     Name="io.cyte.win"
     Publisher="CN=Shoplex Ltd, O=Shoplex Ltd, L=Auckland, C=NZ"
-    Version="0.9.6.0" />
+    Version="0.9.7.0" />
 
   <Properties>
     <DisplayName>Cyte</DisplayName>
