@@ -226,8 +226,10 @@ class Agent : ObservableObject {
         let chatId = chatLog.lastIndex(where: { log in
             return log.0 == "bot"
         })
-        withAnimation(.easeInOut(duration: 0.3)) {
-            chatLog[chatId!].2.append(token.replacingOccurrences(of: "\\n", with: "\n"))
+        DispatchQueue.main.async {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                self.chatLog[chatId!].2.append(token.replacingOccurrences(of: "\\n", with: "\n"))
+            }
         }
     }
     

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 3F049C9A29EE9CEF0078EE31 /* SwiftDiff */; };
-		3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3F049C9C29EE9CFE0078EE31 /* SwiftDiff */; };
 		3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F049C9E29EEA9E30078EE31 /* AVKit.framework */; };
 		3F0B8C0029B310E40018BD60 /* ScreenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFD29B310E40018BD60 /* ScreenRecorder.swift */; platformFilters = (macos, ); };
 		3F0B8C0129B310E40018BD60 /* CaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B8BFE29B310E40018BD60 /* CaptureEngine.swift */; platformFilters = (macos, ); };
@@ -41,7 +39,8 @@
 		3FCAA20729AC7C0100898995 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCAA20629AC7C0100898995 /* ContentView.swift */; };
 		3FCAA20929AC7C0400898995 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FCAA20829AC7C0400898995 /* Assets.xcassets */; };
 		3FCAA20D29AC7C0400898995 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FCAA20C29AC7C0400898995 /* Preview Assets.xcassets */; };
-		3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5B429CD7BAC00A4C6C0 /* OpenAI */; };
+		3FCF42D82A24CC610085A6E8 /* SwiftDiff in Frameworks */ = {isa = PBXBuildFile; productRef = 3FCF42D72A24CC610085A6E8 /* SwiftDiff */; };
+		3FCF42DB2A24CC8C0085A6E8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 3FCF42DA2A24CC8C0085A6E8 /* OpenAI */; };
 		3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5BA29D0029800A4C6C0 /* ObjcExceptionBridging */; };
 		3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDBE5BC29D0029800A4C6C0 /* XCGLogger */; };
 		3FDBE5C429D4704300A4C6C0 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDBE5C329D4704300A4C6C0 /* Export.swift */; };
@@ -149,7 +148,6 @@
 				3FDFCE4729ED109200988BAF /* SQLite in Frameworks */,
 				3FDFCE4D29ED10A400988BAF /* ObjcExceptionBridging in Frameworks */,
 				3FDFCE4B29ED109F00988BAF /* XCGLogger in Frameworks */,
-				3F049C9D29EE9CFE0078EE31 /* SwiftDiff in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,14 +156,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE7822629DBDB4A008CB97D /* llama in Frameworks */,
+				3FCF42DB2A24CC8C0085A6E8 /* OpenAI in Frameworks */,
+				3FCF42D82A24CC610085A6E8 /* SwiftDiff in Frameworks */,
 				3FDBE5BB29D0029800A4C6C0 /* ObjcExceptionBridging in Frameworks */,
 				3F049C9F29EEA9E40078EE31 /* AVKit.framework in Frameworks */,
 				3F6FE08129CAB0170061DBF5 /* SQLite in Frameworks */,
 				3F14BDCA29BCEF6500F12FE7 /* Highlightr in Frameworks */,
 				3FC6C78B29CC2EA2004E19FF /* KeychainSwift in Frameworks */,
 				3FDBE5BD29D0029800A4C6C0 /* XCGLogger in Frameworks */,
-				3FDBE5B529CD7BAC00A4C6C0 /* OpenAI in Frameworks */,
-				3F049C9B29EE9CEF0078EE31 /* SwiftDiff in Frameworks */,
 				3FA833B929FCF74F0003AB96 /* DiffMatchPatch.framework in Frameworks */,
 				3FE7822329DB15A8008CB97D /* AXSwift in Frameworks */,
 			);
@@ -354,7 +352,6 @@
 				3FDFCE4829ED109700988BAF /* KeychainSwift */,
 				3FDFCE4A29ED109F00988BAF /* XCGLogger */,
 				3FDFCE4C29ED10A400988BAF /* ObjcExceptionBridging */,
-				3F049C9C29EE9CFE0078EE31 /* SwiftDiff */,
 			);
 			productName = CyteExtension;
 			productReference = 3F6AAE5829EBBC0100843D71 /* CyteRecorder.appex */;
@@ -380,12 +377,12 @@
 				3F14BDC929BCEF6500F12FE7 /* Highlightr */,
 				3F6FE08029CAB0170061DBF5 /* SQLite */,
 				3FC6C78A29CC2EA2004E19FF /* KeychainSwift */,
-				3FDBE5B429CD7BAC00A4C6C0 /* OpenAI */,
 				3FDBE5BA29D0029800A4C6C0 /* ObjcExceptionBridging */,
 				3FDBE5BC29D0029800A4C6C0 /* XCGLogger */,
 				3FE7822529DBDB4A008CB97D /* llama */,
 				3FE7822229DB15A8008CB97D /* AXSwift */,
-				3F049C9A29EE9CEF0078EE31 /* SwiftDiff */,
+				3FCF42D72A24CC610085A6E8 /* SwiftDiff */,
+				3FCF42DA2A24CC8C0085A6E8 /* OpenAI */,
 			);
 			productName = Cyte;
 			productReference = 3FCAA1FC29AC7C0100898995 /* Cyte.app */;
@@ -423,11 +420,11 @@
 				3F14BDC829BCEF6500F12FE7 /* XCRemoteSwiftPackageReference "Highlightr" */,
 				3F6FE07F29CAB0170061DBF5 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				3FC6C78929CC2EA2004E19FF /* XCRemoteSwiftPackageReference "keychain-swift" */,
-				3FDBE5B329CD7BAC00A4C6C0 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				3FE7822429DBDB4A008CB97D /* XCRemoteSwiftPackageReference "llama" */,
 				3FE7822129DB15A8008CB97D /* XCRemoteSwiftPackageReference "AXSwift" */,
-				3F049C9929EE9CEF0078EE31 /* XCRemoteSwiftPackageReference "SwiftDiff" */,
+				3FCF42D62A24CC610085A6E8 /* XCRemoteSwiftPackageReference "SwiftDiff" */,
+				3FCF42D92A24CC8C0085A6E8 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 3FCAA1FD29AC7C0100898995 /* Products */;
 			projectDirPath = "";
@@ -524,7 +521,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 794T33TWQW;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyteExtension/Info.plist;
@@ -555,7 +552,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 794T33TWQW;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyteExtension/Info.plist;
@@ -709,7 +706,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Cyte/Preview Content\"";
 				DEVELOPMENT_TEAM = 794T33TWQW;
@@ -772,7 +769,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Cyte/Preview Content\"";
 				DEVELOPMENT_TEAM = 794T33TWQW;
@@ -852,14 +849,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3F049C9929EE9CEF0078EE31 /* XCRemoteSwiftPackageReference "SwiftDiff" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/shaunnarayan/SwiftDiff";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		3F14BDC829BCEF6500F12FE7 /* XCRemoteSwiftPackageReference "Highlightr" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/raspu/Highlightr";
@@ -884,12 +873,20 @@
 				kind = branch;
 			};
 		};
-		3FDBE5B329CD7BAC00A4C6C0 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+		3FCF42D62A24CC610085A6E8 /* XCRemoteSwiftPackageReference "SwiftDiff" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/shaunnarayan/OpenAI";
+			repositoryURL = "https://github.com/shaunnarayan/SwiftDiff";
 			requirement = {
-				branch = main;
+				branch = master;
 				kind = branch;
+			};
+		};
+		3FCF42D92A24CC8C0085A6E8 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.1;
 			};
 		};
 		3FDBE5B929D0029800A4C6C0 /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
@@ -919,16 +916,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3F049C9A29EE9CEF0078EE31 /* SwiftDiff */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3F049C9929EE9CEF0078EE31 /* XCRemoteSwiftPackageReference "SwiftDiff" */;
-			productName = SwiftDiff;
-		};
-		3F049C9C29EE9CFE0078EE31 /* SwiftDiff */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3F049C9929EE9CEF0078EE31 /* XCRemoteSwiftPackageReference "SwiftDiff" */;
-			productName = SwiftDiff;
-		};
 		3F14BDC929BCEF6500F12FE7 /* Highlightr */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F14BDC829BCEF6500F12FE7 /* XCRemoteSwiftPackageReference "Highlightr" */;
@@ -944,9 +931,14 @@
 			package = 3FC6C78929CC2EA2004E19FF /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
-		3FDBE5B429CD7BAC00A4C6C0 /* OpenAI */ = {
+		3FCF42D72A24CC610085A6E8 /* SwiftDiff */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3FDBE5B329CD7BAC00A4C6C0 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			package = 3FCF42D62A24CC610085A6E8 /* XCRemoteSwiftPackageReference "SwiftDiff" */;
+			productName = SwiftDiff;
+		};
+		3FCF42DA2A24CC8C0085A6E8 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FCF42D92A24CC8C0085A6E8 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
 		};
 		3FDBE5BA29D0029800A4C6C0 /* ObjcExceptionBridging */ = {
