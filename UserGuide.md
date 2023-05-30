@@ -12,9 +12,9 @@
 
 ### Windows users only
 
-- Double click the file Cyte.ppkg and confirm installation when prompted.
-- - Sadly, there is no confirmation dialog for installation completion. It shouldn't take longer than a minute, and once complete Cyte should be available as an Application from your taskbar. To confirm your installation, open Settings > Accounts > Access work or school > Add or remove a provisioning package. There should be an entry for Cyte under the "Packages" heading
-- Open Cyte from your Taskbar (Type Cyte in the search bar or press All Apps and browse to 'C'). You'll see a search bar, some buttons, and a big empty area where your recordings will show.
+- Right click the downloaded zip file and select 'Extract all'
+- Double click the file ending with '.msix' and select Install.
+- Select launch once installation completes. You'll see a search bar, some buttons, and a big empty area where your recordings will show.
 - You should see a dialog saying Cyte wants to record your screen, and ask you to grant permission.
 - Next you will be asked if you would like to allow Cyte to record without a border around your entire screen - allow this if you'd like.
 - Now you'll see a dialog asking you to allow Cyte to access process diagnostic info - this is needed to track the active application during recording
@@ -23,8 +23,8 @@
 
 - At this point, if you'd like to review your settings, click the cog icon
 - - Cyte can use a lot of disk space, depending on your screen resolution and other factors. You can choose how long to keep recordings around for, and where to store them incase you want to use another drive. As a rule of thumb, Cyte will take around 100MB per hour recorded on an average setup
-- - You can also enter your OpenAI API key or llama.cpp model, please read the section on chat for more info about this. When you next start Cyte, you will be asked to grant permission for Cyte to access this key from Apple's keychain
-- - If you enable browser awareness (see below for more detail), you should see a dialog appear asking for access to Accessability services. If it doesn't appear, open System Settings -> Privacy and Security -> Accessability, press the plus icon and select Cyte from the Applications folder
+- - You can also enter your OpenAI API key or llama.cpp model, please read the section on chat for more info about this. On macOS, when you next start Cyte, you will be asked to grant permission for Cyte to access this key from Apple's keychain
+- - On macOS, if you enable browser awareness (see below for more detail), you should see a dialog appear asking for access to Accessability services. If it doesn't appear, open System Settings -> Privacy and Security -> Accessability, press the plus icon and select Cyte from the Applications folder
 - - Cyte will already have detected the applications currently running, and displayed them in a grid. Tick boxes for any applications you don't want Cyte to record. If your application isn't showing, press the add application button and select it there
 - Once happy with your setup, press the back icon at the top of the window.
 - When you need help remembering something, select the Cyte application in your dock or Menu Bar, or use Spotlight
@@ -52,8 +52,8 @@
 - Download and install [Visual Studio Community Edition 2022](https://visualstudio.microsoft.com/vs/community/)
 - Download and unzip or clone the [cytev2 repository](https://github.com/shaunnarayan/cytev2)
 - Double click to open Cyte.sln inside the Windows directory
-- Right-click the Cyte project, and select "Create App Packages", then follow through the prompts
-- You can now use Cyte.ppkg as per the Quickstart instructions above
+- Right-click the Cyte project, and select "Publish > Create App Packages", then follow through the prompts
+- You can now use Cyte.msix as per the Quickstart instructions above
 
 ## Feed
 
